@@ -17,7 +17,9 @@ class ProductController extends Controller
         $messages = [
             'image.image' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
             'image.mimes' =>'Please provide a Valid Extension Image(e.g: .jpg .png)',
-            'title.required' =>'Please provide a Product Title',
+            'title_english.required' =>'Please provide a Product Title',
+            'title_hindi.required' =>'Please provide a Product Title',
+            'title_gujarati.required' =>'Please provide a Product Title',
             'description.required' =>'Please provide a Product Description.',
             'price.required' =>'Please provide a Product Price.',
             'stock.required' =>'Please provide a Product Stock.',
@@ -25,7 +27,9 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), [
             'image' => 'image|mimes:jpeg,png,jpg',
-            'title' => 'required',
+            'title_english' => 'required',
+            'title_hindi' => 'required',
+            'title_gujarati' => 'required',
             'description' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required',
@@ -46,7 +50,9 @@ class ProductController extends Controller
             $old_image = $Product->image;
             $image_name = $old_image;
 
-            $Product->title = $request->title;
+            $Product->title_english = $request->title_english;
+            $Product->title_hindi = $request->title_hindi;
+            $Product->title_gujarati = $request->title_gujarati;
             $Product->description = $request->description;
             $Product->price = $request->price;
             $Product->stock = $request->stock;
@@ -54,7 +60,9 @@ class ProductController extends Controller
         else{
             $action = "add";
             $Product = new Product();
-            $Product->title = $request->title;
+            $Product->title_english = $request->title_english;
+            $Product->title_hindi = $request->title_hindi;
+            $Product->title_gujarati = $request->title_gujarati;
             $Product->description = $request->description;
             $Product->price = $request->price;
             $Product->stock = $request->stock;
@@ -118,7 +126,9 @@ class ProductController extends Controller
                 $search = $request->input('search.value');
                 $Products =  Product::Query();
                 $Products = $Products->where(function($query) use($search){
-                    $query->where('title','LIKE',"%{$search}%")
+                    $query->where('title_english','LIKE',"%{$search}%")
+                        ->orWhere('title_hindi', 'LIKE',"%{$search}%")
+                        ->orWhere('title_gujarati', 'LIKE',"%{$search}%")
                         ->orWhere('description', 'LIKE',"%{$search}%")
                         ->orWhere('price', 'LIKE',"%{$search}%")
                         ->orWhere('stock', 'LIKE',"%{$search}%")
@@ -150,8 +160,13 @@ class ProductController extends Controller
                     $action .= '<button id="editProductBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#ProductModal" onclick="" data-id="' .$Product->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteProductBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteProductModal" onclick="" data-id="' .$Product->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
+                    $title = '';
+                    $title .= '<span>English: '.$Product->title_english.'</span>';
+                    $title .= '<span>Hindi: '.$Product->title_hindi.'</span>';
+                    $title .= '<span>Gujarati: '.$Product->title_gujarati.'</span>';
+
                     $nestedData['image'] = '<img src="'. $image .'" width="50px" height="50px" alt="Product Image">';
-                    $nestedData['title'] = $Product->title;
+                    $nestedData['title'] = $title;
                     $nestedData['description'] = $Product->description;
                     $nestedData['price'] = '<i class="fa fa-inr" aria-hidden="true"></i> '.$Product->price;
                     $nestedData['stock'] = $Product->stock." KG";

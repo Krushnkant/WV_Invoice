@@ -33,4 +33,12 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('products/{id}/edit',[\App\Http\Controllers\admin\ProductController::class,'editProduct'])->name('products.edit');
     Route::get('products/{id}/delete',[\App\Http\Controllers\admin\ProductController::class,'deleteProduct'])->name('products.delete');
 
+    Route::get('product_prices',[\App\Http\Controllers\admin\ProductPriceController::class,'index'])->name('product_prices.list');
+    Route::get('get_customers_products',[\App\Http\Controllers\admin\ProductPriceController::class,'get_customers_products'])->name('product_prices.get_customers_products');
+    Route::post('addorupdateProductPrice',[\App\Http\Controllers\admin\ProductPriceController::class,'addorupdateProductPrice'])->name('product_prices.addorupdate');
+    Route::post('allProductPriceslist',[\App\Http\Controllers\admin\ProductPriceController::class,'allProductPriceslist'])->name('allProductPriceslist');
+    Route::get('product_prices/{id}/edit',[\App\Http\Controllers\admin\ProductPriceController::class,'editProductPrice'])->name('product_prices.edit');
+    Route::get('get_products_price/{product_id}',[\App\Http\Controllers\admin\ProductPriceController::class,'get_products_price'])->name('product_prices.get_products_price');
+    Route::get('product_prices/{id}/delete',[\App\Http\Controllers\admin\ProductPriceController::class,'deleteProductPrice'])->name('product_prices.delete');
+
 });

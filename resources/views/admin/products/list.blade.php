@@ -72,10 +72,24 @@
                         {{ csrf_field() }}
 
                         <div class="form-group ">
-                            <label class="col-form-label" for="title">Title <span class="text-danger">*</span>
+                            <label class="col-form-label" for="title">Title (English) <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control input-flat" id="title" name="title" placeholder="">
-                            <div id="title-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                            <input type="text" class="form-control input-flat" id="title_english" name="title_english" placeholder="">
+                            <div id="title_english-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="col-form-label" for="title">Title (Hindi) <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control input-flat" id="title_hindi" name="title_hindi" placeholder="">
+                            <div id="title_hindi-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="col-form-label" for="title">Title (Gujarati) <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control input-flat" id="title_gujarati" name="title_gujarati" placeholder="">
+                            <div id="title_gujarati-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
 
                         <div class="form-group ">
@@ -169,10 +183,22 @@
                         $('#image-error').hide();
                     }
 
-                    if (res.errors.title) {
-                        $('#title-error').show().text(res.errors.title);
+                    if (res.errors.title_english) {
+                        $('#title_english-error').show().text(res.errors.title_english);
                     } else {
-                        $('#title-error').hide();
+                        $('#title_english-error').hide();
+                    }
+
+                    if (res.errors.title_hindi) {
+                        $('#title_hindi-error').show().text(res.errors.title_hindi);
+                    } else {
+                        $('#title_hindi-error').hide();
+                    }
+
+                    if (res.errors.title_gujarati) {
+                        $('#title_gujarati-error').show().text(res.errors.title_gujarati);
+                    } else {
+                        $('#title_gujarati-error').hide();
                     }
 
                     if (res.errors.description) {
@@ -219,13 +245,15 @@
                         $("#ProductModal").find("#save_closeProductBtn").removeAttr('data-id');
                         $('#product_id').val("");
                         $('#image-error').html("");
-                        $('#title-error').html("");
+                        $('#title_english-error').html("");
+                        $('#title_hindi-error').html("");
+                        $('#title_gujarati-error').html("");
                         $('#description-error').html("");
                         $('#price-error').html("");
                         $('#stock-error').html("");
                         var default_image = "{{ url('public/images/placeholder_image.png') }}";
                         $('#image_show').attr('src', default_image);
-                        $("#title").focus();
+                        $("#title_english").focus();
                         if(res.action == 'add'){
                             Product_Table(true);
                             toastr.success("Product Added",'Success',{timeOut: 5000});
@@ -264,7 +292,7 @@
     });
 
     $('#ProductModal').on('shown.bs.modal', function (e) {
-        $("#title").focus();
+        $("#title_english").focus();
     });
 
     $('#image').change(function(){
@@ -294,7 +322,9 @@
         $(this).find("#save_closeProductBtn").removeAttr('data-id');
         $('#product_id').val("");
         $('#image-error').html("");
-        $('#title-error').html("");
+        $('#title_english-error').html("");
+        $('#title_hindi-error').html("");
+        $('#title_gujarati-error').html("");
         $('#description-error').html("");
         $('#price-error').html("");
         $('#stock-error').html("");
@@ -347,7 +377,7 @@
                     }
                 },
                 {data: 'image', name: 'image', class: "text-center", orderable: false},
-                {data: 'title', name: 'title', class: "text-left"},
+                {data: 'title', name: 'title', class: "text-left multirow"},
                 {data: 'description', name: 'description', class: "text-left"},
                 {data: 'price', name: 'price'},
                 {data: 'stock', name: 'stock'},
@@ -378,7 +408,9 @@
                 var image = "{{ url('public/images/product') }}" +"/" + data.image;
                 $('#image_show').attr('src', image);
             }
-            $('#title').val(data.title);
+            $('#title_english').val(data.title_english);
+            $('#title_hindi').val(data.title_hindi);
+            $('#title_gujarati').val(data.title_gujarati);
             $('#description').val(data.description);
             $('#price').val(data.price);
             $('#stock').val(data.stock);

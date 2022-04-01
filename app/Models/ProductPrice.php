@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class ProductPrice extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'products';
+    protected $table = 'product_prices';
 
     protected $dates = ['deleted_at'];
 
@@ -21,12 +21,18 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title_english',
-        'title_hindi',
-        'title_gujarati',
-        'description',
-        'image',
+        'user_id',
+        'product_id',
         'price',
-        'stock',
+        'estatus',
     ];
+
+    public function user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function product(){
+        return $this->hasOne(Product::class,'id','product_id');
+    }
+
 }
