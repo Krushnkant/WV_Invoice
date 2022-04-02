@@ -70,14 +70,14 @@
                         <div class="form-group ">
                             <label class="col-form-label" for="Customer">Customer <span class="text-danger">*</span>
                             </label>
-                            <select class="form-control input-flat" id="customer" name="customer" ></select>
+                            <select class="" id="customer" name="customer" ></select>
                             <div id="customer-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
 
                         <div class="form-group ">
                             <label class="col-form-label" for="Product">Product <span class="text-danger">*</span>
                             </label>
-                            <select class="form-control input-flat" id="product" name="product" ></select>
+                            <select class="" id="product" name="product" ></select>
                             <div id="product-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
 
@@ -126,12 +126,22 @@ $('body').on('click', '#AddProductPriceBtn', function (e) {
         $("#customer").empty();
         $("#product").empty();
 
+        $('#customer').select2({
+            width: '100%',
+            placeholder: "Select Customer",
+            allowClear: false
+        });
         $("#customer").append("<option value='' disabled selected>Select Customer</option>");
         var customers = res['customers'];
         for(var i = 0; i < customers.length; i++) {
             $("#customer").append("<option value='"+ customers[i].id +"'>"+ customers[i].full_name +"</option>");
         }
 
+        $('#product').select2({
+            width: '100%',
+            placeholder: "Select Product",
+            allowClear: false
+        });
         $("#product").append("<option value='' disabled selected>Select Product</option>");
         var products = res['products'];
         for(var i = 0; i < products.length; i++) {
@@ -326,12 +336,23 @@ $('body').on('click', '#editProductPriceBtn', function () {
 
         $("#customer").empty();
         $("#product").empty();
+
+        $('#customer').select2({
+            width: '100%',
+            placeholder: "Select Customer",
+            allowClear: false
+        });
         var customers = data['customers'];
         for(var i = 0; i < customers.length; i++) {
             $("#customer").append("<option value='"+ customers[i].id +"'>"+ customers[i].full_name +"</option>");
         }
         $('#customer').find("option[value="+data['ProductPrice'].user_id+"]").prop("selected", true);
 
+        $('#product').select2({
+            width: '100%',
+            placeholder: "Select Product",
+            allowClear: false
+        });
         var products = data['products'];
         for(var i = 0; i < products.length; i++) {
             $("#product").append("<option value='"+ products[i].id +"'>"+ products[i].title_english +"</option>");
