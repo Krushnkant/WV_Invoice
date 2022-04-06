@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\ProductPrice;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -101,6 +103,18 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        if ($request->action=="add" && $request->role==2){
+            $products = Product::get();
+            foreach ($products as $product){
+                $product_price = new ProductPrice();
+                $product_price->user_id = $user->id;
+                $product_price->product_id = $product->id;
+                $product_price->price = $product->price;
+                $product_price->save();
+            }
+        }
+
         return response()->json(['status' => '200', 'action' => $action]);
     }
 

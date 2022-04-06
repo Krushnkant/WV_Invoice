@@ -41,4 +41,19 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('get_products_price/{product_id}',[\App\Http\Controllers\admin\ProductPriceController::class,'get_products_price'])->name('product_prices.get_products_price');
     Route::get('product_prices/{id}/delete',[\App\Http\Controllers\admin\ProductPriceController::class,'deleteProductPrice'])->name('product_prices.delete');
 
+    Route::get('settings',[\App\Http\Controllers\admin\SettingsController::class,'index'])->name('settings.list');
+    Route::post('updateInvoiceSetting',[\App\Http\Controllers\admin\SettingsController::class,'updateInvoiceSetting'])->name('settings.updateInvoiceSetting');
+    Route::get('settings/edit',[\App\Http\Controllers\admin\SettingsController::class,'editSettings'])->name('settings.edit');
+
+    Route::get('invoice',[\App\Http\Controllers\admin\InvoiceController::class,'index'])->name('invoice.list');
+    Route::get('invoice/create',[\App\Http\Controllers\admin\InvoiceController::class,'create'])->name('invoice.add');
+    Route::post('invoice/add_row_item',[\App\Http\Controllers\admin\InvoiceController::class,'add_row_item'])->name('invoice.add_row_item');
+    Route::post('invoice/change_products',[\App\Http\Controllers\admin\InvoiceController::class,'change_products'])->name('invoice.change_products');
+    Route::post('invoice/change_product_price',[\App\Http\Controllers\admin\InvoiceController::class,'change_product_price'])->name('invoice.change_product_price');
+    Route::post('invoice/save',[\App\Http\Controllers\admin\InvoiceController::class,'save'])->name('invoice.save');
+    Route::post('allInvoicelist',[\App\Http\Controllers\admin\InvoiceController::class,'allInvoicelist'])->name('allInvoicelist');
+    Route::get('invoice/edit/{id}',[\App\Http\Controllers\admin\InvoiceController::class,'edit'])->name('invoice.edit');
+    Route::get('invoice/{id}/delete',[\App\Http\Controllers\admin\InvoiceController::class,'delete'])->name('invoice.delete');
+    Route::get('invoice/pdf/{id}',[\App\Http\Controllers\admin\InvoiceController::class,'generate_pdf'])->name('invoice.pdf');
+
 });

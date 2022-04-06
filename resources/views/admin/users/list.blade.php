@@ -99,6 +99,15 @@
                             <div id="mobileno-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
                         <div class="form-group ">
+                            <label class="col-form-label" for="role">Role
+                            </label>
+                            <div>
+                                <label class="radio-inline mr-3"><input type="radio" name="role" value="1"> Admin</label>
+                                <label class="radio-inline mr-3"><input type="radio" name="role" value="2" checked> Customer</label>
+                            </div>
+                            <div id="role-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                        </div>
+                        <div class="form-group ">
                             <label class="col-form-label" for="email">E-mail <span class="text-danger">*</span>
                             </label>
                             <input type="email" class="form-control input-flat" id="email" name="email" placeholder="">
@@ -127,15 +136,6 @@
                                 <input type="text" class="form-control custom_date_picker" id="dob" name="dob" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                                 <div id="dob-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                             </div>
-                        </div>
-                        <div class="form-group ">
-                            <label class="col-form-label" for="role">Role
-                            </label>
-                            <div>
-                                <label class="radio-inline mr-3"><input type="radio" name="role" value="1" checked> Admin</label>
-                                <label class="radio-inline mr-3"><input type="radio" name="role" value="2"> Customer</label>
-                            </div>
-                            <div id="role-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

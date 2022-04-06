@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductPrice;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -85,6 +87,18 @@ class ProductController extends Controller
         }
 
         $Product->save();
+
+        if(isset($request->action) && $request->action=="add"){
+            $customers = User::where('role',2)->get();
+            foreach ($customers as $customer){
+                $product_price = new ProductPrice();
+                $product_price->user_id = $customer->id;
+                $product_price->product_id = $Product->id;
+                $product_price->price = $Product->price;
+                $product_price->save();
+            }
+        }
+
         return response()->json(['status' => '200', 'action' => $action]);
     }
 

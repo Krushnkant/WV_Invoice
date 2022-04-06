@@ -141,6 +141,18 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('admin.invoice.list') }}" aria-expanded="false">
+                        <i class="icon-badge menu-icon"></i><span class="nav-text">Invoice</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('admin.settings.list') }}" aria-expanded="false">
+                        <i class="icon-badge menu-icon"></i><span class="nav-text">Settings</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -207,6 +219,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 
 <script src="{{ url('public/js/jquery.filer.min.js') }}" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
 @yield('js')
 
 </body>
