@@ -22,20 +22,38 @@ class ProductPriceController extends Controller
     }
 
     public function addorupdateProductPrice(Request $request){
-        $messages = [
-            'customer.required' =>'Please select a customer',
-            'product.required' =>'Please select a Product',
-            'price.required' =>'Please provide a Product price',
-        ];
+        if($request->action == "update") {
+            $messages = [
+                'price.required' => 'Please provide a Product price',
+            ];
 
-        $validator = Validator::make($request->all(), [
-            'customer' => 'required',
-            'product' => 'required',
-            'price' => 'required',
-        ], $messages);
+            $validator = Validator::make($request->all(), [
+                'price' => 'required',
+            ], $messages);
+        }
+        else{
+            $messages = [
+                'customer.required' => 'Please select a customer',
+                'product.required' => 'Please select a Product',
+                'price.required' => 'Please provide a Product price',
+            ];
+
+            $validator = Validator::make($request->all(), [
+                'customer' => 'required',
+                'product' => 'required',
+                'price' => 'required',
+            ], $messages);
+        }
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors(),'status'=>'failed']);
+        }
+
+        if($request->action != "update"){
+            $Product_Price = ProductPrice::where('user_id',$request->customer)->where('product_id',$request->product)->first();
+            if ($Product_Price){
+                return response()->json(['error' => "This Customer Price already added",'status' => 401]);
+            }
         }
 
         if(isset($request->action) && $request->action=="update"){
@@ -46,8 +64,8 @@ class ProductPriceController extends Controller
                 return response()->json(['status' => '400']);
             }
 
-            $ProductPrice->user_id = $request->customer;
-            $ProductPrice->product_id = $request->product;
+//            $ProductPrice->user_id = $request->customer;
+//            $ProductPrice->product_id = $request->product;
             $ProductPrice->price = $request->price;
         }
         else{

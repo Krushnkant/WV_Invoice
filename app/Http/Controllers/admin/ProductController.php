@@ -49,6 +49,7 @@ class ProductController extends Controller
                 return response()->json(['status' => '400']);
             }
 
+            $old_price = $Product->price;
             $old_image = $Product->image;
             $image_name = $old_image;
 
@@ -96,6 +97,23 @@ class ProductController extends Controller
                 $product_price->product_id = $Product->id;
                 $product_price->price = $Product->price;
                 $product_price->save();
+            }
+        }
+
+        if(isset($request->action) && $request->action=="update"){
+            if (isset($request->is_update_for_all) && $request->is_update_for_all==1){
+                $product_prices = ProductPrice::where('product_id',$Product->id)->get();
+                foreach ($product_prices as $product_price){
+                    $product_price->price = $Product->price;
+                    $product_price->save();
+                }
+            }
+            else{
+                $product_prices = ProductPrice::where('product_id',$Product->id)->where('price',$old_price)->get();
+                foreach ($product_prices as $product_price){
+                    $product_price->price = $Product->price;
+                    $product_price->save();
+                }
             }
         }
 

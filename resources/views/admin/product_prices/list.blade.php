@@ -89,6 +89,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <div id="customer_price-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         <input type="hidden" name="product_price_id" id="product_price_id">
                         {{--                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>--}}
                         <button type="button" class="btn btn-outline-primary" id="save_newProductPriceBtn">Save & New <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
@@ -225,6 +226,7 @@ function save_product_price(btn,btn_type){
                     $('#customer-error').html("");
                     $('#product-error').html("");
                     $('#price-error').html("");
+                    $('#customer_price-error').html("");
                     $("#customer").focus();
                     if(res.action == 'add'){
                         Product_Price_Table(true);
@@ -243,6 +245,12 @@ function save_product_price(btn,btn_type){
                 $(btn).find('.loadericonfa').hide();
                 Product_Price_Table();
                 toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+
+            if(res.status == 401){
+                $(btn).prop('disabled',false);
+                $(btn).find('.loadericonfa').hide();
+                $('#customer_price-error').show().text(res.error);
             }
         },
         error: function (data) {
@@ -311,6 +319,8 @@ $('#ProductPriceModal').on('shown.bs.modal', function (e) {
 });
 
 $('#ProductPriceModal').on('hidden.bs.modal', function () {
+    $("#customer").prop('disabled',false);
+    $("#product").prop('disabled',false);
     $(this).find('form').trigger('reset');
     $(this).find("#save_newProductPriceBtn").removeAttr('data-action');
     $(this).find("#save_closeProductPriceBtn").removeAttr('data-action');
@@ -320,6 +330,7 @@ $('#ProductPriceModal').on('hidden.bs.modal', function () {
     $('#customer-error').html("");
     $('#product-error').html("");
     $('#price-error').html("");
+    $('#customer_price-error').html("");
     $("#customer").empty();
     $("#product").empty();
 });
@@ -359,6 +370,9 @@ $('body').on('click', '#editProductPriceBtn', function () {
         }
         $('#product').find("option[value="+data['ProductPrice'].product_id+"]").prop("selected", true);
         $('#price').val(data['ProductPrice'].price);
+
+        $("#customer").prop('disabled',true);
+        $("#product").prop('disabled',true);
     })
 });
 

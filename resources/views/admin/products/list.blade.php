@@ -114,6 +114,14 @@
                             <div id="price-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
 
+                        <div class="form-group" id="is_update_for_all_div" style="display: none">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" id="is_update_for_all" class="form-check-input" value="0" name="is_update_for_all">Do you want to update price for all customers?
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="form-group ">
                             <label class="col-form-label" for="stock">Stock (KG) <span class="text-danger">*</span>
                             </label>
@@ -330,6 +338,9 @@
         $('#stock-error').html("");
         var default_image = "{{ url('public/images/placeholder_image.png') }}";
         $('#image_show').attr('src', default_image);
+        $("#is_update_for_all").val(0);
+        $("#is_update_for_all").attr('checked', false);
+        $("#is_update_for_all_div").hide();
     });
 
     $('#DeleteProductModal').on('hidden.bs.modal', function () {
@@ -414,6 +425,7 @@
             $('#description').val(data.description);
             $('#price').val(data.price);
             $('#stock').val(data.stock);
+            $("#is_update_for_all_div").show();
         })
     });
 
@@ -457,6 +469,17 @@
                 toastr.error("Please try again",'Error',{timeOut: 5000});
             }
         });
+    });
+
+    $(document).on('change', '#is_update_for_all', function(e) {
+        if ($(this).is(':checked')) {
+            $(this).val(1);
+            $(this).attr('checked', true);
+        }
+        else {
+            $(this).val(0);
+            $(this).attr('checked', false);
+        }
     });
 </script>
 <!-- product JS end -->
