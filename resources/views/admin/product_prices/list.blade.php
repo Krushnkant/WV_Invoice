@@ -5,7 +5,7 @@
         <div class="col p-md-0">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Product Price List</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Customer Price List</a></li>
             </ol>
         </div>
     </div>
@@ -16,7 +16,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product Price List</h4>
+                        <h4 class="card-title">Customer Price List</h4>
 
                         <div class="action-section">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ProductPriceModal" id="AddProductPriceBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -59,7 +59,7 @@
             <div class="modal-content">
                 <form class="form-valide" action="" id="ProductPriceForm" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="formtitle">Add Product Price</h5>
+                        <h5 class="modal-title" id="formtitle">Add Customer Price</h5>
                         <button type="button" class="close" data-dismiss="modal"><span>×</span>
                         </button>
                     </div>
@@ -103,10 +103,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Remove Product Price</h5>
+                    <h5 class="modal-title">Remove Customer Price</h5>
                 </div>
                 <div class="modal-body">
-                    Are you sure you wish to remove this Product Price?
+                    Are you sure you wish to remove this Customer Price?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
@@ -121,7 +121,7 @@
 <!-- product price JS start -->
 <script type="text/javascript">
 $('body').on('click', '#AddProductPriceBtn', function (e) {
-    $("#ProductPriceModal").find('.modal-title').html("Add Product Price");
+    $("#ProductPriceModal").find('.modal-title').html("Add Customer Price");
     $.get("{{ url('admin/get_customers_products') }}", function (res) {
         $("#customer").empty();
         $("#product").empty();
@@ -205,11 +205,11 @@ function save_product_price(btn,btn_type){
                     $(btn).find('.loadericonfa').hide();
                     if(res.action == 'add'){
                         Product_Price_Table(true);
-                        toastr.success("Product Price Added",'Success',{timeOut: 5000});
+                        toastr.success("Customer Price Added",'Success',{timeOut: 5000});
                     }
                     if(res.action == 'update'){
                         Product_Price_Table();
-                        toastr.success("Product Price Updated",'Success',{timeOut: 5000});
+                        toastr.success("Customer Price Updated",'Success',{timeOut: 5000});
                     }
                 }
 
@@ -228,11 +228,11 @@ function save_product_price(btn,btn_type){
                     $("#customer").focus();
                     if(res.action == 'add'){
                         Product_Price_Table(true);
-                        toastr.success("Product Price Added",'Success',{timeOut: 5000});
+                        toastr.success("Customer Price Added",'Success',{timeOut: 5000});
                     }
                     if(res.action == 'update'){
                         Product_Price_Table();
-                        toastr.success("Product Price Updated",'Success',{timeOut: 5000});
+                        toastr.success("Customer Price Updated",'Success',{timeOut: 5000});
                     }
                 }
             }
@@ -327,7 +327,7 @@ $('#ProductPriceModal').on('hidden.bs.modal', function () {
 $('body').on('click', '#editProductPriceBtn', function () {
     var product_price_id = $(this).attr('data-id');
     $.get("{{ url('admin/product_prices') }}" +'/' + product_price_id +'/edit', function (data) {
-        $('#ProductPriceModal').find('.modal-title').html("Edit Product Price");
+        $('#ProductPriceModal').find('.modal-title').html("Edit Customer Price");
         $('#ProductPriceModal').find('#save_closeProductPriceBtn').attr("data-action","update");
         $('#ProductPriceModal').find('#save_newProductPriceBtn').attr("data-action","update");
         $('#ProductPriceModal').find('#save_closeProductPriceBtn').attr("data-id",product_price_id);
@@ -394,7 +394,7 @@ $('body').on('click', '#RemoveProductPriceSubmit', function (e) {
                 $('#RemoveProductPriceSubmit').prop('disabled',false);
                 $("#RemoveProductPriceSubmit").find('.removeloadericonfa').hide();
                 Product_Price_Table();
-                toastr.success("Product Price Deleted",'Success',{timeOut: 5000});
+                toastr.success("Customer Price Deleted",'Success',{timeOut: 5000});
             }
 
             if(res.status == 400){
