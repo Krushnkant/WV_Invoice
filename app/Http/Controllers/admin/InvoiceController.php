@@ -325,6 +325,7 @@ class InvoiceController extends Controller
     public function generate_pdf($id){
         try{
             $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
+            $settings = Setting::find(1);
             $Icon = url('public/images/avatar.png');
 
             $HTMLContent = '<style type="text/css">
@@ -339,12 +340,13 @@ class InvoiceController extends Controller
                         <table cellspacing="0" style="width: 100%; text-align: center; font-size: 14px; border-bottom: dotted 1px black;">
                             <tr>
                                 <td style="width: 25%; color: #444444;">
-                                    <img style="width: 100%;" src="'.$Icon.'" alt="Logo"><br>
+                                    <img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo"><br>
                                 </td>
                                 <td style="width: 50%;">
-                                	<h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">Web Vedant Technology</h3>
+                                	<h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
 			                        <h5 style="text-align: center; margin-bottom: 0;">webvedant@gmail.com</h5>
-			                        <p style="padding-bottom:10px; text-align: center; font-size: 10pt margin-bottom: 0;">406, Anupam The Business Hub, Surat, 395010.</p>
+			                        <h5 style="text-align: center; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
+			                        <p style="padding-bottom:10px; text-align: center; font-size: 10pt margin-bottom: 0;">'.$settings->company_address.'</p>
                                 </td>
                                 <td style="width: 25%;">
                                 </td>
