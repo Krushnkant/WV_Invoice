@@ -121,7 +121,7 @@ class InvoiceController extends Controller
         $invoice->language = $request->language;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->customer_name;
-        $invoice->invoice_date = $request->invoice_date;
+        $invoice->invoice_date = date("Y-m-d", strtotime($request->invoice_date));
         $invoice->total_price = $request->total_price;
         $invoice->total_qty = $request->total_qty;
         $invoice->total_discount = $request->total_discount;
@@ -277,7 +277,7 @@ class InvoiceController extends Controller
                     $nestedData['invoice_no'] = $Invoice->invoice_no;
                     $nestedData['customer_info'] = $Invoice->user->full_name;
                     $nestedData['amount'] = $amount;
-                    $nestedData['invoice_date'] = $Invoice->invoice_date;
+                    $nestedData['invoice_date'] = date("d-m-Y", strtotime($Invoice->invoice_date));
                     $nestedData['action'] = $action;
                     $nestedData['table1'] = $table;
                     $data[] = $nestedData;

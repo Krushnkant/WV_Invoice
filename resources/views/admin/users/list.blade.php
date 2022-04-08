@@ -102,18 +102,18 @@
                             <label class="col-form-label" for="role">Role
                             </label>
                             <div>
-                                <label class="radio-inline mr-3"><input type="radio" name="role" value="1"> Admin</label>
-                                <label class="radio-inline mr-3"><input type="radio" name="role" value="2" checked> Customer</label>
+                                <label class="radio-inline mr-3"><input type="radio" name="role" value="1" class="role"> Admin</label>
+                                <label class="radio-inline mr-3"><input type="radio" name="role" value="2" checked class="role"> Customer</label>
                             </div>
                             <div id="role-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
-                        <div class="form-group ">
+                        <div class="form-group" id="email_div" style="display: none">
                             <label class="col-form-label" for="email">E-mail <span class="text-danger">*</span>
                             </label>
                             <input type="email" class="form-control input-flat" id="email" name="email" placeholder="">
                             <div id="email-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
-                        <div class="form-group ">
+                        <div class="form-group" id="password_div" style="display: none">
                             <label class="col-form-label" for="password">Password <span class="text-danger">*</span>
                             </label>
                             <input type="password" class="form-control input-flat" id="password" name="password" placeholder="">
@@ -354,6 +354,8 @@
         $('#gender-error').html("");
         var default_image = "{{ url('public/images/default_avatar.jpg') }}";
         $('#profilepic_image_show').attr('src', default_image);
+        $("#email_div").hide();
+        $("#password_div").hide();
     });
 
     $('#DeleteUserModal').on('hidden.bs.modal', function () {
@@ -437,8 +439,16 @@
             }
             $('#full_name').val(data.full_name);
             $('#mobile_no').val(data.mobile_no);
-            $('#email').val(data.email);
-            $('#password').val(data.decrypted_password);
+            if(data.role == 1) {
+                $("#email_div").show();
+                $("#password_div").show();
+                $('#email').val(data.email);
+                $('#password').val(data.decrypted_password);
+            }
+            else{
+                $("#email_div").hide();
+                $("#password_div").hide();
+            }
             $('#dob').val(data.dob);
             $("input[name=gender][value=" + data.gender + "]").prop('checked', true);
             $("input[name=role][value=" + data.role + "]").prop('checked', true);
@@ -487,6 +497,17 @@
                 toastr.error("Please try again",'Error',{timeOut: 5000});
             }
         });
+    });
+
+    $('body').on('change', '.role', function (e) {
+        if($(this).val() == 1){
+            $("#email_div").show();
+            $("#password_div").show();
+        }
+        else{
+            $("#email_div").hide();
+            $("#password_div").hide();
+        }
     });
 </script>
 <!-- user list JS end -->

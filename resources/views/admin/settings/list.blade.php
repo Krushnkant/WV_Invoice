@@ -30,14 +30,6 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <th style="width: 50%">Prefix for Invoice No</th>
-                                        <td><span id="prefix_invoice_no_val">{{ $Settings->prefix_invoice_no }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 50%">Invoice No</th>
-                                        <td><span id="invoice_no_val">{{ $Settings->invoice_no }}</span></td>
-                                    </tr>
-                                    <tr>
                                         <th style="width: 50%">Company Name</th>
                                         <td><span id="company_name_val">{{ $Settings->company_name }}</span></td>
                                     </tr>
@@ -58,6 +50,14 @@
                                     <tr>
                                         <th style="width: 50%">Company Mobile No.</th>
                                         <td><span id="company_mobile_no_val">{{ $Settings->company_mobile_no }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 50%">Prefix for Invoice No</th>
+                                        <td><span id="prefix_invoice_no_val">{{ $Settings->prefix_invoice_no }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 50%">Invoice No</th>
+                                        <td><span id="invoice_no_val">{{ $Settings->invoice_no }}</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -80,18 +80,6 @@
                     </div>
                     <div class="modal-body">
                         <div id="attr-cover-spin" class="cover-spin"></div>
-                        <div class="form-group">
-                            <label class="col-form-label" for="Prefix for Invoice No">Prefix for Invoice No <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control input-flat" id="prefix_invoice_no" name="prefix_invoice_no" placeholder="">
-                            <div id="prefix_invoice_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label" for="Invoice No">Invoice No <span class="text-danger">*</span>
-                            </label>
-                            <input type="number" class="form-control input-flat" id="invoice_no" name="invoice_no" placeholder="">
-                            <div id="invoice_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
                         <div class="form-group">
                             <label class="col-form-label" for="Company Name">Company Name <span class="text-danger">*</span>
                             </label>
@@ -116,6 +104,18 @@
                             </label>
                             <input type="text" class="form-control input-flat" id="company_mobile_no" name="company_mobile_no" placeholder="">
                             <div id="company_mobile_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="Prefix for Invoice No">Prefix for Invoice No <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control input-flat" id="prefix_invoice_no" name="prefix_invoice_no" placeholder="">
+                            <div id="prefix_invoice_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="Invoice No">Invoice No <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control input-flat" id="invoice_no" name="invoice_no" placeholder="">
+                            <div id="invoice_no-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

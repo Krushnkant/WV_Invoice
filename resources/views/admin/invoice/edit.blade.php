@@ -68,7 +68,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-12 col-form-label text-left" for="">Date</label>
                                     <div class="col-lg-12">
-                                        <input class="form-control custom_date_picker" type="text" id="invoice_date" name="invoice_date" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" value="{{ $invoice->invoice_date }}">
+                                        <input class="form-control custom_date_picker" type="text" id="invoice_date" name="invoice_date" placeholder="dd-mm-yyyy" data-date-format="dd-mm-yyyy" value="{{ date("d-m-Y", strtotime($invoice->invoice_date)) }}">
                                         <label id="invoice_date-error" class="error invalid-feedback animated fadeInDown" for="invoice_date"></label>
                                     </div>
                                 </div>

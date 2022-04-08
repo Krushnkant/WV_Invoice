@@ -28,7 +28,7 @@ class UserController extends Controller
             'dob.required' =>'Please provide a Date of Birth.',
         ];
 
-        if (isset($request->action) && $request->action=="update"){
+        if ($request->role == 1){
             $validator = Validator::make($request->all(), [
                 'profile_pic' => 'image|mimes:jpeg,png,jpg',
                 'full_name' => 'required',
@@ -43,8 +43,6 @@ class UserController extends Controller
                 'profile_pic' => 'image|mimes:jpeg,png,jpg',
                 'full_name' => 'required',
                 'mobile_no' => 'required|numeric|digits:10',
-                'email' => 'required|email|unique:users',
-                'password' => 'required',
                 'dob' => 'required',
             ], $messages);
         }
@@ -66,25 +64,34 @@ class UserController extends Controller
 
             $user->full_name = $request->full_name;
             $user->mobile_no = $request->mobile_no;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->decrypted_password = $request->password;
             $user->gender = $request->gender;
             $user->dob = $request->dob;
             $user->role = $request->role;
+            if ($request->role == 1){
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->decrypted_password = $request->password;
+            }
+            else{
+                $user->email = null;
+                $user->password = null;
+                $user->decrypted_password = null;
+            }
         }
         else{
             $action = "add";
             $user = new User();
             $user->full_name = $request->full_name;
             $user->mobile_no = $request->mobile_no;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->decrypted_password = $request->password;
             $user->gender = $request->gender;
             $user->dob = $request->dob;
             $user->role = $request->role;
             $user->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
+            if ($request->role == 1){
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->decrypted_password = $request->password;
+            }
             $image_name=null;
         }
 

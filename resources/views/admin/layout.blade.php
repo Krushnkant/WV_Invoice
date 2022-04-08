@@ -88,14 +88,18 @@
                     <li class="icons dropdown">
                         <div class="user-img c-pointer position-relative"   data-toggle="dropdown">
                             <span class="activity active"></span>
-                            <img src="{{ url('public/images/avatar.png') }}" height="40" width="40" alt="">
+                            @if(isset(\Illuminate\Support\Facades\Auth::user()->profile_pic))
+                                <img src="{{ url('public/images/profile_pic/'.\Illuminate\Support\Facades\Auth::user()->profile_pic) }}" height="40" width="40" alt="Profile">
+                            @else
+                                <img src="{{ url('public/images/default_avatar.jpg') }}" height="40" width="40" alt="Profile">
+                            @endif
                         </div>
                         <div class="drop-down dropdown-profile   dropdown-menu">
                             <div class="dropdown-content-body">
                                 <ul>
-                                    <li>
+                                    {{--<li>
                                         <a href="#"><i class="icon-lock"></i> <span>Profile</span></a>
-                                    </li>
+                                    </li>--}}
                                     <li>
                                         <a href="{{ route('admin.logout') }}"><i class="icon-key"></i> <span>Logout</span></a>
                                     </li>
