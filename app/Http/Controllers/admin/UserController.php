@@ -111,7 +111,7 @@ class UserController extends Controller
 
         $user->save();
 
-        if ($request->action=="add" && $request->role==2){
+        if ($request->action!="update" && $request->role==2){
             $products = Product::get();
             foreach ($products as $product){
                 $product_price = new ProductPrice();
