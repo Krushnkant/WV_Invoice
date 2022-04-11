@@ -89,7 +89,7 @@ class ProductController extends Controller
 
         $Product->save();
 
-        if(isset($request->action) && $request->action=="add"){
+        if($request->action!="update"){
             $customers = User::where('role',2)->get();
             foreach ($customers as $customer){
                 $product_price = new ProductPrice();
