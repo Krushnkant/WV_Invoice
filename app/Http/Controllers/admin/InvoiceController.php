@@ -344,7 +344,6 @@ class InvoiceController extends Controller
                                 </td>
                                 <td style="width: 70%;">
                                 	<h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
-			                        <h5 style="text-align: center; margin-bottom: 0;">webvedant@gmail.com</h5>
 			                        <h5 style="text-align: center; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
 			                        <p style="padding-bottom:10px; text-align: center; font-size: 10pt margin-bottom: 0;">'.$settings->company_address.'</p>
                                 </td>
