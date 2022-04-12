@@ -89,7 +89,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div id="customer_price-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         <input type="hidden" name="product_price_id" id="product_price_id">
                         {{--                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>--}}
                         <button type="button" class="btn btn-outline-primary" id="save_newProductPriceBtn">Save & New <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
@@ -226,7 +225,6 @@ function save_product_price(btn,btn_type){
                     $('#customer-error').html("");
                     $('#product-error').html("");
                     $('#price-error').html("");
-                    $('#customer_price-error').html("");
                     $("#customer").focus();
                     if(res.action == 'add'){
                         Product_Price_Table(true);
@@ -250,7 +248,7 @@ function save_product_price(btn,btn_type){
             if(res.status == 401){
                 $(btn).prop('disabled',false);
                 $(btn).find('.loadericonfa').hide();
-                $('#customer_price-error').show().text(res.error);
+                toastr.error(res.error,'Error',{timeOut: 5000});
             }
         },
         error: function (data) {
@@ -330,7 +328,6 @@ $('#ProductPriceModal').on('hidden.bs.modal', function () {
     $('#customer-error').html("");
     $('#product-error').html("");
     $('#price-error').html("");
-    $('#customer_price-error').html("");
     $("#customer").empty();
     $("#product").empty();
 });

@@ -339,10 +339,10 @@ class InvoiceController extends Controller
                         <bookmark title="Lettre" level="0" ></bookmark>
                         <table cellspacing="0" style="width: 100%; text-align: center; font-size: 14px; border-bottom: dotted 1px black;">
                             <tr>
-                                <td style="width: 25%; color: #444444;">
+                                <td style="width: 15%">
                                     <img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo"><br>
                                 </td>
-                                <td style="width: 50%;">
+                                <td style="width: 70%;">
                                 	<h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
 			                        <h5 style="text-align: center; margin-bottom: 0;">webvedant@gmail.com</h5>
 			                        <h5 style="text-align: center; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
@@ -378,10 +378,8 @@ class InvoiceController extends Controller
                                 </tr>
                                 <tr>
                                     <td style="font-size: 10pt; padding:2px 0;">
-                                        Language
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
-                                        : '.$invoice->language.'
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
                                         Date
@@ -423,7 +421,7 @@ class InvoiceController extends Controller
                     $item = $invoice_item->product->title_english;
                 }
                 elseif ($invoice->language == "Hindi"){
-                    $item = $invoice_item->product->title_hindi;
+                    $item = html_entity_decode($invoice_item->product->title_hindi);
                 }
                 elseif ($invoice->language == "Gujarati"){
                     $item = $invoice_item->product->title_gujarati;
@@ -467,7 +465,7 @@ class InvoiceController extends Controller
                             </table>
                         </page>';
 
-            $html2pdf = new Html2Pdf('P', 'A4', 'fr');
+            $html2pdf = new Html2Pdf('P', 'A4', 'en', true, 'UTF-8');
             $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->writeHTML($HTMLContent);
             $html2pdf->output($invoice->invoice_no.'.pdf');

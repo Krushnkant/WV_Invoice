@@ -85,7 +85,7 @@
             <tr>
                 <th>Item</th>
                 <th>Unit Cost</th>
-                <th>Quantity</th>
+                <th>Quantity (Kg)</th>
                 <th>Discount</th>
                 <th>Price</th>
             </tr>
@@ -125,7 +125,7 @@
                     <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
                 <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}">(KG)
+                    <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
