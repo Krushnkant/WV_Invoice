@@ -393,14 +393,14 @@ class InvoiceController extends Controller
                         <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:10px;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
-                                <col style="width: 40%; text-align: center">
+                                <col style="width: 40%; text-align: left">
                                 <col style="width: 16%; text-align: center">
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 14%; text-align: center">
                             </colgroup>
                             <thead>
-                                <tr style="background: #ffe6e6;   ">
+                                <tr style="background: #ffe6e6;">
                                     <th colspan="6" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Item Details </th>
                                 </tr>
                                 <tr>
@@ -420,7 +420,7 @@ class InvoiceController extends Controller
                     $item = $invoice_item->product->title_english;
                 }
                 elseif ($invoice->language == "Hindi"){
-                    $item = html_entity_decode($invoice_item->product->title_hindi);
+                    $item = $invoice_item->product->title_hindi;
                 }
                 elseif ($invoice->language == "Gujarati"){
                     $item = $invoice_item->product->title_gujarati;
