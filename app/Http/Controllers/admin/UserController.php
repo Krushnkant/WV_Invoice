@@ -238,6 +238,10 @@ class UserController extends Controller
                     $action .= '<button id="editUserBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#UserModal" onclick="" data-id="' .$user->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteUserBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteUserModal" onclick="" data-id="' .$user->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
+                    if ($user->role == 2){
+                        $action .= '<button id="ProductPriceBtn" class="btn btn-gray text-blue btn-sm" onclick="" data-id="' .$user->id. '">Product Price</button>';
+                    }
+
                     $nestedData['profile_pic'] = '<img src="'. $profile_pic .'" width="50px" height="50px" alt="Profile Pic"><span>'.$full_name.'</span>';
                     $nestedData['contact_info'] = $contact_info;
                     $nestedData['login_info'] = $login_info;

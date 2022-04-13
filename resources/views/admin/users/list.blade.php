@@ -509,6 +509,12 @@
             $("#password_div").hide();
         }
     });
+
+    $('body').on('click', '#ProductPriceBtn', function () {
+        var user_id = $(this).attr('data-id');
+        var url = "{{ url('admin/product_prices') }}" + "/" + user_id;
+        window.open(url,"_blank");
+    });
 </script>
 <!-- user list JS end -->
 @endsection

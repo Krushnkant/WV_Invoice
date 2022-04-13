@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductPriceController extends Controller
 {
-    public function index(){
-        return view('admin.product_prices.list');
+    public function index($user_id){
+        return view('admin.product_prices.list',compact('user_id'));
     }
 
     public function get_customers_products(){
@@ -85,14 +85,13 @@ class ProductPriceController extends Controller
         if ($request->ajax()) {
             $columns = array(
                 0 =>'id',
-                1 =>'customer',
-                2=> 'product',
-                3=> 'price',
-                4=> 'created_at',
-                5=> 'action',
+                1=> 'product',
+                2=> 'price',
+                3=> 'created_at',
+                4=> 'action',
             );
 
-            $totalData = ProductPrice::count();
+            $totalData = ProductPrice::where('user_id',$request->user_id)->count();
 
             $totalFiltered = $totalData;
 
@@ -109,6 +108,7 @@ class ProductPriceController extends Controller
             if(empty($request->input('search.value')))
             {
                 $ProductPrices = ProductPrice::with('user','product')
+                    ->where('user_id',$request->user_id)
                     ->offset($start)
                     ->limit($limit)
                     ->orderBy($order,$dir)
@@ -116,7 +116,7 @@ class ProductPriceController extends Controller
             }
             else {
                 $search = $request->input('search.value');
-                $ProductPrices =  ProductPrice::with('user','product');
+                $ProductPrices =  ProductPrice::with('user','product')->where('user_id',$request->user_id);
                 $ProductPrices = $ProductPrices->where(function($query) use($search){
                     $query->where('price','LIKE',"%{$search}%")
                         ->orWhereHas('user',function ($Query) use($search) {
@@ -142,9 +142,8 @@ class ProductPriceController extends Controller
                 {
                     $action='';
                     $action .= '<button id="editProductPriceBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#ProductPriceModal" onclick="" data-id="' .$ProductPrice->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
-                    $action .= '<button id="deleteProductPriceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteProductPriceModal" onclick="" data-id="' .$ProductPrice->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
+//                    $action .= '<button id="deleteProductPriceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteProductPriceModal" onclick="" data-id="' .$ProductPrice->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
-                    $nestedData['customer'] = $ProductPrice->user->full_name;
                     $nestedData['product'] = $ProductPrice->product->title_english;
                     $nestedData['price'] = '<i class="fa fa-inr" aria-hidden="true"></i> '.$ProductPrice->price;
                     $nestedData['created_at'] = date('Y-m-d H:i:s', strtotime($ProductPrice->created_at));

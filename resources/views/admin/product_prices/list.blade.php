@@ -5,7 +5,7 @@
         <div class="col p-md-0">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Customer Price List</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Product Price List</a></li>
             </ol>
         </div>
     </div>
@@ -16,19 +16,18 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Customer Price List</h4>
+                        <h4 class="card-title">Product Price List</h4>
 
-                        <div class="action-section">
+                        {{--<div class="action-section">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ProductPriceModal" id="AddProductPriceBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                            {{-- <button class="btn btn-danger" onclick="deleteMultipleAttributes()"><i class="fa fa-trash" aria-hidden="true"></i></button>--}}
-                        </div>
+                            --}}{{-- <button class="btn btn-danger" onclick="deleteMultipleAttributes()"><i class="fa fa-trash" aria-hidden="true"></i></button>--}}{{--
+                        </div>--}}
 
                         <div class="table-responsive">
                             <table id="ProductPrice" class="table zero-configuration customNewtable" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Customer</th>
                                     <th>Product</th>
                                     <th>Price</th>
                                     <th>Date</th>
@@ -38,7 +37,6 @@
                                 <tfoot>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Customer</th>
                                     <th>Product</th>
                                     <th>Price</th>
                                     <th>Date</th>
@@ -90,8 +88,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="product_price_id" id="product_price_id">
-                        {{--                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>--}}
-                        <button type="button" class="btn btn-outline-primary" id="save_newProductPriceBtn">Save & New <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+{{--                        <button type="button" class="btn btn-outline-primary" id="save_newProductPriceBtn">Save & New <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>--}}
                         <button type="button" class="btn btn-primary" id="save_closeProductPriceBtn">Save & Close <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                     </div>
                 </form>
@@ -286,7 +283,7 @@ function Product_Price_Table(is_clearState=false) {
             "url": "{{ url('admin/allProductPriceslist') }}",
             "dataType": "json",
             "type": "POST",
-            "data":{ _token: '{{ csrf_token() }}'},
+            "data":{ _token: '{{ csrf_token() }}', user_id: "{{ $user_id }}"},
             // "dataSrc": ""
         },
         'columnDefs': [
@@ -295,7 +292,6 @@ function Product_Price_Table(is_clearState=false) {
             { "width": "165px", "targets": 2 },
             { "width": "230px", "targets": 3 },
             { "width": "75px", "targets": 4 },
-            { "width": "120px", "targets": 5 },
         ],
         "columns": [
             {data: 'id', name: 'id', class: "text-center", orderable: false,
@@ -303,7 +299,6 @@ function Product_Price_Table(is_clearState=false) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            {data: 'customer', name: 'customer', class: "text-left", orderable: false},
             {data: 'product', name: 'product', class: "text-left", orderable: false},
             {data: 'price', name: 'price', orderable: false},
             {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
