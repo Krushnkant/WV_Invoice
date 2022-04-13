@@ -347,7 +347,7 @@ $('body').on('click', '#editProductPriceBtn', function () {
         });
         var customers = data['customers'];
         for(var i = 0; i < customers.length; i++) {
-            $("#customer").append("<option value='"+ customers[i].id +"'>"+ customers[i].full_name +"</option>");
+            $("#customer").append("<option value='"+ customers[i].id +"'>"+ customers[i].full_name +" [" + customers[i].id + "]</option>");
         }
         $('#customer').find("option[value="+data['ProductPrice'].user_id+"]").prop("selected", true);
 

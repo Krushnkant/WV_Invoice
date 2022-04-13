@@ -32,7 +32,7 @@
                                                 <select name="customer_name" id="customer_name">
                                                     <option></option>
                                                     @foreach($customers as $customer)
-                                                        <option value="{{ $customer->id }}" @if($invoice->user_id==$customer->id) selected @endif>{{ $customer->full_name }}</option>
+                                                        <option value="{{ $customer->id }}" @if($invoice->user_id==$customer->id) selected @endif>{{ $customer->full_name }} [{{ $customer->id }}]</option>
                                                     @endforeach
                                                 </select>
                                                 <label id="customer_name-error" class="error invalid-feedback animated fadeInDown" for="customer_name"></label>
