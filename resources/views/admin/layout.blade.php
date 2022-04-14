@@ -232,6 +232,7 @@
 <script src="{{ url('public/js/jquery.filer.min.js') }}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @yield('js')
 
 </body>
