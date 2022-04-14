@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Riskihajar\Terbilang\TerbilangServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,6 +230,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Terbilang' => Riskihajar\Terbilang\Facades\Terbilang::class,
 
     ],
 

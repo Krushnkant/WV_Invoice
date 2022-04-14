@@ -12,6 +12,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "riskihajar/terbilang": "^1.2",
         "spipu/html2pdf": "^5.2"
     },
     "require-dev": {

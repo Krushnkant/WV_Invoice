@@ -342,6 +342,7 @@ class InvoiceController extends Controller
             $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
             $settings = Setting::find(1);
             $Icon = url('public/images/avatar.png');
+            $f = new \NumberFormatter( locale_get_default(), \NumberFormatter::SPELLOUT );
 
             $HTMLContent = '<style type="text/css">
                             <!--
@@ -352,22 +353,21 @@ class InvoiceController extends Controller
                             </style>';
             $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <table cellspacing="0" style="width: 100%; text-align: center; font-size: 14px; border-bottom: dotted 1px black;">
+                        <h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">Invoice</h3>
+                        <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
                             <tr>
                                 <td style="width: 15%">
                                     <img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo"><br>
                                 </td>
-                                <td style="width: 70%;">
-                                	<h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
-			                        <h5 style="text-align: center; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
-			                        <p style="padding-bottom:10px; text-align: center; font-size: 10pt margin-bottom: 0;">'.$settings->company_address.'</p>
-                                </td>
-                                <td style="width: 25%;">
+                                <td style="width: 85%;">
+                                	<h3 style="text-align: right; font-size: 15pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
+			                        <h5 style="text-align: right; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
+			                        <p style="text-align: right; font-size: 10pt; margin-bottom: 0;">'.$settings->company_address.'</p>
                                 </td>
                             </tr>
                         </table>
                         <br>
-                        <div style="width:100%; margin-top:0px; padding-top:0px; text-align: center; font-size: 15pt;"><b>Invoice</b></div>
+                       
                         <table cellspacing="0" style="width: 100%;">
                             <colgroup>
                                 <col style="width: 12%;">
@@ -392,8 +392,10 @@ class InvoiceController extends Controller
                                 </tr>
                                 <tr>
                                     <td style="font-size: 10pt; padding:2px 0;">
+                                        Mobile No
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
+                                        : '.$invoice->user->mobile_no.'
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
                                         Date
@@ -405,7 +407,7 @@ class InvoiceController extends Controller
                             </tbody>
                         </table>
                         
-                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:10px;" align="center">
+                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 40%; text-align: left">
@@ -468,10 +470,11 @@ class InvoiceController extends Controller
                                     <td style="padding:8px 0; border-bottom: solid 1px black;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span>'.number_format($invoice->final_amount, 2, '.', ',').'</td>
                              </tr>
                             </tbody>
-                        </table>
-                        <br>';
+                        </table>';
 
-            $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 10px;">
+            $HTMLContent .= '<p>Amount in Words: '.$f->format($invoice->final_amount).' Rupees Only</p>';
+
+            $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
                                 <tr>
                                     <td  style="padding:10px 0; width :50%; border-top : solid 0.5px gray; border-bottom: solid 1px gray; text-align:left; color:gray;"><i>[This Document is computer generated.]</i> </td>
                                     <td  style="padding:10px 0; width :50%; border-top : solid 0.5px gray; border-bottom: solid 1px gray; text-align:right; color:gray;">Invoice No : <b>('.$invoice->invoice_no.')</b> '.date('d/m/Y', strtotime($invoice->invoice_date)).'</td>
