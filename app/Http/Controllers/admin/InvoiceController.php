@@ -360,9 +360,9 @@ class InvoiceController extends Controller
                                     <img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo"><br>
                                 </td>
                                 <td style="width: 85%;">
-                                	<h3 style="text-align: right; font-size: 15pt; margin-bottom: 0;">'.$settings->company_name.'</h3>
-			                        <h5 style="text-align: right; margin-bottom: 0;">'.$settings->company_mobile_no.'</h5>
-			                        <p style="text-align: right; font-size: 10pt; margin-bottom: 0;">'.$settings->company_address.'</p>
+                                	<h3 style="text-align: right; font-size: 15pt; margin: 0">'.$settings->company_name.'</h3>
+			                        <h5 style="text-align: right; margin: 0">'.$settings->company_mobile_no.'</h5>
+			                        <p style="text-align: right; font-size: 10pt; margin: 0">'.$settings->company_address.'</p>
                                 </td>
                             </tr>
                         </table>
