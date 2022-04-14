@@ -341,8 +341,12 @@ class InvoiceController extends Controller
         try{
             $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
             $settings = Setting::find(1);
-            $Icon = url('public/images/avatar.png');
             $f = new \NumberFormatter( locale_get_default(), \NumberFormatter::SPELLOUT );
+
+            $image = '';
+            if (isset($settings->company_logo)){
+                $image = '<img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo">';
+            }
 
             $HTMLContent = '<style type="text/css">
                             <!--
@@ -357,7 +361,7 @@ class InvoiceController extends Controller
                         <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
                             <tr>
                                 <td style="width: 15%">
-                                    <img style="width: 100%;" src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo"><br>
+                                    '.$image.'
                                 </td>
                                 <td style="width: 85%;">
                                 	<h3 style="text-align: right; font-size: 15pt; margin: 0">'.$settings->company_name.'</h3>
