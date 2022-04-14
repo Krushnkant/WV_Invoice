@@ -30,6 +30,26 @@
                             <button type="button" class="btn btn-primary" id="AddInvoiceBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
                             {{-- <button class="btn btn-danger" onclick="deleteMultipleAttributes()"><i class="fa fa-trash" aria-hidden="true"></i></button>--}}
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select class="form-control" id="user_id_filter">
+                                    <option></option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->full_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 input-group">
+                                <input type="text" class="form-control custom_date_picker" id="start_date" name="start_date" placeholder="Start Date" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>
+                            <div class="col-md-3 input-group">
+                                <input type="text" class="form-control custom_date_picker" id="end_date" name="end_date" placeholder="End Date" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-outline-primary" id="export_excel_btn" >Export to Excel <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                            </div>
+                        </div>
                         @endif
 
                         @if(isset($action) && $action=='list')
@@ -152,6 +172,12 @@ $(document).ready(function() {
             allowClear: false
         });
     })
+
+    $('#user_id_filter').select2({
+        width: '100%',
+        placeholder: "Select User",
+        allowClear: true
+    });
 });
 
 function format ( d ) {
@@ -163,6 +189,9 @@ function invoice_table(is_clearState=false){
     if(is_clearState){
         $('#Invoice').DataTable().state.clear();
     }
+    var user_id_filter = $("#user_id_filter").val();
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
 
     table = $('#Invoice').DataTable({
         "destroy": true,
@@ -176,11 +205,22 @@ function invoice_table(is_clearState=false){
                 return true;
             }
         },
+        buttons: [
+            {
+                extend: 'excel',
+                // text: 'Export to Excel',
+                exportOptions: {
+                    modifier: {
+                        page: 'current'
+                    }
+                }
+            }
+        ],
         "ajax":{
             "url": "{{ url('admin/allInvoicelist') }}",
             "dataType": "json",
             "type": "POST",
-            "data":{ _token: '{{ csrf_token() }}'},
+            "data":{ _token: '{{ csrf_token() }}', user_id_filter: user_id_filter, start_date: start_date, end_date: end_date},
             // "dataSrc": ""
         },
         'columnDefs': [
@@ -537,6 +577,25 @@ function getInvoiceData(invoice_id) {
     var url = "{{ url('admin/invoice/pdf') }}" + "/" + invoice_id;
     window.open(url, "_blank");
 }
+
+$('body').on('change', '#user_id_filter', function (e) {
+    // e.preventDefault();
+    invoice_table(true);
+});
+
+$('body').on('change', '#start_date', function (e) {
+    // e.preventDefault();
+    invoice_table(true);
+});
+
+$('body').on('change', '#end_date', function (e) {
+    // e.preventDefault();
+    invoice_table(true);
+});
+
+$("#export_excel_btn").on("click", function() {
+    table.button( '.buttons-excel' ).trigger();
+});
 </script>
 <!-- Invoice JS end -->
 @endsection

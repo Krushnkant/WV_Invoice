@@ -93,7 +93,7 @@
                         </div>
 
                         <div class="form-group ">
-                            <label class="col-form-label" for="description">Description <span class="text-danger">*</span>
+                            <label class="col-form-label" for="description">Description
                             </label>
                             <input type="text" class="form-control input-flat" id="description" name="description" placeholder="">
                             <div id="description-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>

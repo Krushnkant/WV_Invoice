@@ -18,7 +18,8 @@ class InvoiceController extends Controller
 {
     public function index(){
         $action = "list";
-        return view('admin.invoice.list',compact('action'));
+        $users = User::where('role',2)->get();
+        return view('admin.invoice.list',compact('action','users'));
     }
 
     public function create(){
@@ -188,14 +189,28 @@ class InvoiceController extends Controller
             if(empty($request->input('search.value')))
             {
                 $Invoices = Invoice::with('invoice_item.product','user');
+                if (isset($request->user_id_filter) && $request->user_id_filter!=""){
+                    $Invoices = $Invoices->where('user_id',$request->user_id_filter);
+                }
+                if (isset($request->start_date) && $request->start_date!="" && isset($request->end_date) && $request->end_date!=""){
+                    $Invoices = $Invoices->whereRaw("invoice_date between '".$request->start_date."' and '".$request->end_date."'");
+                }
                 $Invoices = $Invoices->offset($start)
                     ->limit($limit)
                     ->orderBy($order,$dir)
                     ->get();
+
+                $totalFiltered = count($Invoices->toArray());
             }
             else {
                 $search = $request->input('search.value');
                 $Invoices = Invoice::with('invoice_item.product','user');
+                if (isset($request->user_id_filter) && $request->user_id_filter!=""){
+                    $Invoices = $Invoices->where('user_id',$request->user_id_filter);
+                }
+                if (isset($request->start_date) && $request->start_date!="" && isset($request->end_date) && $request->end_date!=""){
+                    $Invoices = $Invoices->whereRaw("invoice_date between '".$request->start_date."' and '".$request->end_date."'");
+                }
                 $Invoices = $Invoices->where(function($query) use($search){
                     $query->where('invoice_no','LIKE',"%{$search}%")
                         ->orWhere('invoice_date', 'LIKE',"%{$search}%")
@@ -223,27 +238,27 @@ class InvoiceController extends Controller
                 {
                     $amount = '';
                     if (isset($Invoice->total_price)){
-                        $amount .= '<span>Total Price: '.$Invoice->total_price;
+                        $amount .= '<span>Total Price: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->total_price;
                     }
                     if (isset($Invoice->total_qty)){
                         $amount .= '<span>Total Quantity: '.$Invoice->total_qty;
                     }
                     if (isset($Invoice->total_discount)){
-                        $amount .= '<span>Total Discount: '.$Invoice->total_discount;
+                        $amount .= '<span>Total Discount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->total_discount;
                     }
                     if (isset($Invoice->final_amount)){
-                        $amount .= '<span>Final Amount: '.$Invoice->final_amount;
+                        $amount .= '<span>Final Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->final_amount;
                     }
 
-                    $table = '<table class="subTable text-left" cellpadding="5" cellspacing="0" border="0" width="100%" id="items_table">';
+                    $table = '<table cellpadding="5" cellspacing="0" border="0" width="100%" id="items_table">';
                     $table .= '<tbody>';
                     $table .='<tr style="width: 100%">';
                     $table .= '<th style="text-align: center">Item No.</th>';
                     $table .= '<th>Item Name</th>';
-                    $table .= '<th>Price</th>';
-                    $table .= '<th>Quantity</th>';
-                    $table .= '<th>Discount</th>';
-                    $table .= '<th>Final Price</th>';
+                    $table .= '<th style="text-align: center">Price</th>';
+                    $table .= '<th style="text-align: center">Quantity</th>';
+                    $table .= '<th style="text-align: center">Discount</th>';
+                    $table .= '<th style="text-align: right">Final Price</th>';
                     $table .= '</tr>';
                     $item = 1;
                     foreach ($Invoice->invoice_item as $invoice_item){
@@ -259,10 +274,10 @@ class InvoiceController extends Controller
                         $table .='<tr>';
                         $table .= '<td style="text-align: center">'.$item.'</td>';
                         $table .= '<td>'.$product.'</td>';
-                        $table .= '<td><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->price.'</td>';
-                        $table .= '<td>'.$invoice_item->quantity.'</td>';
-                        $table .= '<td><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->discount.'</td>';
-                        $table .= '<td><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->final_price.'</td>';
+                        $table .= '<td style="text-align: center"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->price.'</td>';
+                        $table .= '<td style="text-align: center">'.$invoice_item->quantity.'</td>';
+                        $table .= '<td style="text-align: center"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->discount.'</td>';
+                        $table .= '<td style="text-align: right"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->final_price.'</td>';
                         $table .= '</tr>';
                         $item++;
                     }
@@ -270,7 +285,7 @@ class InvoiceController extends Controller
                     $table .='</table>';
 
                     $action = '';
-                    $action .= '<button id="printBtn" class="btn btn-gray text-blue btn-sm" onclick="getInvoiceData(\''.$Invoice->id.'\')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                    $action .= '<button id="printBtn" class="btn btn-gray text-warning btn-sm" onclick="getInvoiceData(\''.$Invoice->id.'\')"><i class="fa fa-print" aria-hidden="true"></i></button>';
                     $action .= '<button id="editInvoiceBtn" class="btn btn-gray text-blue btn-sm" data-id="'.$Invoice->id.'"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteInvoiceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteInvoiceModal" data-id="'.$Invoice->id.'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 

@@ -228,7 +228,12 @@ class UserController extends Controller
                     }
 
                     if(isset($user->full_name)){
-                        $full_name = $user->full_name." [".$user->id."]";
+                        if ($user->role == 2){
+                            $full_name = '<a href="'.url('admin/product_prices/'.$user->id).'" target="_blank">'.$user->full_name . " [" . $user->id . "]".'</a>';
+                        }
+                        else {
+                            $full_name = $user->full_name . " [" . $user->id . "]";
+                        }
                     }
                     else{
                         $full_name="";

@@ -22,7 +22,6 @@ class ProductController extends Controller
             'title_english.required' =>'Please provide a Product Title',
             'title_hindi.required' =>'Please provide a Product Title',
             'title_gujarati.required' =>'Please provide a Product Title',
-            'description.required' =>'Please provide a Product Description.',
             'price.required' =>'Please provide a Product Price.',
             'stock.required' =>'Please provide a Product Stock.',
         ];
@@ -32,7 +31,6 @@ class ProductController extends Controller
             'title_english' => 'required',
             'title_hindi' => 'required',
             'title_gujarati' => 'required',
-            'description' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required',
         ], $messages);

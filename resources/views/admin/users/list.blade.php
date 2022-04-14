@@ -25,16 +25,14 @@
 
                         <div class="custom-tab-1">
                             <ul class="nav nav-tabs mb-3">
-                                <li class="nav-item user_page_tabs" data-tab="all_user_tab"><a class="nav-link active show" data-toggle="tab" href="">All</a>
-                                </li>
-                                <li class="nav-item user_page_tabs" data-tab="customer_user_tab"><a class="nav-link" data-toggle="tab" href="">Customer</a>
+                                <li class="nav-item user_page_tabs" data-tab="customer_user_tab"><a class="nav-link active show" data-toggle="tab" href="">Customer</a>
                                 </li>
                                 <li class="nav-item user_page_tabs" data-tab="admin_user_tab"><a class="nav-link" data-toggle="tab" href="">Admin</a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="tab-pane fade show active table-responsive" id="all_user_tab">
+                        <div class="tab-pane fade show active table-responsive" id="customer_user_tab">
                             <table id="all_users" class="table zero-configuration customNewtable" style="width:100%">
                                 <thead>
                                 <tr>
@@ -171,7 +169,8 @@
 <!-- user list JS start -->
 <script type="text/javascript">
     $(document).ready(function() {
-        user_page_tabs('',true);
+        var tab_type = get_users_page_tabType();
+        user_page_tabs(tab_type,true);
     });
 
     function get_users_page_tabType(){
