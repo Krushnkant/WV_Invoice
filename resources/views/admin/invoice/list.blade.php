@@ -303,8 +303,8 @@ $('body').on('change', '.item_name', function () {
         url: "{{ route('admin.invoice.change_product_price') }}",
         data: {_token: '{{ csrf_token() }}', user_id: user_id, product_id: product_id},
         success: function (res) {
-            $(thi).parents('.item-name').next().find('.unitcost').val(res);
-            $(thi).parents('.item-name').next().find('.unitcost').trigger('change');
+            $(thi).parents('.item-row').find('.unitcost').val(res);
+            $(thi).parents('.item-row').find('.unitcost').trigger('change');
         },
         error: function (data) {
 
@@ -315,9 +315,8 @@ $('body').on('change', '.item_name', function () {
 $('body').on('change', '.unitcost', function () {
     var price = $(this).val();
     var qty = $(this).parents('.item-row').find('.quantity').val();
-    var discount = $(this).parents('.item-row').find('.discount').val();
 
-    var final_price_item = (price * qty) - discount;
+    var final_price_item = (price * qty);
 
     if(final_price_item > 0) {
         $(this).parents('.item-row').find('.proprice').html(final_price_item);
@@ -332,9 +331,8 @@ $('body').on('change', '.unitcost', function () {
 $('body').on('change', '.quantity', function () {
     var price = $(this).parents('.item-row').find('.unitcost').val();
     var qty = $(this).val();
-    var discount = $(this).parents('.item-row').find('.discount').val();
 
-    var final_price_item = (price * qty) - discount;
+    var final_price_item = (price * qty);
 
     if(final_price_item > 0) {
         $(this).parents('.item-row').find('.proprice').html(final_price_item);
@@ -377,7 +375,7 @@ function update_total() {
 
     $(".quantity").each(function() {
         if($(this).val()>0) {
-            totalQty = parseInt(totalQty) + parseInt($(this).val());
+            totalQty = parseFloat(totalQty) + parseFloat($(this).val());
         }
     });
 
@@ -414,24 +412,25 @@ $('body').on('click', '#invoice_submit', function () {
     if(validate_invoice==true && validate_invoice_items==true) {
         var formData = new FormData($('#invoiceForm')[0]);
         var cnt = 1;
+        var product_ids = [];
         $('.item-row').each(function () {
             var thi = $(this);
             var InvoiceItemForm = {"item_name":$(thi).find('.item_name').val(),
                 "price":$(thi).find('.unitcost').val(),
                 "quantity":$(thi).find('.quantity').val(),
-                "discount":$(thi).find('.discount').val(),
                 "final_price":$(thi).find('.sub_price').html()};
 
             formData.append("InvoiceItemForm" + cnt, JSON.stringify(InvoiceItemForm));
+            product_ids.push($(thi).find('.item_name').val());
             cnt++;
         });
         formData.append("total_price", $("#totalUnitcost").html());
         formData.append("total_qty", $("#totalQty").html());
-        formData.append("total_discount", $("#totalDiscount").html());
         formData.append("final_amount", $("#total").html());
         formData.append("language", $("#language").val());
         formData.append("action", $(btn).attr('action'));
         formData.append("total_items", $('.item-row').length);
+        formData.append("product_ids", product_ids);
 
         $.ajaxSetup({
             headers: {

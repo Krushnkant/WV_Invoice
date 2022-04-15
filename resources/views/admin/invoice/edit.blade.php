@@ -84,9 +84,8 @@
             <thead>
             <tr>
                 <th>Item</th>
-                <th>Unit Cost</th>
                 <th>Quantity (Kg)</th>
-                <th>Discount</th>
+                <th>Unit Cost</th>
                 <th>Price</th>
             </tr>
             </thead>
@@ -105,13 +104,13 @@
                                     $product_title = $product->title_english;
                                 }
                                 elseif ($invoice->language == "Hindi"){
-                                    $product_title = $product->title_hindi;
+                                    $product_title = $product->title_english." | ".$product->title_hindi;
                                 }
                                 elseif ($invoice->language == "Gujarati"){
-                                    $product_title = $product->title_gujarati;
+                                    $product_title = $product->title_english." | ".$product->title_gujarati;
                                 }
                                 ?>
-                                <option value="{{ $product->id }}" @if($invoice_item->product_id==$product->id) selected @endif>{{ $product_title }} ({{ $invoice->language }})</option>
+                                <option value="{{ $product->id }}" @if($invoice_item->product_id==$product->id) selected @endif>{{ $product_title }}</option>
                             @endforeach
                         </select>
                         <label id="item_name-error" class="error invalid-feedback animated fadeInDown" for="item_name"></label>
@@ -121,15 +120,12 @@
                     </div>
                 </td>
                 <td>
-                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="{{ $invoice_item->price }}">
-                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
-                </td>
-                <td>
                     <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
-                    <input class="form-control discount disc" placeholder="0.00" type="number" name="discount" min="1" value="{{ $invoice_item->discount }}">
+                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="{{ $invoice_item->price }}">
+                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
                 <td class="subt_price"><div class="prse"><i class="fa fa-inr" aria-hidden="true"></i><span class="price proprice sub_price">{{ $invoice_item->final_price }}</span></div></td>
             </tr>
@@ -145,13 +141,12 @@
             </tr>
             <tr class="fullrow">
                 <td class="total-line">Total</td>
+                <td><div class=""><span id="totalQty" class="totalQty">{{ $invoice->total_qty }}</span></div></td>
                 <td>
                     <div class="">
                         <p class="mb-0">Total Price: <span id="totalUnitcost" class="totalUnitcost">{{ $invoice->total_price }}</span></p>
                     </div>
                 </td>
-                <td><div class=""><span id="totalQty" class="totalQty">{{ $invoice->total_qty }}</span></div></td>
-                <td><div class=""><span id="totalDiscount" class="totalDiscount">{{ $invoice->total_discount }}</span></div></td>
                 <td class="total-value"><div id="total">{{ $invoice->final_amount }}</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>
             </tfoot>

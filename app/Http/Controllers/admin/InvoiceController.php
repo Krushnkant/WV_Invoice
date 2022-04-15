@@ -50,12 +50,12 @@ class InvoiceController extends Controller
                 $title = $product->title_english;
             }
             elseif ($language == "Hindi"){
-                $title = $product->title_hindi;
+                $title = $product->title_english." | ".$product->title_hindi;
             }
             elseif ($language == "Gujarati"){
-                $title = $product->title_gujarati;
+                $title = $product->title_english." | ".$product->title_gujarati;
             }
-            $html_product .= '<option value="'.$product->id.'">'.$title.' ('.$language.')</option>';
+            $html_product .= '<option value="'.$product->id.'">'.$title.'</option>';
         }
 
 
@@ -70,15 +70,12 @@ class InvoiceController extends Controller
                     </div>
                 </td>
                 <td>
-                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
-                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
-                </td>
-                <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" value="1" min="1">(KG)
+                    <input class="form-control quantity qty" name="quantity" type="number" value="1" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
-                    <input class="form-control discount disc" placeholder="0.00" type="number" name="discount" min="1" value="">
+                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
+                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
                 <td class="subt_price"><div class="prse"><i class="fa fa-inr" aria-hidden="true"></i><span class="price proprice sub_price">0.00</span></div></td>
            </tr>';
@@ -95,12 +92,12 @@ class InvoiceController extends Controller
                 $title = $product->title_english;
             }
             elseif ($language == "Hindi"){
-                $title = $product->title_hindi;
+                $title = $product->title_english." | ".$product->title_hindi;
             }
             elseif ($language == "Gujarati"){
-                $title = $product->title_gujarati;
+                $title = $product->title_english." | ".$product->title_gujarati;
             }
-            $html_product .= '<option value="'.$product->id.'">'.$title.' ('.$language.')</option>';
+            $html_product .= '<option value="'.$product->id.'">'.$title.'</option>';
         }
 
         return ['html' => $html_product];
@@ -112,7 +109,6 @@ class InvoiceController extends Controller
     }
 
     public function save(Request $request){
-//        dd($request->all(),json_decode($request->InvoiceItemForm1,true));
         if ($request->action == "add"){
             $invoice = new Invoice();
         }
@@ -125,14 +121,17 @@ class InvoiceController extends Controller
         $invoice->invoice_date = date("Y-m-d", strtotime($request->invoice_date));
         $invoice->total_price = $request->total_price;
         $invoice->total_qty = $request->total_qty;
-        $invoice->total_discount = $request->total_discount;
         $invoice->final_amount = $request->final_amount;
         $invoice->save();
 
+//        $deleted_product_ids = array();
         if ($request->action == "update"){
             $invoice_items = InvoiceItem::where('invoice_id',$request->invoice_id)->get();
             foreach ($invoice_items as $invoice_item){
                 $invoice_item->estatus = 3;
+//                $temp['product_id'] = $invoice_item->product_id;
+//                $temp['qty'] = $invoice_item->quantity;
+//                array_push($deleted_product_ids,$temp);
                 $invoice_item->save();
                 $invoice_item->delete();
             }
@@ -146,11 +145,13 @@ class InvoiceController extends Controller
             $invoice_item->product_id = $item['item_name'];
             $invoice_item->price = $item['price'];
             $invoice_item->quantity = $item['quantity'];
-            if (isset($item['discount']) && $item['discount']!="") {
-                $invoice_item->discount = $item['discount'];
-            }
             $invoice_item->final_price = $item['final_price'];
             $invoice_item->save();
+            if ($request->action == "add") {
+                $product = Product::find($invoice_item->product_id);
+                $product->stock = $product->stock - $invoice_item->quantity;
+                $product->save();
+            }
         }
 
         if ($request->action == "add") {
@@ -216,7 +217,6 @@ class InvoiceController extends Controller
                         ->orWhere('invoice_date', 'LIKE',"%{$search}%")
                         ->orWhere('total_price', 'LIKE',"%{$search}%")
                         ->orWhere('total_qty', 'LIKE',"%{$search}%")
-                        ->orWhere('total_discount', 'LIKE',"%{$search}%")
                         ->orWhere('final_amount', 'LIKE',"%{$search}%")
                         ->orWhereHas('user',function ($Query) use($search) {
                             $Query->where('full_name', 'Like', '%' . $search . '%');
@@ -243,9 +243,6 @@ class InvoiceController extends Controller
                     if (isset($Invoice->total_qty)){
                         $amount .= '<span>Total Quantity: '.$Invoice->total_qty;
                     }
-                    if (isset($Invoice->total_discount)){
-                        $amount .= '<span>Total Discount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->total_discount;
-                    }
                     if (isset($Invoice->final_amount)){
                         $amount .= '<span>Final Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->final_amount;
                     }
@@ -257,7 +254,6 @@ class InvoiceController extends Controller
                     $table .= '<th>Item Name</th>';
                     $table .= '<th style="text-align: center">Price</th>';
                     $table .= '<th style="text-align: center">Quantity</th>';
-                    $table .= '<th style="text-align: center">Discount</th>';
                     $table .= '<th style="text-align: right">Final Price</th>';
                     $table .= '</tr>';
                     $item = 1;
@@ -266,17 +262,16 @@ class InvoiceController extends Controller
                             $product = $invoice_item->product->title_english;
                         }
                         elseif ($Invoice->language == "Hindi"){
-                            $product = $invoice_item->product->title_hindi;
+                            $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_hindi;
                         }
                         elseif ($Invoice->language == "Gujarati"){
-                            $product = $invoice_item->product->title_gujarati;
+                            $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_gujarati;
                         }
                         $table .='<tr>';
                         $table .= '<td style="text-align: center">'.$item.'</td>';
                         $table .= '<td>'.$product.'</td>';
                         $table .= '<td style="text-align: center"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->price.'</td>';
                         $table .= '<td style="text-align: center">'.$invoice_item->quantity.'</td>';
-                        $table .= '<td style="text-align: center"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->discount.'</td>';
                         $table .= '<td style="text-align: right"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->final_price.'</td>';
                         $table .= '</tr>';
                         $item++;
@@ -329,6 +324,11 @@ class InvoiceController extends Controller
             foreach ($Invoice->invoice_item as $invoice_item){
                 $invoice_item->estatus = 3;
                 $invoice_item->save();
+
+                $product = Product::find($invoice_item->product_id);
+                $product->stock = $product->stock + $invoice_item->quantity;
+                $product->save();
+
                 $invoice_item->delete();
             }
 
@@ -364,8 +364,8 @@ class InvoiceController extends Controller
                                     '.$image.'
                                 </td>
                                 <td style="width: 85%;">
-                                	<h3 style="text-align: right; font-size: 15pt; margin: 0">'.$settings->company_name.'</h3>
-			                        <h5 style="text-align: right; margin: 0">'.$settings->company_mobile_no.'</h5>
+                                	<h3 style="text-align: right; font-size: 15pt; margin: 0;margin-bottom: 2px">'.$settings->company_name.'</h3>
+			                        <h5 style="text-align: right; margin: 0;margin-bottom: 2px">'.$settings->company_mobile_no.'</h5>
 			                        <p style="text-align: right; font-size: 10pt; margin: 0">'.$settings->company_address.'</p>
                                 </td>
                             </tr>
@@ -414,22 +414,20 @@ class InvoiceController extends Controller
                         <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
-                                <col style="width: 40%; text-align: left">
-                                <col style="width: 16%; text-align: center">
+                                <col style="width: 50%; text-align: left">
+                                <col style="width: 20%; text-align: center">
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 10%; text-align: center">
-                                <col style="width: 14%; text-align: center">
                             </colgroup>
                             <thead>
                                 <tr style="background: #ffe6e6;">
-                                    <th colspan="6" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Item Details </th>
+                                    <th colspan="5" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Item Details </th>
                                 </tr>
                                 <tr>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">No.</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Item</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Qty</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Disc</th>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Total</th>
                                 </tr>
                             </thead>
@@ -441,37 +439,35 @@ class InvoiceController extends Controller
                     $item = $invoice_item->product->title_english;
                 }
                 elseif ($invoice->language == "Hindi"){
-                    $item = $invoice_item->product->title_hindi;
+                    $item = $invoice_item->product->title_english." | ".$invoice_item->product->title_hindi;
                 }
                 elseif ($invoice->language == "Gujarati"){
-                    $item = $invoice_item->product->title_gujarati;
+                    $item = $invoice_item->product->title_english." | ".$invoice_item->product->title_gujarati;
                 }
 
                 $HTMLContent .= '<tr>
                                     <th style="font-weight : 10px; padding:8px 0;">'.$no.'</th>
                                     <th style="font-weight : 10px; padding:8px 0;"><b>'.$item.'</b></th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
                                     <th style="font-weight : 10px; padding:8px 0;">'.$invoice_item->quantity.' KG</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->discount, 2, '.', ',').'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
                                     <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
                                 </tr>';
                 $no++;
             }
 
             $HTMLContent .= '<tr>
-                                    <td colspan="6" style="padding:4px 0;"></td>
+                                    <td colspan="5" style="padding:4px 0;"></td>
                              </tr>
                              <tr>
                                     <th colspan="2" style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">Total</th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->total_price, 2, '.', ',').'</th>
                                     <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.$invoice->total_qty.'</th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->total_discount, 2, '.', ',').'</th>
+                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->total_price, 2, '.', ',').'</th>
                                     <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
                              <tr>
                                     <td colspan="2" style="padding:8px 0; border-bottom: solid 1px black;"></td>
-                                    <td colspan="3" style="padding:8px 0; text-align:left; padding-left : 10px; border-bottom: solid 1px black; border-left: solid 1px black;">Total Amount</td>
-                                    <td style="padding:8px 0; border-bottom: solid 1px black;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span>'.number_format($invoice->final_amount, 2, '.', ',').'</td>
+                                    <td colspan="2" style="padding:8px 0; text-align:left; padding-left : 10px; border-bottom: solid 1px black; border-left: solid 1px black;">Total Amount</td>
+                                    <td style="padding:8px 0; border-bottom: solid 1px black;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.number_format($invoice->final_amount, 2, '.', ',').'</td>
                              </tr>
                             </tbody>
                         </table>';
@@ -486,7 +482,7 @@ class InvoiceController extends Controller
                             </table>
                         </page>';
 
-            $html2pdf = new Html2Pdf('P', 'A4', 'fr', true, "UTF-8");
+            $html2pdf = new Html2Pdf('P', 'A5', 'fr', true, "UTF-8");
             $html2pdf->setDefaultFont('freeserif');
             $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->writeHTML($HTMLContent);

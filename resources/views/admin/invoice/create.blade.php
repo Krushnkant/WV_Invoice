@@ -83,9 +83,8 @@
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Unit Cost</th>
                     <th>Quantity (Kg)</th>
-                    <th>Discount</th>
+                    <th>Unit Cost</th>
                     <th>Price</th>
                 </tr>
             </thead>
@@ -97,22 +96,19 @@
                         <select name="item_name" id="item_name_1" class="item_name">
                             <option></option>
                             @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->title_english }} (English)</option>
+                                <option value="{{ $product->id }}">{{ $product->title_english }}</option>
                             @endforeach
                         </select>
                         <label id="item_name-error" class="error invalid-feedback animated fadeInDown" for="item_name"></label>
                     </div>
                 </td>
                 <td>
-                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
-                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
-                </td>
-                <td>
                     <input class="form-control quantity qty" name="quantity" type="number" value="1" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
-                    <input class="form-control discount disc" placeholder="0.00" type="number" name="discount" min="1" value="">
+                    <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
+                    <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
                 <td class="subt_price"><div class="prse"><i class="fa fa-inr" aria-hidden="true"></i><span class="price proprice sub_price">0.00</span></div></td>
             </tr>
@@ -126,13 +122,12 @@
             </tr>
             <tr class="fullrow">
                 <td class="total-line">Total</td>
+                <td><div class=""><span id="totalQty" class="totalQty">1</span></div></td>
                 <td>
                     <div class="">
                         <p class="mb-0">Total Price: <span id="totalUnitcost" class="totalUnitcost">0.00</span></p>
                     </div>
                 </td>
-                <td><div class=""><span id="totalQty" class="totalQty">1</span></div></td>
-                <td><div class=""><span id="totalDiscount" class="totalDiscount">0.00</span></div></td>
                 <td class="total-value"><div id="total">0.00</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>
             </tfoot>
