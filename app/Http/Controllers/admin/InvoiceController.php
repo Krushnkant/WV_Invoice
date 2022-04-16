@@ -209,7 +209,7 @@ class InvoiceController extends Controller
 
             if($order == "id"){
                 $order = "created_at";
-                $dir = 'desc';
+                $dir = 'ASC';
             }
 
             $totalData = Invoice::count();
