@@ -124,14 +124,22 @@ class InvoiceController extends Controller
         $invoice->final_amount = $request->final_amount;
         $invoice->save();
 
-//        $deleted_product_ids = array();
+        $deleted_product_ids = array();
         if ($request->action == "update"){
             $invoice_items = InvoiceItem::where('invoice_id',$request->invoice_id)->get();
             foreach ($invoice_items as $invoice_item){
                 $invoice_item->estatus = 3;
-//                $temp['product_id'] = $invoice_item->product_id;
-//                $temp['qty'] = $invoice_item->quantity;
-//                array_push($deleted_product_ids,$temp);
+
+                $temp['product_id'] = $invoice_item->product_id;
+                $temp['qty'] = $invoice_item->quantity;
+                array_push($deleted_product_ids,$temp);
+                //update stock
+                if (!in_array($invoice_item->product_id,explode(",",$request->product_ids))){
+                    $product = Product::find($invoice_item->product_id);
+                    $product->stock = $product->stock + $invoice_item->quantity;
+                    $product->save();
+                }
+
                 $invoice_item->save();
                 $invoice_item->delete();
             }
@@ -147,10 +155,30 @@ class InvoiceController extends Controller
             $invoice_item->quantity = $item['quantity'];
             $invoice_item->final_price = $item['final_price'];
             $invoice_item->save();
+
+            //update stock
             if ($request->action == "add") {
                 $product = Product::find($invoice_item->product_id);
                 $product->stock = $product->stock - $invoice_item->quantity;
                 $product->save();
+            }
+            elseif ($request->action == "update"){
+                foreach ($deleted_product_ids as $deleted_product_id) {
+                    if ($deleted_product_id->product_id==$invoice_item->product_id && $deleted_product_id->qty!=$invoice_item->quantity){
+                        if ($invoice_item->quantity > $deleted_product_id->qty){
+                            $qty = $invoice_item->quantity - $deleted_product_id->qty;
+                            $product = Product::find($invoice_item->product_id);
+                            $product->stock = $product->stock - $qty;
+                            $product->save();
+                        }
+                        elseif ($invoice_item->quantity < $deleted_product_id->qty){
+                            $qty = $deleted_product_id->qty - $invoice_item->quantity;
+                            $product = Product::find($invoice_item->product_id);
+                            $product->stock = $product->stock + $qty;
+                            $product->save();
+                        }
+                    }
+                }
             }
         }
 
