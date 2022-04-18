@@ -314,7 +314,7 @@ class InvoiceController extends Controller
                     $action .= '<button id="deleteInvoiceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteInvoiceModal" data-id="'.$Invoice->id.'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
                     $nestedData['invoice_no'] = $Invoice->invoice_no;
-                    $nestedData['customer_info'] = $Invoice->user->full_name;
+                    $nestedData['customer_info'] = isset($Invoice->user->full_name)?$Invoice->user->full_name:'';
                     $nestedData['amount'] = $amount;
                     $nestedData['invoice_date'] = date("d-m-Y", strtotime($Invoice->invoice_date));
                     $nestedData['action'] = $action;
