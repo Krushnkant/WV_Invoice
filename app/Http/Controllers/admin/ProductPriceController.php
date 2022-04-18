@@ -144,7 +144,7 @@ class ProductPriceController extends Controller
                     $action .= '<button id="editProductPriceBtn" class="btn btn-gray text-blue btn-sm" data-toggle="modal" data-target="#ProductPriceModal" onclick="" data-id="' .$ProductPrice->id. '"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
 //                    $action .= '<button id="deleteProductPriceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteProductPriceModal" onclick="" data-id="' .$ProductPrice->id. '"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
-                    $nestedData['product'] = $ProductPrice->product->title_english;
+                    $nestedData['product'] = isset($ProductPrice->product)?$ProductPrice->product->title_english:'';
                     $nestedData['price'] = '<i class="fa fa-inr" aria-hidden="true"></i> '.$ProductPrice->price;
                     $nestedData['created_at'] = date('Y-m-d H:i:s', strtotime($ProductPrice->created_at));
                     $nestedData['action'] = $action;
