@@ -286,13 +286,13 @@ class InvoiceController extends Controller
                     $table .= '</tr>';
                     $item = 1;
                     foreach ($Invoice->invoice_item as $invoice_item){
-                        if ($Invoice->language == "English"){
+                        if ($Invoice->language == "English" && isset($invoice_item->product)){
                             $product = $invoice_item->product->title_english;
                         }
-                        elseif ($Invoice->language == "Hindi"){
+                        elseif ($Invoice->language == "Hindi" && isset($invoice_item->product)){
                             $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_hindi;
                         }
-                        elseif ($Invoice->language == "Gujarati"){
+                        elseif ($Invoice->language == "Gujarati" && isset($invoice_item->product)){
                             $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_gujarati;
                         }
                         $table .='<tr>';
