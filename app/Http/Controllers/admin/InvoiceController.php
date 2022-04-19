@@ -507,12 +507,12 @@ class InvoiceController extends Controller
                             </tbody>
                         </table>';
 
-            $HTMLContent .= '<p>AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
+            $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
 
             $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
                                 <tr>
-                                    <td  style="padding:10px 0; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
-                                    <td  style="padding:10px 0; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
+                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
+                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
                                 </tr>
                             </table>
                         </page>';
