@@ -163,15 +163,15 @@ class InvoiceController extends Controller
             }
             elseif ($request->action == "update"){
                 foreach ($deleted_product_ids as $deleted_product_id) {
-                    if ($deleted_product_id->product_id==$invoice_item->product_id && $deleted_product_id->qty!=$invoice_item->quantity){
-                        if ($invoice_item->quantity > $deleted_product_id->qty){
-                            $qty = $invoice_item->quantity - $deleted_product_id->qty;
+                    if ($deleted_product_id['product_id']==$invoice_item->product_id && $deleted_product_id['qty']!=$invoice_item->quantity){
+                        if ($invoice_item->quantity > $deleted_product_id['qty']){
+                            $qty = $invoice_item->quantity - $deleted_product_id['qty'];
                             $product = Product::find($invoice_item->product_id);
                             $product->stock = $product->stock - $qty;
                             $product->save();
                         }
-                        elseif ($invoice_item->quantity < $deleted_product_id->qty){
-                            $qty = $deleted_product_id->qty - $invoice_item->quantity;
+                        elseif ($invoice_item->quantity < $deleted_product_id['qty']){
+                            $qty = $deleted_product_id['qty'] - $invoice_item->quantity;
                             $product = Product::find($invoice_item->product_id);
                             $product->stock = $product->stock + $qty;
                             $product->save();

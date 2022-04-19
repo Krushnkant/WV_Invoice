@@ -77,7 +77,7 @@
 @section('js')
 <script type="text/javascript">
     var cData = JSON.parse('<?php echo $final_chart_data; ?>');
-    console.log("cData:",cData);
+    // console.log("cData:",cData);
 
     const data = {
         labels: cData.label,
