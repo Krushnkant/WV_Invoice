@@ -121,13 +121,6 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="form-group ">
-                            <label class="col-form-label" for="stock">Stock (KG) <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" class="form-control input-flat" id="stock" name="stock" placeholder="">
-                            <div id="stock-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="product_id" id="product_id">
@@ -219,12 +212,6 @@
                         $('#price-error').show().text(res.errors.price);
                     } else {
                         $('#price-error').hide();
-                    }
-
-                    if (res.errors.stock) {
-                        $('#stock-error').show().text(res.errors.stock);
-                    } else {
-                        $('#stock-error').hide();
                     }
                 }
 
@@ -425,7 +412,6 @@
             $('#title_gujarati').val(data.title_gujarati);
             $('#description').val(data.description);
             $('#price').val(data.price);
-            $('#stock').val(data.stock);
             $("#is_update_for_all_div").show();
         })
     });

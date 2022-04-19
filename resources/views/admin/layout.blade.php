@@ -139,6 +139,12 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ route('admin.product_stock.list') }}" aria-expanded="false">
+                        <i class="icon-badge menu-icon"></i><span class="nav-text">Stock</span>
+                    </a>
+                </li>
+
                 {{--<li>
                     <a href="{{ route('admin.product_prices.list') }}" aria-expanded="false">
                         <i class="icon-badge menu-icon"></i><span class="nav-text">Customer Price</span>

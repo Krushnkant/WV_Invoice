@@ -438,7 +438,7 @@ $('body').on('click', '#invoice_submit', function () {
     var btn = $(this);
 
     var validate_invoice = validateInvoice();
-    var validate_invoice_items = validateInvoiceItems();
+    var validate_invoice_items = validateInvoiceItems($(btn).attr('action'));
 
     if(validate_invoice==true && validate_invoice_items==true) {
         var formData = new FormData($('#invoiceForm')[0]);
@@ -537,25 +537,46 @@ function validateInvoice() {
     return valid;
 }
 
-function validateInvoiceItems() {
+function validateInvoiceItems(action) {
     var valid = true;
     $('.item-row').each(function () {
         var thi = $(this);
         if($(thi).find('.item_name').val() == ""){
             valid = false;
             $(thi).find('#item_name-error').show().html("Please Select Item");
+            return valid;
         }
         if($(thi).find('.unitcost').val() == ""){
             valid = false;
             $(thi).find('#price-error').show().html("Please Provide Price");
+            return valid;
         }
         if($(thi).find('.quantity').val() == "" || $(thi).find('.quantity').val()<=0){
             valid = false;
             $(thi).find('#quantity-error').show().html("Please Provide Quantity");
+            return valid;
+        }
+        if($(thi).find('.quantity').val() != "" && $(thi).find('.quantity').val()>0 && $(thi).find('.item_name').val() != ""){
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('admin.check_stock') }}",
+                data: {_token: '{{ csrf_token() }}', product_id: $(thi).find('.item_name').val() , quantity: $(thi).find('.quantity').val(), action: action},
+                success: function (res) {
+                    if(res.status == 400){
+                        valid = false;
+                        $(thi).find('#quantity-error').show().html("Item is not available in stock");
+                    }
+                },
+                error: function (data) {
+
+                }
+            }).then(function() {
+                if(valid == false) {
+                    return valid;
+                }
+            });
         }
     });
-
-    return valid;
 }
 
 $('body').on('click', '#deleteInvoiceBtn', function (e) {

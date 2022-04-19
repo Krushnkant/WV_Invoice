@@ -56,4 +56,10 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('invoice/{id}/delete',[\App\Http\Controllers\admin\InvoiceController::class,'delete'])->name('invoice.delete');
     Route::get('invoice/pdf/{id}',[\App\Http\Controllers\admin\InvoiceController::class,'generate_pdf'])->name('invoice.pdf');
 
+    Route::get('product_stock',[\App\Http\Controllers\admin\ProductStockController::class,'index'])->name('product_stock.list');
+    Route::post('addProductStock',[\App\Http\Controllers\admin\ProductStockController::class,'addProductStock'])->name('product_stock.add');
+    Route::post('allProductStocklist',[\App\Http\Controllers\admin\ProductStockController::class,'allProductStocklist'])->name('allProductStocklist');
+    Route::get('product_stock/{id}/delete',[\App\Http\Controllers\admin\ProductStockController::class,'deleteProductStock'])->name('product_stock.delete');
+    Route::post('check_stock',[\App\Http\Controllers\admin\ProductStockController::class,'check_stock'])->name('check_stock');
+
 });

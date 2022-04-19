@@ -23,7 +23,6 @@ class ProductController extends Controller
             'title_hindi.required' =>'Please provide a Product Title',
             'title_gujarati.required' =>'Please provide a Product Title',
             'price.required' =>'Please provide a Product Price.',
-            'stock.required' =>'Please provide a Product Stock.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -32,7 +31,6 @@ class ProductController extends Controller
             'title_hindi' => 'required',
             'title_gujarati' => 'required',
             'price' => 'required|numeric',
-            'stock' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
@@ -56,7 +54,6 @@ class ProductController extends Controller
             $Product->title_gujarati = $request->title_gujarati;
             $Product->description = $request->description;
             $Product->price = $request->price;
-            $Product->stock = $request->stock;
         }
         else{
             $action = "add";
@@ -66,7 +63,6 @@ class ProductController extends Controller
             $Product->title_gujarati = $request->title_gujarati;
             $Product->description = $request->description;
             $Product->price = $request->price;
-            $Product->stock = $request->stock;
             $Product->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
             $image_name=null;
         }
