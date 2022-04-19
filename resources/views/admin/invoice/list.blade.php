@@ -64,6 +64,11 @@
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Action</th>
+                                        <th>Quantity</th>
+                                        <th>Amount</th>
+                                        <th>amount transfer</th>
+                                        <th>payment type</th>
+                                        <th>outstanding amount</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -75,6 +80,11 @@
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Action</th>
+                                        <th>Quantity</th>
+                                        <th>Amount</th>
+                                        <th>amount transfer</th>
+                                        <th>payment type</th>
+                                        <th>outstanding amount</th>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -192,11 +202,13 @@ function invoice_table(is_clearState=false){
     var user_id_filter = $("#user_id_filter").val();
     var start_date = $("#start_date").val();
     var end_date = $("#end_date").val();
+    var hideFromExport = [6];
 
     table = $('#Invoice').DataTable({
         "destroy": true,
         "processing": true,
         "serverSide": true,
+        "pageLength": 100,
         'stateSave': function(){
             if(is_clearState){
                 return false;
@@ -210,6 +222,15 @@ function invoice_table(is_clearState=false){
                 extend: 'excel',
                 // text: 'Export to Excel',
                 exportOptions: {
+                    /*columns: function ( idx, data, node ) {
+                        var isVisible = table.column( idx ).visible();
+                        var isNotForExport = $.inArray( idx, hideFromExport ) !== -1;
+                        return ((isVisible && !isNotForExport) || !isVisible) ? true : false;
+                    },*/
+                    columns: [0,1,5,2,3,function ( idx, data, node ) {
+                        var isVisible = table.column( idx ).visible();
+                        return (!isVisible) ? true : false;
+                    }],
                     modifier: {
                         page: 'current'
                     }
@@ -231,6 +252,11 @@ function invoice_table(is_clearState=false){
             { "width": "150px", "targets": 4 },
             { "width": "120px", "targets": 5 },
             { "width": "200px", "targets": 6 },
+            { "width": "5px", "visible": false ,"targets": 7 },
+            { "width": "5px", "visible": false ,"targets": 8 },
+            { "width": "5px", "visible": false ,"targets": 9 },
+            { "width": "5px", "visible": false ,"targets": 10 },
+            { "width": "5px", "visible": false ,"targets": 11 },
         ],
         "columns": [
             {"className": 'details-control', "orderable": false, "data": null, "defaultContent": ''},
@@ -244,6 +270,11 @@ function invoice_table(is_clearState=false){
             {data: 'amount', name: 'amount', orderable: false, class: "text-left multirow"},
             {data: 'invoice_date', name: 'invoice_date', orderable: false, class: "text-left"},
             {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
+            {data: 'quantity', name: 'quantity', orderable: false, searchable: false},
+            {data: 'final_amount', name: 'final_amount', orderable: false, searchable: false},
+            {data: 'amount_transfer', name: 'amount_transfer', orderable: false, searchable: false},
+            {data: 'payment_type', name: 'payment_type', orderable: false, searchable: false},
+            {data: 'outstanding_amount', name: 'outstanding_amount', orderable: false, searchable: false},
         ]
     });
 }

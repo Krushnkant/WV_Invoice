@@ -25,7 +25,7 @@ class UserController extends Controller
             'mobile_no.required' =>'Please provide a Mobile No.',
             'email.required' =>'Please provide a Email Address.',
             'password.required' =>'Please provide a Password.',
-            'dob.required' =>'Please provide a Date of Birth.',
+            'address.required' =>'Please provide a Address.',
         ];
 
         if ($request->role == 1){
@@ -35,7 +35,6 @@ class UserController extends Controller
                 'mobile_no' => 'required|numeric|digits:10',
                 'email' => 'required|email',
                 'password' => 'required',
-                'dob' => 'required',
             ], $messages);
         }
         else{
@@ -43,7 +42,7 @@ class UserController extends Controller
                 'profile_pic' => 'image|mimes:jpeg,png,jpg',
                 'full_name' => 'required',
                 'mobile_no' => 'required|numeric|digits:10',
-                'dob' => 'required',
+                'address' => 'required',
             ], $messages);
         }
 
@@ -64,18 +63,18 @@ class UserController extends Controller
 
             $user->full_name = $request->full_name;
             $user->mobile_no = $request->mobile_no;
-            $user->gender = $request->gender;
-            $user->dob = $request->dob;
             $user->role = $request->role;
             if ($request->role == 1){
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
                 $user->decrypted_password = $request->password;
+                $user->address = null;
             }
             else{
                 $user->email = null;
                 $user->password = null;
                 $user->decrypted_password = null;
+                $user->address = $request->address;
             }
         }
         else{
@@ -83,14 +82,15 @@ class UserController extends Controller
             $user = new User();
             $user->full_name = $request->full_name;
             $user->mobile_no = $request->mobile_no;
-            $user->gender = $request->gender;
-            $user->dob = $request->dob;
             $user->role = $request->role;
             $user->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
             if ($request->role == 1){
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
                 $user->decrypted_password = $request->password;
+            }
+            if ($request->role == 2){
+                $user->address = $request->address;
             }
             $image_name=null;
         }
@@ -139,10 +139,9 @@ class UserController extends Controller
                 0 =>'id',
                 1 =>'profile_pic',
                 2=> 'contact_info',
-                3=> 'login_info',
-                4=> 'role',
-                5=> 'created_at',
-                6=> 'action',
+                3=> 'role',
+                4=> 'created_at',
+                5=> 'action',
             );
 
             $totalData = User::count();
@@ -219,14 +218,6 @@ class UserController extends Controller
                         $contact_info .= '<span><i class="fa fa-phone" aria-hidden="true"></i> ' .$user->mobile_no .'</span>';
                     }
 
-                    $login_info = '';
-                    if (isset($user->email)){
-                        $login_info = '<span>' .$user->email .'</span>';
-                    }
-                    if (isset($user->password)){
-                        $login_info .= '<span>' .$user->decrypted_password .'</span>';
-                    }
-
                     if(isset($user->full_name)){
                         if ($user->role == 2){
                             $full_name = '<a href="'.url('admin/product_prices/'.$user->id).'" target="_blank">'.$user->full_name . " [" . $user->id . "]".'</a>';
@@ -249,7 +240,6 @@ class UserController extends Controller
 
                     $nestedData['profile_pic'] = '<img src="'. $profile_pic .'" width="50px" height="50px" alt="Profile Pic"><span>'.$full_name.'</span>';
                     $nestedData['contact_info'] = $contact_info;
-                    $nestedData['login_info'] = $login_info;
                     $nestedData['role'] = ($user->role == 1)?"Admin":"Customer";
                     $nestedData['created_at'] = date('Y-m-d H:i:s', strtotime($user->created_at));
                     $nestedData['action'] = $action;

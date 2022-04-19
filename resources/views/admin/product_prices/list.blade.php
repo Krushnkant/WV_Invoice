@@ -271,6 +271,7 @@ function Product_Price_Table(is_clearState=false) {
         "destroy": true,
         "processing": true,
         "serverSide": true,
+        "pageLength": 100,
         'stateSave': function(){
             if(is_clearState){
                 return false;

@@ -120,7 +120,7 @@
                     </div>
                 </td>
                 <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}">
+                    <input class="form-control quantity qty" name="quantity" type="number" min="0" value="{{ $invoice_item->quantity }}">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
@@ -142,11 +142,7 @@
             <tr class="fullrow">
                 <td class="total-line">Total</td>
                 <td><div class=""><span id="totalQty" class="totalQty">{{ $invoice->total_qty }}</span></div></td>
-                <td>
-                    <div class="">
-                        <p class="mb-0">Total Price: <span id="totalUnitcost" class="totalUnitcost">{{ $invoice->total_price }}</span></p>
-                    </div>
-                </td>
+                <td></td>
                 <td class="total-value"><div id="total">{{ $invoice->final_amount }}</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>
             </tfoot>

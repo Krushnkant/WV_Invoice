@@ -39,7 +39,6 @@
                                     <th>No</th>
                                     <th>Profile</th>
                                     <th>Contact Info</th>
-                                    <th>Login Info</th>
                                     <th>Role</th>
                                     <th>Registration Date</th>
                                     <th>Other</th>
@@ -50,7 +49,6 @@
                                     <th>No</th>
                                     <th>Profile</th>
                                     <th>Contact Info</th>
-                                    <th>Login Info</th>
                                     <th>Role</th>
                                     <th>Registration Date</th>
                                     <th>Other</th>
@@ -117,23 +115,11 @@
                             <input type="password" class="form-control input-flat" id="password" name="password" placeholder="">
                             <div id="password-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
-                        <div class="form-group ">
-                            <label class="col-form-label" for="gender">Gender
+                        <div class="form-group" id="address_div">
+                            <label class="col-form-label" for="address">Address <span class="text-danger">*</span>
                             </label>
-                            <div>
-                                <label class="radio-inline mr-3"><input type="radio" name="gender" value="1" checked> Female</label>
-                                <label class="radio-inline mr-3"><input type="radio" name="gender" value="2"> Male</label>
-                                <label class="radio-inline mr-3"><input type="radio" name="gender" value="3"> Other</label>
-                            </div>
-                            <div id="gender-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                        </div>
-                        <div class="form-group ">
-                            <label class="col-form-label" for="dob">Date of Birth <span class="text-danger">*</span>
-                            </label>
-                            <div class="input-group">
-                                <input type="text" class="form-control custom_date_picker" id="dob" name="dob" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
-                                <div id="dob-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
-                            </div>
+                            <textarea class="form-control input-flat" id="address" name="address" placeholder=""></textarea>
+                            <div id="address-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -236,10 +222,10 @@
                         $('#password-error').hide();
                     }
 
-                    if (res.errors.dob) {
-                        $('#dob-error').show().text(res.errors.dob);
+                    if (res.errors.address) {
+                        $('#address-error').show().text(res.errors.address);
                     } else {
-                        $('#dob-error').hide();
+                        $('#address-error').hide();
                     }
                 }
 
@@ -272,8 +258,7 @@
                         $('#mobileno-error').html("");
                         $('#email-error').html("");
                         $('#password-error').html("");
-                        $('#dob-error').html("");
-                        $('#gender-error').html("");
+                        $('#address-error').html("");
                         var default_image = "{{ url('public/images/default_avatar.jpg') }}";
                         $('#profilepic_image_show').attr('src', default_image);
                         $("#full_name").focus();
@@ -349,12 +334,12 @@
         $('#mobileno-error').html("");
         $('#email-error').html("");
         $('#password-error').html("");
-        $('#dob-error').html("");
-        $('#gender-error').html("");
+        $('#address-error').html("");
         var default_image = "{{ url('public/images/default_avatar.jpg') }}";
         $('#profilepic_image_show').attr('src', default_image);
         $("#email_div").hide();
         $("#password_div").hide();
+        $("#address_div").show();
     });
 
     $('#DeleteUserModal').on('hidden.bs.modal', function () {
@@ -370,6 +355,7 @@
             "destroy": true,
             "processing": true,
             "serverSide": true,
+            "pageLength": 100,
             'stateSave': function(){
                 if(is_clearState){
                     return false;
@@ -387,12 +373,11 @@
             },
             'columnDefs': [
                 { "width": "50px", "targets": 0 },
-                { "width": "145px", "targets": 1 },
-                { "width": "165px", "targets": 2 },
-                { "width": "230px", "targets": 3 },
-                { "width": "75px", "targets": 4 },
+                { "width": "120px", "targets": 1 },
+                { "width": "230px", "targets": 2 },
+                { "width": "75px", "targets": 3 },
+                { "width": "150px", "targets": 4 },
                 { "width": "120px", "targets": 5 },
-                { "width": "115px", "targets": 6 },
             ],
             "columns": [
                 {data: 'id', name: 'id', class: "text-center", orderable: false,
@@ -402,7 +387,6 @@
                 },
                 {data: 'profile_pic', name: 'profile_pic', class: "text-center multirow"},
                 {data: 'contact_info', name: 'contact_info', class: "text-left multirow", orderable: false},
-                {data: 'login_info', name: 'login_info', class: "text-left multirow", orderable: false},
                 {data: 'role', name: 'role', orderable: false, searchable: false, class: "text-center"},
                 {data: 'created_at', name: 'created_at', searchable: false, class: "text-left"},
                 {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
@@ -441,15 +425,16 @@
             if(data.role == 1) {
                 $("#email_div").show();
                 $("#password_div").show();
+                $("#address_div").hide();
                 $('#email').val(data.email);
                 $('#password').val(data.decrypted_password);
             }
             else{
+                $('#address').val(data.address);
                 $("#email_div").hide();
                 $("#password_div").hide();
+                $("#address_div").show();
             }
-            $('#dob').val(data.dob);
-            $("input[name=gender][value=" + data.gender + "]").prop('checked', true);
             $("input[name=role][value=" + data.role + "]").prop('checked', true);
         })
     });
@@ -502,10 +487,12 @@
         if($(this).val() == 1){
             $("#email_div").show();
             $("#password_div").show();
+            $("#address_div").hide();
         }
         else{
             $("#email_div").hide();
             $("#password_div").hide();
+            $("#address_div").show();
         }
     });
 

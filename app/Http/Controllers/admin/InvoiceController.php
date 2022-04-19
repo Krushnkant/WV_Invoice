@@ -70,7 +70,7 @@ class InvoiceController extends Controller
                     </div>
                 </td>
                 <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" value="1" min="1">
+                    <input class="form-control quantity qty" name="quantity" type="number" value="0" min="0">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
@@ -265,9 +265,6 @@ class InvoiceController extends Controller
                 foreach ($Invoices as $Invoice)
                 {
                     $amount = '';
-                    if (isset($Invoice->total_price)){
-                        $amount .= '<span>Total Price: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->total_price;
-                    }
                     if (isset($Invoice->total_qty)){
                         $amount .= '<span>Total Quantity: '.$Invoice->total_qty;
                     }
@@ -318,6 +315,11 @@ class InvoiceController extends Controller
                     $nestedData['amount'] = $amount;
                     $nestedData['invoice_date'] = date("d-m-Y", strtotime($Invoice->invoice_date));
                     $nestedData['action'] = $action;
+                    $nestedData['quantity'] = $Invoice->total_qty;
+                    $nestedData['final_amount'] = $Invoice->final_amount;
+                    $nestedData['amount_transfer'] = '';
+                    $nestedData['payment_type'] = '';
+                    $nestedData['outstanding_amount'] = '';
                     $nestedData['table1'] = $table;
                     $data[] = $nestedData;
                 }
@@ -386,17 +388,20 @@ class InvoiceController extends Controller
                             </style>';
             $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <h3 style="text-align: center; font-size: 20pt; margin-bottom: 0;">Invoice</h3>
+                        <p style="text-align: center; font-size: 7pt; margin-bottom: 0;">SHREE GANESHAY NAMAH</p>
+                        <p style="text-align: right; font-size: 10pt; margin-bottom: 0;">Mo.: '.$settings->company_mobile_no.'</p>
                         <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
                             <tr>
-                                <td style="width: 15%">
+                                <td style="width: 15%;">
                                     '.$image.'
                                 </td>
-                                <td style="width: 85%;">
-                                	<h3 style="text-align: right; font-size: 15pt; margin: 0;margin-bottom: 2px">'.$settings->company_name.'</h3>
-			                        <h5 style="text-align: right; margin: 0;margin-bottom: 2px">'.$settings->company_mobile_no.'</h5>
-			                        <p style="text-align: right; font-size: 10pt; margin: 0">'.$settings->company_address.'</p>
+                                <td style="width: 20%"></td>
+                                <td style="width: 65%;">
+                                	<h3 style="text-align: left; font-size: 20pt; margin: 0;">'.$settings->company_name.'</h3>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"><p style="text-align: center;font-size: 10pt;">'.$settings->company_address.'</p></td>
                             </tr>
                         </table>
                         <br>
@@ -404,14 +409,14 @@ class InvoiceController extends Controller
                         <table cellspacing="0" style="width: 100%;">
                             <colgroup>
                                 <col style="width: 12%;">
-                                <col style="width: 62%;">
+                                <col style="width: 60%;">
                                 <col style="width: 12%;">
-                                <col style="width: 14%;">
+                                <col style="width: 16%;">
                             </colgroup>
                             <tbody>
                                 <tr>
                                     <td style="font-size: 12pt; padding:2px 0;">
-                                        Customer
+                                        Name
                                     </td>
                                     <td style="font-size: 12pt; padding:2px 0;">
                                         : <b>'.$invoice->user->full_name.'</b>
@@ -435,6 +440,14 @@ class InvoiceController extends Controller
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
                                         : '.date('d M, Y', strtotime($invoice->invoice_date)).'
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        Address
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        : '.$invoice->user->address.'
                                     </td>
                                 </tr>
                             </tbody>
@@ -490,23 +503,18 @@ class InvoiceController extends Controller
                              <tr>
                                     <th colspan="2" style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">Total</th>
                                     <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.$invoice->total_qty.'</th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->total_price, 2, '.', ',').'</th>
+                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;"></th>
                                     <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
-                             </tr>
-                             <tr>
-                                    <td colspan="2" style="padding:8px 0; border-bottom: solid 1px black;"></td>
-                                    <td colspan="2" style="padding:8px 0; text-align:left; padding-left : 10px; border-bottom: solid 1px black; border-left: solid 1px black;">Total Amount</td>
-                                    <td style="padding:8px 0; border-bottom: solid 1px black;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.number_format($invoice->final_amount, 2, '.', ',').'</td>
                              </tr>
                             </tbody>
                         </table>';
 
-            $HTMLContent .= '<p>Amount in Words: '.$f->format($invoice->final_amount).' Rupees Only</p>';
+            $HTMLContent .= '<p>AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
 
             $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
                                 <tr>
-                                    <td  style="padding:10px 0; width :50%; border-top : solid 0.5px gray; border-bottom: solid 1px gray; text-align:left; color:gray;"><i>[This Document is computer generated.]</i> </td>
-                                    <td  style="padding:10px 0; width :50%; border-top : solid 0.5px gray; border-bottom: solid 1px gray; text-align:right; color:gray;">Invoice No : <b>('.$invoice->invoice_no.')</b> '.date('d/m/Y', strtotime($invoice->invoice_date)).'</td>
+                                    <td  style="padding:10px 0; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
+                                    <td  style="padding:10px 0; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
                                 </tr>
                             </table>
                         </page>';

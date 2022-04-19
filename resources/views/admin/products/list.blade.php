@@ -356,6 +356,7 @@
             "destroy": true,
             "processing": true,
             "serverSide": true,
+            "pageLength": 100,
             'stateSave': function(){
                 if(is_clearState){
                     return false;
