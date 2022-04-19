@@ -119,7 +119,6 @@ class InvoiceController extends Controller
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->customer_name;
         $invoice->invoice_date = date("Y-m-d", strtotime($request->invoice_date));
-        $invoice->total_price = $request->total_price;
         $invoice->total_qty = $request->total_qty;
         $invoice->final_amount = $request->final_amount;
         $invoice->save();
@@ -243,7 +242,6 @@ class InvoiceController extends Controller
                 $Invoices = $Invoices->where(function($query) use($search){
                     $query->where('invoice_no','LIKE',"%{$search}%")
                         ->orWhere('invoice_date', 'LIKE',"%{$search}%")
-                        ->orWhere('total_price', 'LIKE',"%{$search}%")
                         ->orWhere('total_qty', 'LIKE',"%{$search}%")
                         ->orWhere('final_amount', 'LIKE',"%{$search}%")
                         ->orWhereHas('user',function ($Query) use($search) {
