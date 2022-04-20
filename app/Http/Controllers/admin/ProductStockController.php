@@ -143,8 +143,8 @@ class ProductStockController extends Controller
         $product = Product::find($request->product_id);
 
         if ($product->stock >= $request->quantity){
-            return response()->json(['status' => 200]);
+            return true;
         }
-        return response()->json(['status' => 400]);
+        return false;
     }
 }

@@ -40,6 +40,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('product_prices/{id}/edit',[\App\Http\Controllers\admin\ProductPriceController::class,'editProductPrice'])->name('product_prices.edit');
     Route::get('get_products_price/{product_id}',[\App\Http\Controllers\admin\ProductPriceController::class,'get_products_price'])->name('product_prices.get_products_price');
     Route::get('product_prices/{id}/delete',[\App\Http\Controllers\admin\ProductPriceController::class,'deleteProductPrice'])->name('product_prices.delete');
+    Route::get('product_prices/pdf/{id}',[\App\Http\Controllers\admin\ProductPriceController::class,'generate_pdf'])->name('product_prices.pdf');
 
     Route::get('settings',[\App\Http\Controllers\admin\SettingsController::class,'index'])->name('settings.list');
     Route::post('updateInvoiceSetting',[\App\Http\Controllers\admin\SettingsController::class,'updateInvoiceSetting'])->name('settings.updateInvoiceSetting');

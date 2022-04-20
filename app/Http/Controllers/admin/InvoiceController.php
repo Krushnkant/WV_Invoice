@@ -70,7 +70,7 @@ class InvoiceController extends Controller
                     </div>
                 </td>
                 <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" value="0" min="0">
+                    <input class="form-control quantity qty" name="quantity" type="number" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>
@@ -270,7 +270,7 @@ class InvoiceController extends Controller
                         $amount .= '<span>Final Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->final_amount;
                     }
 
-                    $table = '<table cellpadding="5" cellspacing="0" border="0" width="100%" id="items_table">';
+                    $table = '<table cellpadding="5" cellspacing="0" border="1" width="100%" id="items_table">';
                     $table .= '<tbody>';
                     $table .='<tr style="width: 100%">';
                     $table .= '<th style="text-align: center">Item No.</th>';

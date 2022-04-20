@@ -557,26 +557,27 @@ function validateInvoiceItems(action) {
             return valid;
         }
         if($(thi).find('.quantity').val() != "" && $(thi).find('.quantity').val()>0 && $(thi).find('.item_name').val() != ""){
-            $.ajax({
+            var check_stock = $.ajax({
                 type: 'POST',
                 url: "{{ route('admin.check_stock') }}",
                 data: {_token: '{{ csrf_token() }}', product_id: $(thi).find('.item_name').val() , quantity: $(thi).find('.quantity').val(), action: action},
+                async:false,
                 success: function (res) {
-                    if(res.status == 400){
-                        valid = false;
-                        $(thi).find('#quantity-error').show().html("Item is not available in stock");
-                    }
+
                 },
                 error: function (data) {
 
                 }
-            }).then(function() {
-                if(valid == false) {
-                    return valid;
-                }
-            });
+            }).responseText;
+            if(check_stock != 1){
+                valid = false;
+                $(thi).find('#quantity-error').show().html("Item is not available in stock");
+                return valid;
+            }
         }
     });
+
+    return valid;
 }
 
 $('body').on('click', '#deleteInvoiceBtn', function (e) {

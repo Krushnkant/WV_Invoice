@@ -103,7 +103,7 @@
                     </div>
                 </td>
                 <td>
-                    <input class="form-control quantity qty" name="quantity" type="number" value="0" min="0">
+                    <input class="form-control quantity qty" name="quantity" type="number" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td>

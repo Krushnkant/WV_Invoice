@@ -18,10 +18,10 @@
                     <div class="card-body">
                         <h4 class="card-title">Product Price List</h4>
 
-                        {{--<div class="action-section">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ProductPriceModal" id="AddProductPriceBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                            --}}{{-- <button class="btn btn-danger" onclick="deleteMultipleAttributes()"><i class="fa fa-trash" aria-hidden="true"></i></button>--}}{{--
-                        </div>--}}
+                        <div class="action-section">
+                            <button type="button" class="btn btn-primary" id="printBtn">Download PDF</button>
+{{--                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ProductPriceModal" id="AddProductPriceBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>--}}
+                        </div>
 
                         <div class="table-responsive">
                             <table id="ProductPrice" class="table zero-configuration customNewtable" style="width:100%">
@@ -420,6 +420,13 @@ $('body').on('click', '#RemoveProductPriceSubmit', function (e) {
             toastr.error("Please try again",'Error',{timeOut: 5000});
         }
     });
+});
+
+$('body').on('click', '#printBtn', function (e) {
+    // e.preventDefault();
+    var user_id = "{{ $user_id }}";
+    var url = "{{ url('admin/product_prices/pdf') }}" + "/" + user_id;
+    window.open(url,'_blank');
 });
 </script>
 <!-- product price JS end -->

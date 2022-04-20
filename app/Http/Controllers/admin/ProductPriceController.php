@@ -8,6 +8,9 @@ use App\Models\ProductPrice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Html2Pdf;
 
 class ProductPriceController extends Controller
 {
@@ -187,5 +190,71 @@ class ProductPriceController extends Controller
             return response()->json(['status' => '200']);
         }
         return response()->json(['status' => '400']);
+    }
+
+    public function generate_pdf($user_id){
+        try{
+            $ProductPrices = ProductPrice::with('user','product')
+                    ->where('user_id',$user_id)
+                    ->orderBy('created_at','ASC')
+                    ->get();
+
+            $HTMLContent = '<style type="text/css">
+                            <!--
+                            table { vertical-align: top; }
+                            tr    { vertical-align: top; }
+                            td    { vertical-align: top; }
+                            -->
+                            </style>';
+            $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
+                        <bookmark title="Lettre" level="0" ></bookmark>
+                        <h3 style="text-align: center;">Product Prices</h3>
+                        
+                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center">
+                            <colgroup>
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 50%; text-align: left">
+                                <col style="width: 20%; text-align: left">
+                                <col style="width: 20%; text-align: left">
+                            </colgroup>
+                            <thead>
+                                <tr style="background: #ffe6e6;">
+                                    <th colspan="4" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Products </th>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">No.</th>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Product</th>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+            $no = 1;
+            foreach ($ProductPrices as $ProductPrice){
+                $HTMLContent .= '<tr>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.$no.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.$ProductPrice->product->title_english.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.date('Y-m-d H:i:s', strtotime($ProductPrice->created_at)).'</th>
+                                </tr>';
+                $no++;
+            }
+
+            $HTMLContent .= '</tbody>
+                        </table>
+                        </page>';
+
+            $html2pdf = new Html2Pdf('P', 'A5', 'fr', true, "UTF-8");
+            $html2pdf->setDefaultFont('freeserif');
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            $html2pdf->writeHTML($HTMLContent);
+            $html2pdf->output('productprices_'.$user_id.'.pdf');
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
     }
 }
