@@ -122,7 +122,7 @@
             </tr>
             <tr class="fullrow">
                 <td class="total-line">Total</td>
-                <td><div class=""><span id="totalQty" class="totalQty">1</span></div></td>
+                <td><div class=""><span id="totalQty" class="totalQty"></span></div></td>
                 <td></td>
                 <td class="total-value"><div id="total">0.00</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>

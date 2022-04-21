@@ -10,6 +10,7 @@ use App\Models\ProductPrice;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -281,19 +282,20 @@ class InvoiceController extends Controller
                     $table .= '</tr>';
                     $item = 1;
                     foreach ($Invoice->invoice_item as $invoice_item){
-                        $product = '';
-                        if ($Invoice->language == "English" && isset($invoice_item->product)){
-                            $product = $invoice_item->product->title_english;
+                        $product = Product::withTrashed()->find($invoice_item->product_id);
+                        $product_title = '';
+                        if ($Invoice->language == "English" && isset($product)){
+                            $product_title = $product->title_english;
                         }
-                        elseif ($Invoice->language == "Hindi" && isset($invoice_item->product)){
-                            $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_hindi;
+                        elseif ($Invoice->language == "Hindi" && isset($product)){
+                            $product_title = $product->title_english." | ".$product->title_hindi;
                         }
-                        elseif ($Invoice->language == "Gujarati" && isset($invoice_item->product)){
-                            $product = $invoice_item->product->title_english." | ".$invoice_item->product->title_gujarati;
+                        elseif ($Invoice->language == "Gujarati" && isset($product)){
+                            $product_title = $product->title_english." | ".$product->title_gujarati;
                         }
                         $table .='<tr>';
                         $table .= '<td style="text-align: center">'.$item.'</td>';
-                        $table .= '<td>'.$product.'</td>';
+                        $table .= '<td>'.$product_title.'</td>';
                         $table .= '<td style="text-align: center"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->price.'</td>';
                         $table .= '<td style="text-align: center">'.$invoice_item->quantity.'</td>';
                         $table .= '<td style="text-align: right"><i class="fa fa-inr" aria-hidden="true"></i> '.$invoice_item->final_price.'</td>';
@@ -366,7 +368,7 @@ class InvoiceController extends Controller
         return response()->json(['status' => '400']);
     }
 
-    public function generate_pdf($id){
+    public function generate_pdf1($id){
         try{
             $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
             $settings = Setting::find(1);
@@ -451,7 +453,7 @@ class InvoiceController extends Controller
                             </tbody>
                         </table>
                         
-                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center">
+                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
@@ -461,14 +463,14 @@ class InvoiceController extends Controller
                             </colgroup>
                             <thead>
                                 <tr style="background: #ffe6e6;">
-                                    <th colspan="5" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Item Details </th>
+                                    <th colspan="5" style="text-align: center; padding:8px 0;"> Item Details </th>
                                 </tr>
                                 <tr>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">No.</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Item</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Qty</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Total</th>
+                                    <th style="padding:8px 0;">No.</th>
+                                    <th style="padding:8px 0;">Item</th>
+                                    <th style="padding:8px 0;">Qty</th>
+                                    <th style="padding:8px 0;">Price</th>
+                                    <th style="padding:8px 0;">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -496,13 +498,10 @@ class InvoiceController extends Controller
             }
 
             $HTMLContent .= '<tr>
-                                    <td colspan="5" style="padding:4px 0;"></td>
-                             </tr>
-                             <tr>
-                                    <th colspan="2" style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">Total</th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.$invoice->total_qty.'</th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;"></th>
-                                    <th  style="padding:10px 0; border-top : solid 0.5px black; border-bottom: solid 1px black;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                                    <th colspan="2" style="padding:10px 0;">Total</th>
+                                    <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
+                                    <th  style="padding:10px 0;"></th>
+                                    <th  style="padding:10px 0;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
                             </tbody>
                         </table>';
@@ -528,6 +527,169 @@ class InvoiceController extends Controller
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
+    }
+
+    public function generate_pdf($id){
+        $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
+        $settings = Setting::find(1);
+        $f = new \NumberFormatter( locale_get_default(), \NumberFormatter::SPELLOUT );
+
+        $image = '';
+        if (isset($settings->company_logo)){
+            $image = '<img src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo" width="100px" height="100px">';
+        }
+
+        $font_url = url('public/fonts/gujars__.ttf');
+
+        $HTMLContent = '<style type="text/css">
+                            <!--
+                            table { vertical-align: top; }
+                            tr    { vertical-align: top; }
+                            td    { vertical-align: top; }
+                            -->
+                            </style>';
+        $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
+                        <bookmark title="Lettre" level="0" ></bookmark>
+                        <table cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td style="font-size: 7pt; padding:0;width: 80%;" align="right">
+                                    SHREE GANESHAY NAMAH
+                                </td>
+                                <td style="font-size: 7pt; padding:0;" align="right">
+                                    Mo.: '.$settings->company_mobile_no.'
+                                </td>
+                            </tr>
+                        </table>
+                      
+                        <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
+                            <tr>
+                                <td style="width: 15%;height: 15%">
+                                    '.$image.'
+                                </td>
+                                <td style="width: 15%"></td>
+                                <td style="width: 65%;">
+                                	<h3 style="text-align: left; font-size: 20pt; margin: 0;">'.$settings->company_name.'</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" align="left"><p style="font-size: 10pt;">'.$settings->company_address.'</p></td>
+                            </tr>
+                        </table>
+                        <br>
+                       
+                        <table cellspacing="0" style="width: 100%;">
+                            
+                            <tbody>
+                                <tr>
+                                    <td style="font-size: 12pt; padding:2px 0;">
+                                        Name
+                                    </td>
+                                    <td style="font-size: 12pt; padding:2px 0;width: 50%">
+                                        : <b>'.$invoice->user->full_name.'</b>
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
+                                        Invoice No
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
+                                        : '.$invoice->invoice_no.'
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        Mobile No
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 50%">
+                                        : '.$invoice->user->mobile_no.'
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
+                                        Date
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
+                                        : '.date('d M, Y', strtotime($invoice->invoice_date)).'
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        Address
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        : '.$invoice->user->address.'
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+                            <colgroup>
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 50%; text-align: left">
+                                <col style="width: 20%; text-align: center">
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 10%; text-align: center">
+                            </colgroup>
+                            <thead>
+                                <tr style="background: #ffe6e6;">
+                                    <th colspan="5" style="text-align: center; padding:8px 0;"> Item Details </th>
+                                </tr>
+                                <tr>
+                                    <th style="padding:8px 0;">No.</th>
+                                    <th style="padding:8px 0;">Item</th>
+                                    <th style="padding:8px 0;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;">Price</th>
+                                    <th style="padding:8px 0;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+        $no = 1;
+        foreach ($invoice->invoice_item as $invoice_item){
+            $product = Product::withTrashed()->find($invoice_item->product_id);
+            $product_title = '';
+            if ($invoice->language == "English" && isset($product)){
+                $product_title = $product->title_english;
+            }
+            elseif ($invoice->language == "Hindi" && isset($product)){
+                $product_title = $product->title_english." | ".$product->title_hindi;
+            }
+            elseif ($invoice->language == "Gujarati" && isset($product)){
+                $product_title = $product->title_english." | ".$product->title_gujarati;
+            }
+
+            $HTMLContent .= '<tr>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;">'.$product_title.'</td>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.$invoice_item->quantity.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
+                                </tr>';
+            $no++;
+        }
+
+        $HTMLContent .= '<tr>
+                                    <th colspan="2" style="padding:10px 0;">Total</th>
+                                    <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
+                                    <th  style="padding:10px 0;"></th>
+                                    <th  style="padding:10px 0;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                             </tr>
+                            </tbody>
+                        </table>';
+
+        $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
+
+        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
+                                <tr>
+                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
+                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
+                                </tr>
+                            </table>
+                        </page>';
+
+
+        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P']);
+//        $mpdf->SetDefaultFont('gujars');
+        $mpdf->AddFontDirectory($font_url);
+        $mpdf->WriteHTML($HTMLContent);
+        $mpdf->Output();
     }
 }
 

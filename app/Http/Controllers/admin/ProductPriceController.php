@@ -199,6 +199,8 @@ class ProductPriceController extends Controller
                     ->orderBy('created_at','ASC')
                     ->get();
 
+            $customer_name = User::where('id',$user_id)->pluck('full_name')->first();
+
             $HTMLContent = '<style type="text/css">
                             <!--
                             table { vertical-align: top; }
@@ -208,24 +210,22 @@ class ProductPriceController extends Controller
                             </style>';
             $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <h3 style="text-align: center;">Product Prices</h3>
-                        
+                        <h3 style="text-align: center; margin: 0">Product Prices</h3>
+                        <p style="text-align: left;margin: 0">'.$customer_name.'</p>
                         <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
-                                <col style="width: 50%; text-align: left">
-                                <col style="width: 20%; text-align: left">
-                                <col style="width: 20%; text-align: left">
+                                <col style="width: 60%; text-align: left">
+                                <col style="width: 30%; text-align: left">
                             </colgroup>
                             <thead>
                                 <tr style="background: #ffe6e6;">
-                                    <th colspan="4" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Products </th>
+                                    <th colspan="3" style="text-align: center; border-top : solid 1px gray; border-bottom: solid 1px grey;  padding:8px 0;"> Products </th>
                                 </tr>
                                 <tr>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">No.</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Product</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Date</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -236,7 +236,6 @@ class ProductPriceController extends Controller
                                     <th style="font-weight : 10px; padding:8px 0;">'.$no.'</th>
                                     <th style="font-weight : 10px; padding:8px 0;">'.$ProductPrice->product->title_english.'</th>
                                     <th style="font-weight : 10px; padding:8px 0;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.date('Y-m-d H:i:s', strtotime($ProductPrice->created_at)).'</th>
                                 </tr>';
                 $no++;
             }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\ProductStock;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -223,8 +224,11 @@ class ProductController extends Controller
         if ($Product){
             $Product->estatus = 3;
             $Product->save();
-
             $Product->delete();
+
+            $product_prices = ProductPrice::where('product_id',$id)->delete();
+
+            $product_stocks = ProductStock::where('product_id',$id)->delete();
             return response()->json(['status' => '200']);
         }
         return response()->json(['status' => '400']);
