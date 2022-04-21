@@ -19,12 +19,14 @@ class ProductStockController extends Controller
             'product.required' =>'Please provide a Product.',
             'stock.required' =>'Please provide a stock.',
             'purchase_from.required' =>'Please provide a purchase from.',
+            'stock_date.required' =>'Please provide a stock date.',
         ];
 
         $validator = Validator::make($request->all(), [
             'product' => 'required',
             'stock' => 'required',
             'purchase_from' => 'required',
+            'stock_date' => 'required',
         ], $messages);
 
         if ($validator->fails()) {
@@ -36,6 +38,7 @@ class ProductStockController extends Controller
         $ProductStock->product_id = $request->product;
         $ProductStock->stock = $request->stock;
         $ProductStock->purchase_from = $request->purchase_from;
+        $ProductStock->stock_date = date("Y-m-d", strtotime($request->stock_date));
         $ProductStock->created_at = new \DateTime(null, new \DateTimeZone('Asia/Kolkata'));
         $ProductStock->save();
 
@@ -107,7 +110,7 @@ class ProductStockController extends Controller
                     $nestedData['product'] = isset($ProductStock->product)?$ProductStock->product->title_english:'';
                     $nestedData['stock'] = $ProductStock->stock.' Kg';
                     $nestedData['purchase_from'] = $ProductStock->purchase_from;
-                    $nestedData['created_at'] = date('Y-m-d H:i:s', strtotime($ProductStock->created_at));
+                    $nestedData['created_at'] = date('d-m-Y', strtotime($ProductStock->stock_date));
                     $nestedData['action'] = $action;
                     $data[] = $nestedData;
                 }

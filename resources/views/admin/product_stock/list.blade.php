@@ -86,6 +86,14 @@
                             <input type="text" class="form-control input-flat" id="purchase_from" name="purchase_from" >
                             <div id="purchase_from-error" class="invalid-feedback animated fadeInDown" style="display: none;"></div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-lg-12 col-form-label text-left" for="">Date</label>
+                            <div class="col-lg-12">
+                                <input class="form-control custom_date_picker" type="text" id="stock_date" name="stock_date" placeholder="dd-mm-yyyy" data-date-format="dd-mm-yyyy">
+                                <label id="stock_date-error" class="error invalid-feedback animated fadeInDown" for="invoice_date"></label>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" id="save_newProductStockBtn">Save & New <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>

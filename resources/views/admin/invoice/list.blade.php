@@ -48,6 +48,7 @@
                             </div>
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-outline-primary" id="export_excel_btn" >Export to Excel <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                                <button type="button" class="btn btn-outline-primary" id="export_pdf_btn" >Export to PDF <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                             </div>
                         </div>
                         @endif
@@ -647,6 +648,35 @@ $('body').on('change', '#end_date', function (e) {
 
 $("#export_excel_btn").on("click", function() {
     table.button( '.buttons-excel' ).trigger();
+});
+
+$('body').on('click', '#export_pdf_btn', function (e) {
+    e.preventDefault();
+    var user_id_filter = $("#user_id_filter").val();
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    if(user_id_filter == ""){
+        user_id_filter = null;
+    }
+    if(start_date == ""){
+        start_date = null;
+    }
+    if(end_date == ""){
+        end_date = null;
+    }
+    var url = "{{ url('admin/invoice/report') }}" + "/" + user_id_filter + "/" + start_date + "/" + end_date;
+    window.open(url, "_blank");
+    {{--$.ajax({--}}
+    {{--    type: 'GET',--}}
+    {{--    url: "{{ url('admin/invoice/report') }}",--}}
+    {{--    data: { _token: '{{ csrf_token() }}', user_id_filter: user_id_filter, start_date: start_date, end_date: end_date},--}}
+    {{--    success: function (res) {--}}
+
+    {{--    },--}}
+    {{--    error: function (data) {--}}
+    {{--        toastr.error("Please try again",'Error',{timeOut: 5000});--}}
+    {{--    }--}}
+    {{--});--}}
 });
 </script>
 <!-- Invoice JS end -->

@@ -7,9 +7,11 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Product;
 use App\Models\ProductPrice;
+use App\Models\ProductStock;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
@@ -209,7 +211,7 @@ class InvoiceController extends Controller
 
             if($order == "id"){
                 $order = "created_at";
-                $dir = 'ASC';
+                $dir = 'DESC';
             }
 
             $totalData = Invoice::count();
@@ -550,17 +552,9 @@ class InvoiceController extends Controller
                             </style>';
         $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <table cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td style="font-size: 7pt; padding:0;width: 80%;" align="right">
-                                    SHREE GANESHAY NAMAH
-                                </td>
-                                <td style="font-size: 7pt; padding:0;" align="right">
-                                    Mo.: '.$settings->company_mobile_no.'
-                                </td>
-                            </tr>
-                        </table>
-                      
+                        <p style="text-align: center;font-size: 7pt;margin: 0">SHREE GANESHAY NAMAH</p>
+                        <p style="text-align: right;margin: 0;font-size: 7pt;">Mo.: '.$settings->company_mobile_no.'</p>
+
                         <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
                             <tr>
                                 <td style="width: 15%;height: 15%">
@@ -576,9 +570,9 @@ class InvoiceController extends Controller
                             </tr>
                         </table>
                         <br>
-                       
+
                         <table cellspacing="0" style="width: 100%;">
-                            
+
                             <tbody>
                                 <tr>
                                     <td style="font-size: 12pt; padding:2px 0;">
@@ -605,7 +599,7 @@ class InvoiceController extends Controller
                                         Date
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;" align="right">
-                                        : '.date('d M, Y', strtotime($invoice->invoice_date)).'
+                                        : '.date("d-m-Y", strtotime($invoice->invoice_date)).'
                                     </td>
                                 </tr>
                                 <tr>
@@ -618,7 +612,7 @@ class InvoiceController extends Controller
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                         <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
@@ -690,6 +684,164 @@ class InvoiceController extends Controller
         $mpdf->AddFontDirectory($font_url);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output();
+    }
+
+    public function report_pdf($user_id, $start_date, $end_date){
+        $invoices = Invoice::with('invoice_item.product', 'user');
+        if (isset($user_id) && $user_id!="null") {
+            $invoices = $invoices->where('user_id', $user_id);
+        }
+
+        $date = '';
+        if (isset($start_date) && $start_date!="null" && isset($end_date) && $end_date!="null"){
+            $date = $start_date." - ".$end_date;
+            $invoices = $invoices->whereRaw("invoice_date between '".$start_date."' and '".$end_date."'");
+        }
+        elseif (isset($start_date) && $start_date!="null"){
+            $date = $start_date;
+            $invoices = $invoices->where('invoice_date',$start_date);
+        }
+        elseif (isset($end_date) && $end_date!="null"){
+            $date = $end_date;
+            $invoices = $invoices->where('invoice_date',$end_date);
+        }
+
+        $invoices = $invoices->get();
+
+        $HTMLContent = '<style type="text/css">
+                            <!--
+                            table { vertical-align: top; }
+                            tr    { vertical-align: top; }
+                            td    { vertical-align: top; }
+                            -->
+                            </style>';
+
+        $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
+                        <bookmark title="Lettre" level="0" ></bookmark>
+                        <p style="text-align: center;font-size: 7pt;margin: 0">SHREE GANESHAY NAMAH</p>
+                        <p style="text-align: right;margin: 0;font-size: 7pt;">Date: '.$date.'</p>';
+
+        foreach ($invoices as $invoice){
+            $HTMLContent .= '<hr style="height: 1px">
+                            <table cellspacing="0" style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="font-size: 12pt; padding:2px 0;">
+                                        Name
+                                    </td>
+                                    <td style="font-size: 12pt; padding:2px 0;width: 70%">
+                                        : <b>'.$invoice->user->full_name.'</b>
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
+                                        Invoice No
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
+                                        : '.$invoice->invoice_no.'
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+                            <colgroup>
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 50%; text-align: left">
+                                <col style="width: 20%; text-align: center">
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 10%; text-align: center">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="padding:8px 0;">No.</th>
+                                    <th style="padding:8px 0;">Item</th>
+                                    <th style="padding:8px 0;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;">Price</th>
+                                    <th style="padding:8px 0;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+            $no = 1;
+            foreach ($invoice->invoice_item as $invoice_item){
+                $product = Product::withTrashed()->find($invoice_item->product_id);
+                $product_title = '';
+                if ($invoice->language == "English" && isset($product)){
+                    $product_title = $product->title_english;
+                }
+                elseif ($invoice->language == "Hindi" && isset($product)){
+                    $product_title = $product->title_english." | ".$product->title_hindi;
+                }
+                elseif ($invoice->language == "Gujarati" && isset($product)){
+                    $product_title = $product->title_english." | ".$product->title_gujarati;
+                }
+
+                $HTMLContent .= '<tr>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;">'.$product_title.'</td>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.$invoice_item->quantity.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
+                                </tr>';
+                $no++;
+            }
+            $HTMLContent .= '<tr>
+                                    <th colspan="2" style="padding:10px 0;">Total</th>
+                                    <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
+                                    <th  style="padding:10px 0;"></th>
+                                    <th  style="padding:10px 0;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                             </tr>
+                            </tbody>
+                        </table>
+                        <hr style="height: 1px">';
+        }
+
+        $HTMLContent .= '<h3 style="text-align: center;margin: 0">Stock</h3>';
+        $product_stocks = ProductStock::with('product');
+        if (isset($start_date) && $start_date!="null" && isset($end_date) && $end_date!="null"){
+            $product_stocks = $product_stocks->whereRaw("stock_date between '".$start_date."' and '".$end_date."'");
+        }
+        elseif (isset($start_date) && $start_date!="null"){
+            $product_stocks = $product_stocks->where('stock_date',$start_date);
+        }
+        elseif (isset($end_date) && $end_date!="null"){
+            $product_stocks = $product_stocks->where('stock_date',$end_date);
+        }
+        $product_stocks = $product_stocks->get();
+
+        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+                            <colgroup>
+                                <col style="width: 10%; text-align: center">
+                                <col style="width: 50%; text-align: left">
+                                <col style="width: 20%; text-align: left">
+                                <col style="width: 20%; text-align: center">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th style="padding:8px 0;">No.</th>
+                                    <th style="padding:8px 0;">Product</th>
+                                    <th style="padding:8px 0;">Purchase From</th>
+                                    <th style="padding:8px 0;">Qty (Kg)</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+        $no = 1;
+        foreach ($product_stocks as $product_stock){
+            $HTMLContent .= '<tr>
+                                <td style="text-align: center">'.$no.'</td>
+                                <td>'.$product_stock->product->title_english.'</td>
+                                <td>'.$product_stock->purchase_from.'</td>
+                                <td style="text-align: center">'.$product_stock->stock.'</td>
+                             </tr>';
+        }
+
+        $HTMLContent .= '</tbody>
+                        </table>
+                        </page>';
+
+        $filename = "report_".time().".pdf";
+        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P']);
+        $mpdf->WriteHTML($HTMLContent);
+        $mpdf->Output($filename,"I");
     }
 }
 

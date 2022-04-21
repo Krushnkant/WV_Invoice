@@ -56,6 +56,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('invoice/edit/{id}',[\App\Http\Controllers\admin\InvoiceController::class,'edit'])->name('invoice.edit');
     Route::get('invoice/{id}/delete',[\App\Http\Controllers\admin\InvoiceController::class,'delete'])->name('invoice.delete');
     Route::get('invoice/pdf/{id}',[\App\Http\Controllers\admin\InvoiceController::class,'generate_pdf'])->name('invoice.pdf');
+    Route::get('invoice/report/{user_id}/{start_date}/{end_date}',[\App\Http\Controllers\admin\InvoiceController::class,'report_pdf'])->name('report.pdf');
 
     Route::get('product_stock',[\App\Http\Controllers\admin\ProductStockController::class,'index'])->name('product_stock.list');
     Route::post('addProductStock',[\App\Http\Controllers\admin\ProductStockController::class,'addProductStock'])->name('product_stock.add');

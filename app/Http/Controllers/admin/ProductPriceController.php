@@ -244,7 +244,7 @@ class ProductPriceController extends Controller
                         </table>
                         </page>';
 
-            $html2pdf = new Html2Pdf('P', 'A5', 'fr', true, "UTF-8");
+            $html2pdf = new Html2Pdf('P', 'A4', 'fr', true, "UTF-8");
             $html2pdf->setDefaultFont('freeserif');
             $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->writeHTML($HTMLContent);
