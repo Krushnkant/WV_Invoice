@@ -216,7 +216,7 @@ class ProductPriceController extends Controller
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 60%; text-align: left">
-                                <col style="width: 30%; text-align: left">
+                                <col style="width: 30%; text-align: right">
                             </colgroup>
                             <thead>
                                 <tr style="background: #ffe6e6;">

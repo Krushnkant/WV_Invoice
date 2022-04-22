@@ -681,7 +681,7 @@ class InvoiceController extends Controller
 
         $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P']);
 //        $mpdf->SetDefaultFont('gujars');
-        $mpdf->AddFontDirectory($font_url);
+//        $mpdf->AddFontDirectory($font_url);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output();
     }
@@ -718,7 +718,7 @@ class InvoiceController extends Controller
 
         $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <p style="text-align: center;font-size: 7pt;margin: 0">SHREE GANESHAY NAMAH</p>
+                        <h2 style="text-align: center;margin: 0">Daily Report</h2>
                         <p style="text-align: right;margin: 0;font-size: 7pt;">Date: '.$date.'</p>';
 
         foreach ($invoices as $invoice){
@@ -747,16 +747,16 @@ class InvoiceController extends Controller
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
                                 <col style="width: 20%; text-align: center">
-                                <col style="width: 10%; text-align: center">
-                                <col style="width: 10%; text-align: center">
+                                <col style="width: 10%; text-align: left">
+                                <col style="width: 10%; text-align: left">
                             </colgroup>
                             <thead>
                                 <tr>
                                     <th style="padding:8px 0;">No.</th>
-                                    <th style="padding:8px 0;">Item</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Item</th>
                                     <th style="padding:8px 0;">Qty (Kg)</th>
-                                    <th style="padding:8px 0;">Price</th>
-                                    <th style="padding:8px 0;">Total</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Price</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -777,10 +777,10 @@ class InvoiceController extends Controller
 
                 $HTMLContent .= '<tr>
                                     <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;">'.$product_title.'</td>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.$invoice_item->quantity.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.$product_title.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
                 $no++;
             }
@@ -788,14 +788,13 @@ class InvoiceController extends Controller
                                     <th colspan="2" style="padding:10px 0;">Total</th>
                                     <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
                                     <th  style="padding:10px 0;"></th>
-                                    <th  style="padding:10px 0;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                                    <th  style="padding:10px 0;text-align: left;padding-left: 5px">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
                             </tbody>
                         </table>
                         <hr style="height: 1px">';
         }
 
-        $HTMLContent .= '<h3 style="text-align: center;margin: 0">Stock</h3>';
         $product_stocks = ProductStock::with('product');
         if (isset($start_date) && $start_date!="null" && isset($end_date) && $end_date!="null"){
             $product_stocks = $product_stocks->whereRaw("stock_date between '".$start_date."' and '".$end_date."'");
@@ -808,7 +807,10 @@ class InvoiceController extends Controller
         }
         $product_stocks = $product_stocks->get();
 
-        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+        if(isset($product_stocks) && count($product_stocks)>0) {
+            $HTMLContent .= '<h3 style="text-align: center;margin: 0">Stock</h3>';
+
+            $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
@@ -817,26 +819,28 @@ class InvoiceController extends Controller
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="padding:8px 0;">No.</th>
-                                    <th style="padding:8px 0;">Product</th>
-                                    <th style="padding:8px 0;">Purchase From</th>
-                                    <th style="padding:8px 0;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;text-align: center;">No.</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Product</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Purchase From</th>
+                                    <th style="padding:8px 0;text-align: center">Qty (Kg)</th>
                                 </tr>
                             </thead>
                             <tbody>';
-        $no = 1;
-        foreach ($product_stocks as $product_stock){
-            $HTMLContent .= '<tr>
-                                <td style="text-align: center">'.$no.'</td>
-                                <td>'.$product_stock->product->title_english.'</td>
-                                <td>'.$product_stock->purchase_from.'</td>
-                                <td style="text-align: center">'.$product_stock->stock.'</td>
+            $no = 1;
+            foreach ($product_stocks as $product_stock) {
+                $HTMLContent .= '<tr>
+                                <td style="padding:8px 0;text-align: center;">' . $no . '</td>
+                                <td style="padding:8px 0;text-align: left;padding-left: 5px">' . $product_stock->product->title_english . '</td>
+                                <td style="padding:8px 0;text-align: left;padding-left: 5px">' . $product_stock->purchase_from . '</td>
+                                <td style="padding:8px 0;text-align: center">' . $product_stock->stock . '</td>
                              </tr>';
+            }
+
+            $HTMLContent .= '</tbody>
+                        </table>';
         }
 
-        $HTMLContent .= '</tbody>
-                        </table>
-                        </page>';
+        $HTMLContent .= '</page>';
 
         $filename = "report_".time().".pdf";
         $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P']);
