@@ -548,70 +548,43 @@ class InvoiceController extends Controller
                             table { vertical-align: top; }
                             tr    { vertical-align: top; }
                             td    { vertical-align: top; }
+                            .d-flex{ display: flex;}
                             -->
                             </style>';
         $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <p style="text-align: center;font-size: 7pt;margin: 0">SHREE GANESHAY NAMAH</p>
-                        <p style="text-align: right;margin: 0;font-size: 7pt;">Mo.: '.$settings->company_mobile_no.'</p>
+                        <div>
+                        <p style="font-size: 7pt;margin: 0;float: left; width: 60%; text-align: right;">SHREE GANESHAY NAMAH</p>
+                        <p style="margin: 0;font-size: 7pt;float: left; width: 40%; text-align: right;">Mo.: '.$settings->company_mobile_no.'</p>
+                        </div>
 
-                        <table cellspacing="0" style="width: 100%; border-bottom: dotted 1px black;">
+                        <table cellspacing="0" cellpadding="0" style="width: 100%;">
                             <tr>
-                                <td style="width: 15%;height: 15%">
+                                <td style="width: 15%;height: 15%" rowspan="2">
                                     '.$image.'
                                 </td>
-                                <td style="width: 15%"></td>
-                                <td style="width: 65%;">
-                                	<h3 style="text-align: left; font-size: 20pt; margin: 0;">'.$settings->company_name.'</h3>
+                                <td style="width: 75%;">
+                                	<h3 style="text-align: left; font-size: 25pt; margin: 0;">'.$settings->company_name.'</h3>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3" align="left"><p style="font-size: 10pt;">'.$settings->company_address.'</p></td>
+                                <td align="left">'.$settings->company_address.'</td>
                             </tr>
                         </table>
-                        <br>
-
-                        <table cellspacing="0" style="width: 100%;">
-
-                            <tbody>
-                                <tr>
-                                    <td style="font-size: 12pt; padding:2px 0;">
-                                        Name
-                                    </td>
-                                    <td style="font-size: 12pt; padding:2px 0;width: 50%">
-                                        : <b>'.$invoice->user->full_name.'</b>
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
-                                        Invoice No
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
-                                        : '.$invoice->invoice_no.'
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        Mobile No
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 50%">
-                                        : '.$invoice->user->mobile_no.'
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
-                                        Date
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
-                                        : '.date("d-m-Y", strtotime($invoice->invoice_date)).'
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        Address
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        : '.$invoice->user->address.'
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        
+                        <hr style="height: 1px">
+                        
+                        <div>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: <b>'.$invoice->user->full_name.'</b></p>
+                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>
+                        </div>
+                        <div>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Mobile No: '.$invoice->user->mobile_no.'</p>
+                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
+                        </div>
+                        <div>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>
+                        </div>
 
                         <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
                             <colgroup>
@@ -627,7 +600,7 @@ class InvoiceController extends Controller
                                 </tr>
                                 <tr>
                                     <th style="padding:8px 0;">No.</th>
-                                    <th style="padding:8px 0;">Item</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Item</th>
                                     <th style="padding:8px 0;">Qty (Kg)</th>
                                     <th style="padding:8px 0;">Price</th>
                                     <th style="padding:8px 0;">Total</th>
@@ -651,10 +624,10 @@ class InvoiceController extends Controller
 
             $HTMLContent .= '<tr>
                                     <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;">'.$product_title.'</td>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.$invoice_item->quantity.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
+                                    <td style="font-weight : 10px; padding:8px 0;padding-left: 5px">'.$product_title.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
             $no++;
         }
@@ -679,9 +652,22 @@ class InvoiceController extends Controller
                         </page>';
 
 
-        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P']);
+        $mpdf = new Mpdf(["autoScriptToLang" => true,
+            "autoLangToFont" => true,
+            'mode' => 'utf-8',
+            'format' => 'A5-P',
+            'margin_left' => 1,
+            'margin_right' => 1,
+            'margin_top' => 1,
+            'margin_bottom' => 1,
+            'margin_header' => 0,
+            'margin_footer' => 0,]);
 //        $mpdf->SetDefaultFont('gujars');
 //        $mpdf->AddFontDirectory($font_url);
+//        $stylesheet = '';
+//        $stylesheet .= file_get_contents(url('public/css/custom-style.css'));
+//        $stylesheet .= file_get_contents(url('public/css/style.css'));
+//        $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output();
     }
