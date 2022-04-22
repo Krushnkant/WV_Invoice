@@ -718,8 +718,7 @@ class InvoiceController extends Controller
 
         $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
                         <bookmark title="Lettre" level="0" ></bookmark>
-                        <h2 style="text-align: center;margin: 0">Daily Report</h2>
-                        <p style="text-align: right;margin: 0;font-size: 7pt;">Date: '.$date.'</p>';
+                        <h2 style="text-align: center;margin: 0">Daily Report</h2>';
 
         foreach ($invoices as $invoice){
             $HTMLContent .= '<hr style="height: 1px">
@@ -737,6 +736,18 @@ class InvoiceController extends Controller
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;" align="right">
                                         : '.$invoice->invoice_no.'
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 50%">
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
+                                        Date
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
+                                        : '.date("d-m-Y", strtotime($invoice->invoice_date)).'
                                     </td>
                                 </tr>
                             </tbody>
