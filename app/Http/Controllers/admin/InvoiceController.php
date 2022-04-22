@@ -588,9 +588,9 @@ class InvoiceController extends Controller
 
                         <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center" >
                             <colgroup>
-                                <col style="width: 15%; text-align: center">
+                                <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
-                                <col style="width: 5%; text-align: center">
+                                <col style="width: 10%; text-align: center">
                                 <col style="width: 15%; text-align: center">
                                 <col style="width: 15%; text-align: right">
                             </colgroup>
@@ -599,11 +599,11 @@ class InvoiceController extends Controller
                                     <th colspan="5" style="text-align: center; padding:8px 0;border: 1px solid grey;"> Item Details </th>
                                 </tr>
                                 <tr>
-                                    <th style="padding:8px 0;border: 1px solid grey;">No.</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Item</th>
-                                    <th style="padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
-                                    <th style="padding:8px 0;border: 1px solid grey;">Price</th>
-                                    <th style="padding:8px 0;border: 1px solid grey;padding-right: 5px;text-align: right">Total</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;width: 10%;">No.</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;width: 50%;">Item</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;width: 10%;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;width: 15%;">Price</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;padding-right: 5px;text-align: right;width: 15%;">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -623,11 +623,11 @@ class InvoiceController extends Controller
             }
 
             $HTMLContent .= '<tr>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.$no.'</td>
-                                    <td style="padding:8px 0;padding-left: 5px;border: 1px solid grey;">'.$product_title.'</td>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.'</td>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
-                                    <td style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$no.'</td>
+                                    <td style="padding:8px 0;padding-left: 5px;border: 1px solid grey;width: 50%;">'.$product_title.'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$invoice_item->quantity.'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 15%;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px;width: 15%;">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
             $no++;
         }
