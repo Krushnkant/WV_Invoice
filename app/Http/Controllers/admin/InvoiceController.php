@@ -586,24 +586,24 @@ class InvoiceController extends Controller
                         <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>
                         </div>
 
-                        <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;" align="center" border="1">
+                        <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center" >
                             <colgroup>
                                 <col style="width: 15%; text-align: center">
                                 <col style="width: 50%; text-align: left">
                                 <col style="width: 5%; text-align: center">
                                 <col style="width: 15%; text-align: center">
-                                <col style="width: 15%; text-align: center">
+                                <col style="width: 15%; text-align: right">
                             </colgroup>
                             <thead>
-                                <tr style="background: #ffe6e6;">
-                                    <th colspan="5" style="text-align: center; padding:8px 0;"> Item Details </th>
+                                <tr style="background: lightgray;">
+                                    <th colspan="5" style="text-align: center; padding:8px 0;border: 1px solid grey;"> Item Details </th>
                                 </tr>
                                 <tr>
-                                    <th style="padding:8px 0;">No.</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Item</th>
-                                    <th style="padding:8px 0;">Qty (Kg)</th>
-                                    <th style="padding:8px 0;">Price</th>
-                                    <th style="padding:8px 0;">Total</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;">No.</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Item</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;">Price</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;padding-right: 5px;text-align: right">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -623,30 +623,30 @@ class InvoiceController extends Controller
             }
 
             $HTMLContent .= '<tr>
-                                    <td style="padding:8px 0;text-align: center">'.$no.'</td>
-                                    <td style="padding:8px 0;padding-left: 5px">'.$product_title.'</td>
-                                    <td style="padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
-                                    <td style="padding:8px 0;text-align: center">'.number_format($invoice_item->price, 2, '.', ',').'</td>
-                                    <td style="padding:8px 0;text-align: center">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.$no.'</td>
+                                    <td style="padding:8px 0;padding-left: 5px;border: 1px solid grey;">'.$product_title.'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.'</td>
+                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
             $no++;
         }
 
         $HTMLContent .= '<tr>
-                                    <th colspan="2" style="padding:10px 0;">Total</th>
-                                    <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
-                                    <th  style="padding:10px 0;"></th>
-                                    <th  style="padding:10px 0;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                                    <th colspan="2" style="padding:10px 0;border: 1px solid grey;">Total</th>
+                                    <th  style="padding:10px 0;border: 1px solid grey;">'.$invoice->total_qty.'</th>
+                                    <th  style="padding:10px 0;border: 1px solid grey;"></th>
+                                    <th  style="padding:10px 0;border: 1px solid grey;text-align: right;padding-right: 5px">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
                             </tbody>
                         </table>';
 
         $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
 
-        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;" align="left" border="1">
+        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;border: 1px solid grey;" align="left">
                             <thead>
                                 <tr>
-                                    <td colspan="5" style="text-align: left; padding:18px 0; padding-left: 5px; color:gray;"> Notes </td>
+                                    <td colspan="5" style="text-align: left; padding:18px 0; padding-left: 5px; color:gray;border: 1px solid grey;"> Notes </td>
                                 </tr>
                             </thead>
                          </table>';
@@ -716,52 +716,29 @@ class InvoiceController extends Controller
 
         foreach ($invoices as $invoice){
             $HTMLContent .= '<hr style="height: 1px">
-                            <table cellspacing="0" style="width: 100%;">
-                            <tbody>
-                                <tr>
-                                    <td style="font-size: 12pt; padding:2px 0;">
-                                        Name
-                                    </td>
-                                    <td style="font-size: 12pt; padding:2px 0;width: 70%">
-                                        : <b>'.$invoice->user->full_name.'</b>
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
-                                        Invoice No
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
-                                        : '.$invoice->invoice_no.'
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 50%">
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;width: 15%" align="right">
-                                        Date
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;" align="right">
-                                        : '.date("d-m-Y", strtotime($invoice->invoice_date)).'
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: '.$invoice->user->full_name.'</p>
+                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>
+                        </div>
+                        <div>
+                        <p style="margin: 0;font-size: 10pt;float: left; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
+                        </div>
 
-                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+                        <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
                                 <col style="width: 20%; text-align: center">
                                 <col style="width: 10%; text-align: left">
-                                <col style="width: 10%; text-align: left">
+                                <col style="width: 10%; text-align: right">
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="padding:8px 0;">No.</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Item</th>
-                                    <th style="padding:8px 0;">Qty (Kg)</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Price</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Total</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;">No.</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Item</th>
+                                    <th style="padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Price</th>
+                                    <th style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -781,23 +758,22 @@ class InvoiceController extends Controller
                 }
 
                 $HTMLContent .= '<tr>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.$product_title.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.number_format($invoice_item->price, 2, '.', ',').'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$no.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$product_title.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="font-weight : 10px; padding:8px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
                 $no++;
             }
             $HTMLContent .= '<tr>
-                                    <th colspan="2" style="padding:10px 0;">Total</th>
-                                    <th  style="padding:10px 0;">'.$invoice->total_qty.'</th>
-                                    <th  style="padding:10px 0;"></th>
-                                    <th  style="padding:10px 0;text-align: left;padding-left: 5px">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
+                                    <th colspan="2" style="padding:10px 0;border: 1px solid grey;">Total</th>
+                                    <th  style="padding:10px 0;border: 1px solid grey;">'.$invoice->total_qty.'</th>
+                                    <th  style="padding:10px 0;border: 1px solid grey;"></th>
+                                    <th  style="padding:10px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
                             </tbody>
-                        </table>
-                        <hr style="height: 1px">';
+                        </table>';
         }
 
         $product_stocks = ProductStock::with('product');
@@ -813,9 +789,9 @@ class InvoiceController extends Controller
         $product_stocks = $product_stocks->get();
 
         if(isset($product_stocks) && count($product_stocks)>0) {
-            $HTMLContent .= '<h3 style="text-align: center;margin: 0">Stock</h3>';
+            $HTMLContent .= '<hr style="height: 1px"><h3 style="text-align: center;margin: 0">Stock</h3>';
 
-            $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+            $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center">
                             <colgroup>
                                 <col style="width: 10%; text-align: center">
                                 <col style="width: 50%; text-align: left">
@@ -824,20 +800,20 @@ class InvoiceController extends Controller
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th style="padding:8px 0;text-align: center;">No.</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Product</th>
-                                    <th style="padding:8px 0;text-align: left;padding-left: 5px">Purchase From</th>
-                                    <th style="padding:8px 0;text-align: center">Qty (Kg)</th>
+                                    <th style="padding:8px 0;text-align: center;border: 1px solid grey;">No.</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Product</th>
+                                    <th style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Purchase From</th>
+                                    <th style="padding:8px 0;text-align: center;border: 1px solid grey;">Qty (Kg)</th>
                                 </tr>
                             </thead>
                             <tbody>';
             $no = 1;
             foreach ($product_stocks as $product_stock) {
                 $HTMLContent .= '<tr>
-                                <td style="padding:8px 0;text-align: center;">' . $no . '</td>
-                                <td style="padding:8px 0;text-align: left;padding-left: 5px">' . $product_stock->product->title_english . '</td>
-                                <td style="padding:8px 0;text-align: left;padding-left: 5px">' . $product_stock->purchase_from . '</td>
-                                <td style="padding:8px 0;text-align: center">' . $product_stock->stock . '</td>
+                                <td style="padding:8px 0;text-align: center;border: 1px solid grey;">' . $no . '</td>
+                                <td style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">' . $product_stock->product->title_english . '</td>
+                                <td style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">' . $product_stock->purchase_from . '</td>
+                                <td style="padding:8px 0;text-align: center;border: 1px solid grey;">' . $product_stock->stock . '</td>
                              </tr>';
             }
 
@@ -848,7 +824,7 @@ class InvoiceController extends Controller
         $HTMLContent .= '</page>';
 
         $filename = "report_".time().".pdf";
-        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P']);
+        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P', 'margin_top' => 3, 'margin_bottom' => 3]);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output($filename,"I");
     }

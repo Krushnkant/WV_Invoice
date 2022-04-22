@@ -225,7 +225,7 @@ class ProductPriceController extends Controller
                                 <tr>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">No.</th>
                                     <th style="border-bottom: solid 1px gray; padding:8px 0;">Product</th>
-                                    <th style="border-bottom: solid 1px gray; padding:8px 0;">Price</th>
+                                    <th style="border-bottom: solid 1px gray; padding:8px 0;padding-right: 25px">Price</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -235,7 +235,7 @@ class ProductPriceController extends Controller
                 $HTMLContent .= '<tr>
                                     <th style="font-weight : 10px; padding:8px 0;">'.$no.'</th>
                                     <th style="font-weight : 10px; padding:8px 0;">'.$ProductPrice->product->title_english.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0;padding-right: 25px"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
                                 </tr>';
                 $no++;
             }
