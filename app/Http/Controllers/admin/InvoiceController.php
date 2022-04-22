@@ -586,13 +586,13 @@ class InvoiceController extends Controller
                         <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>
                         </div>
 
-                        <table cellspacing="0" style="width: 100%; margin-top:10px;  font-size: 10pt; margin-bottom:0px;" align="center" border="1">
+                        <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;" align="center" border="1">
                             <colgroup>
-                                <col style="width: 10%; text-align: center">
+                                <col style="width: 15%; text-align: center">
                                 <col style="width: 50%; text-align: left">
-                                <col style="width: 20%; text-align: center">
-                                <col style="width: 10%; text-align: center">
-                                <col style="width: 10%; text-align: center">
+                                <col style="width: 5%; text-align: center">
+                                <col style="width: 15%; text-align: center">
+                                <col style="width: 15%; text-align: center">
                             </colgroup>
                             <thead>
                                 <tr style="background: #ffe6e6;">
@@ -623,11 +623,11 @@ class InvoiceController extends Controller
             }
 
             $HTMLContent .= '<tr>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$no.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;padding-left: 5px">'.$product_title.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.number_format($invoice_item->price, 2, '.', ',').'</td>
-                                    <td style="font-weight : 10px; padding:8px 0;text-align: center">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: center">'.$no.'</td>
+                                    <td style="padding:8px 0;padding-left: 5px">'.$product_title.'</td>
+                                    <td style="padding:8px 0;text-align: center">'.$invoice_item->quantity.'</td>
+                                    <td style="padding:8px 0;text-align: center">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                    <td style="padding:8px 0;text-align: center">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                 </tr>';
             $no++;
         }
@@ -643,10 +643,18 @@ class InvoiceController extends Controller
 
         $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
 
+        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;" align="left" border="1">
+                            <thead>
+                                <tr>
+                                    <td colspan="5" style="text-align: left; padding:18px 0; padding-left: 5px; color:gray;"> Notes </td>
+                                </tr>
+                            </thead>
+                         </table>';
+
         $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
                                 <tr>
-                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
-                                    <td  style="padding-top: 40px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
+                                    <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
+                                    <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
                                 </tr>
                             </table>
                         </page>';
@@ -656,10 +664,10 @@ class InvoiceController extends Controller
             "autoLangToFont" => true,
             'mode' => 'utf-8',
             'format' => 'A5-P',
-            'margin_left' => 1,
-            'margin_right' => 1,
-            'margin_top' => 1,
-            'margin_bottom' => 1,
+            'margin_left' => 3,
+            'margin_right' => 3,
+            'margin_top' => 3,
+            'margin_bottom' => 3,
             'margin_header' => 0,
             'margin_footer' => 0,]);
 //        $mpdf->SetDefaultFont('gujars');
