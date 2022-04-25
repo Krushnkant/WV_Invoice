@@ -72,11 +72,11 @@ class InvoiceController extends Controller
                         <a class="delete" onclick="removeRow(\'table-row-'.$next_item.'\',0)" href="javascript:;" title="Remove row">X</a>
                     </div>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control quantity qty" name="quantity" type="number" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
                     <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
@@ -124,6 +124,8 @@ class InvoiceController extends Controller
         $invoice->invoice_date = date("Y-m-d", strtotime($request->invoice_date));
         $invoice->total_qty = $request->total_qty;
         $invoice->final_amount = $request->final_amount;
+        $invoice->outstanding_amount = isset($request->outstanding_amount)?$request->outstanding_amount:0;
+        $invoice->total_payable_amount = $request->total_payable_amount;
         $invoice->save();
 
         $deleted_product_ids = array();
@@ -308,7 +310,7 @@ class InvoiceController extends Controller
                     $table .='</table>';
 
                     $action = '';
-                    $action .= '<button id="printBtn" class="btn btn-gray text-warning btn-sm" onclick="getInvoiceData(\''.$Invoice->id.'\')"><i class="fa fa-print" aria-hidden="true"></i></button>';
+                    $action .= '<button id="printBtn" class="btn btn-gray text-warning btn-sm" data-id="'.$Invoice->id.'"><i class="fa fa-print" aria-hidden="true"></i></button>';
                     $action .= '<button id="editInvoiceBtn" class="btn btn-gray text-blue btn-sm" data-id="'.$Invoice->id.'"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteInvoiceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteInvoiceModal" data-id="'.$Invoice->id.'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
@@ -534,14 +536,11 @@ class InvoiceController extends Controller
     public function generate_pdf($id){
         $invoice = Invoice::with('invoice_item.product','user')->where('id',$id)->first();
         $settings = Setting::find(1);
-        $f = new \NumberFormatter( locale_get_default(), \NumberFormatter::SPELLOUT );
 
         $image = '';
         if (isset($settings->company_logo)){
             $image = '<img src="'.url('public/images/company/'.$settings->company_logo).'" alt="Logo" width="100px" height="100px">';
         }
-
-        $font_url = url('public/fonts/gujars__.ttf');
 
         $HTMLContent = '<style type="text/css">
                             <!--
@@ -638,12 +637,18 @@ class InvoiceController extends Controller
                                     <th  style="padding:10px 0;border: 1px solid grey;"></th>
                                     <th  style="padding:10px 0;border: 1px solid grey;text-align: right;padding-right: 5px">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                          </tr>
-                         <tr><th colspan="5" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Previous Outstanding Amount</th></tr>
-                         <tr><th colspan="5" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Total Payable Amount</th></tr>
+                         <tr>
+                            <th colspan="4" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Previous Outstanding Amount</th>
+                            <th style="padding:10px 0;border: 1px solid grey;text-align: right;padding-right: 5px">'.number_format($invoice->outstanding_amount, 2, '.', ',').'</th>
+                        </tr>
+                        <tr>
+                            <th colspan="4" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Total Payable Amount</th>
+                            <th style="padding:10px 0;border: 1px solid grey;text-align: right;padding-right: 5px">'.number_format($invoice->total_payable_amount, 2, '.', ',').'</th>
+                        </tr>
                         </tbody>
                         </table>';
 
-        $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper(numberTowords($invoice->final_amount)).'</p>';
+        $HTMLContent .= '<p style="font-size: 8pt;padding-bottom: 40px">AMOUNT IN WORDS: '.strtoupper(numberTowords($invoice->final_amount)).'</p>';
 
 //        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;border: 1px solid grey;" align="left">
 //                            <thead>
@@ -654,7 +659,7 @@ class InvoiceController extends Controller
 //                         </table>';
 
         $HTMLContent .= '<htmlpagefooter name="footer">
-                        <table cellspacing="0" style="width: 100%; margin-top: 0px;">
+                        <table cellspacing="0" style="width: 100%; margin-top: 0px;padding-bottom: 40px">
                                 <tr>
                                     <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
                                     <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
@@ -664,25 +669,16 @@ class InvoiceController extends Controller
                         <sethtmlpagefooter name="footer" />
                         </page>';
 
-
-        $mpdf = new Mpdf(["autoScriptToLang" => true,
-            "autoLangToFont" => true,
-            'mode' => 'utf-8',
-            'format' => 'A5-P',
+        $filename = "Invoice_".$invoice->invoice_no.".pdf";
+        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P',
             'margin_left' => 3,
             'margin_right' => 3,
             'margin_top' => 3,
             'margin_bottom' => 3,
             'margin_header' => 0,
-            'margin_footer' => 0,]);
-//        $mpdf->SetDefaultFont('gujars');
-//        $mpdf->AddFontDirectory($font_url);
-//        $stylesheet = '';
-//        $stylesheet .= file_get_contents(url('public/css/custom-style.css'));
-//        $stylesheet .= file_get_contents(url('public/css/style.css'));
-//        $mpdf->WriteHTML($stylesheet,\Mpdf\HTMLParserMode::HEADER_CSS);
+            'margin_footer' => 0]);
         $mpdf->WriteHTML($HTMLContent);
-        $mpdf->Output();
+        $mpdf->Output($filename,"I");
     }
 
     public function report_pdf($user_id, $start_date, $end_date){

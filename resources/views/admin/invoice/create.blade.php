@@ -83,8 +83,8 @@
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Quantity (Kg)</th>
-                    <th>Unit Cost</th>
+                    <th width="200px">Quantity (Kg)</th>
+                    <th width="200px">Unit Cost</th>
                     <th>Price</th>
                 </tr>
             </thead>
@@ -102,11 +102,11 @@
                         <label id="item_name-error" class="error invalid-feedback animated fadeInDown" for="item_name"></label>
                     </div>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control quantity qty" name="quantity" type="number" min="1">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="">
                     <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
@@ -125,6 +125,14 @@
                 <td><div class=""><span id="totalQty" class="totalQty"></span></div></td>
                 <td></td>
                 <td class="total-value"><div id="total">0.00</div><i class="fa fa-inr" aria-hidden="true"></i></td>
+            </tr>
+            <tr class="fullrow">
+                <td colspan="3">Outstanding Amount</td>
+                <td><input type="number" name="outstanding_amount" id="outstanding_amount" class="form-control"></td>
+            </tr>
+            <tr class="fullrow">
+                <td colspan="3">Total Payable Amount</td>
+                <td class="total-value"><div id="total_payable_amount">0.00</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>
             </tfoot>
         </table>

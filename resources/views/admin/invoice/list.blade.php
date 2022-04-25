@@ -398,6 +398,7 @@ function update_total() {
     var totalQty = 0;
     var totalDiscount = 0;
     var final_amount = 0;
+    var total_payable_amount = 0.00;
 
     $(".unitcost").each(function() {
         if($(this).val()>0) {
@@ -423,11 +424,23 @@ function update_total() {
         }
     });
 
+    if($("#outstanding_amount").val()!=""){
+        total_payable_amount = parseFloat(final_amount) + parseFloat($("#outstanding_amount").val());
+    }
+    else{
+        total_payable_amount = final_amount;
+    }
+
     $("#totalUnitcost").html(totalUnitcost);
     $("#totalQty").html(totalQty);
     $("#totalDiscount").html(totalDiscount);
     $("#total").html(final_amount);
+    $("#total_payable_amount").html(total_payable_amount);
 }
+
+$('body').on('change', '#outstanding_amount', function () {
+    update_total();
+});
 
 $('body').on('click', '#invoice_submit', function () {
     $(this).prop('disabled',true);
@@ -459,6 +472,8 @@ $('body').on('click', '#invoice_submit', function () {
         formData.append("total_price", $("#totalUnitcost").html());
         formData.append("total_qty", $("#totalQty").html());
         formData.append("final_amount", $("#total").html());
+        formData.append("outstanding_amount", $("#outstanding_amount").val());
+        formData.append("total_payable_amount", $("#total_payable_amount").html());
         formData.append("language", $("#language").val());
         formData.append("action", $(btn).attr('action'));
         formData.append("total_items", $('.item-row').length);
@@ -626,11 +641,6 @@ $('body').on('click', '#RemoveInvoiceSubmit', function (e) {
     });
 });
 
-function getInvoiceData(invoice_id) {
-    var url = "{{ url('admin/invoice/pdf') }}" + "/" + invoice_id;
-    window.open(url, "_blank");
-}
-
 $('body').on('change', '#user_id_filter', function (e) {
     // e.preventDefault();
     invoice_table(true);
@@ -666,17 +676,13 @@ $('body').on('click', '#export_pdf_btn', function (e) {
     }
     var url = "{{ url('admin/invoice/report') }}" + "/" + user_id_filter + "/" + start_date + "/" + end_date;
     window.open(url, "_blank");
-    {{--$.ajax({--}}
-    {{--    type: 'GET',--}}
-    {{--    url: "{{ url('admin/invoice/report') }}",--}}
-    {{--    data: { _token: '{{ csrf_token() }}', user_id_filter: user_id_filter, start_date: start_date, end_date: end_date},--}}
-    {{--    success: function (res) {--}}
+});
 
-    {{--    },--}}
-    {{--    error: function (data) {--}}
-    {{--        toastr.error("Please try again",'Error',{timeOut: 5000});--}}
-    {{--    }--}}
-    {{--});--}}
+$('body').on('click', '#printBtn', function (e) {
+    e.preventDefault();
+    var invoice_id = $(this).attr('data-id');
+    var url = "{{ url('admin/invoice/pdf') }}" + "/" + invoice_id;
+    window.open(url, "_blank");
 });
 </script>
 <!-- Invoice JS end -->

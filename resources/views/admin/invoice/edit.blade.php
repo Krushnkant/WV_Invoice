@@ -84,8 +84,8 @@
             <thead>
             <tr>
                 <th>Item</th>
-                <th>Quantity (Kg)</th>
-                <th>Unit Cost</th>
+                <th width="200px">Quantity (Kg)</th>
+                <th width="200px">Unit Cost</th>
                 <th>Price</th>
             </tr>
             </thead>
@@ -119,11 +119,11 @@
                         @endif
                     </div>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}">
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
-                <td>
+                <td width="200px">
                     <input class="form-control unitcost cost" placeholder="0.00" type="number" name="price" value="{{ $invoice_item->price }}">
                     <label id="price-error" class="error invalid-feedback animated fadeInDown" for="price"></label>
                 </td>
@@ -144,6 +144,14 @@
                 <td><div class=""><span id="totalQty" class="totalQty">{{ $invoice->total_qty }}</span></div></td>
                 <td></td>
                 <td class="total-value"><div id="total">{{ $invoice->final_amount }}</div><i class="fa fa-inr" aria-hidden="true"></i></td>
+            </tr>
+            <tr class="fullrow">
+                <td colspan="3">Outstanding Amount</td>
+                <td><input type="number" name="outstanding_amount" id="outstanding_amount" class="form-control" value="{{ $invoice->outstanding_amount }}"></td>
+            </tr>
+            <tr class="fullrow">
+                <td colspan="3">Total Payable Amount</td>
+                <td class="total-value"><div id="total_payable_amount">{{ $invoice->total_payable_amount }}</div><i class="fa fa-inr" aria-hidden="true"></i></td>
             </tr>
             </tfoot>
         </table>
