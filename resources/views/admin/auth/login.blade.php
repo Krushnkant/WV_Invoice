@@ -15,7 +15,7 @@
                             </div>
                         @endif
 
-                        <h4>WV Invoice Admin</h4>
+                        <h4>Vedant Invoice Admin</h4>
 
                         <form method="post" action="" class="mt-5 mb-5 login-input" id="LoginForm">
                             {{ csrf_field() }}

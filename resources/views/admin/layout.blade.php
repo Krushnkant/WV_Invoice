@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>WV Invoice Admin</title>
+    <title>Vedant Invoice Admin</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url('public/images/favicon.png') }}">
     <!-- Custom Stylesheet -->
@@ -60,7 +60,7 @@
                 <b class="logo-abbr"><img src="{{ url('public/images/logo.png') }}" alt=""> </b>
                 <span class="logo-compact"><img src="{{ url('public/images/logo-compact.png') }}" alt=""></span>
                 <span class="brand-title text-white">
-                    WV Invoice
+                    Vedant Invoice
                     <!-- <img src="{{ url('public/images/logo-text.png') }}" alt=""> -->
                 </span>
             </a>
@@ -123,25 +123,25 @@
             <ul class="metismenu" id="menu">
                 <li>
                     <a href="{{ route('admin.dashboard') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Dashboard</span>
+                        <i class="fa fa-tachometer"></i><span class="nav-text">Dashboard</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('admin.users.list') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Users</span>
+                        <i class="fa fa-user"></i><span class="nav-text">Users</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('admin.products.list') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Products</span>
+                        <i class="fa fa-product-hunt"></i><span class="nav-text">Products</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('admin.product_stock.list') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Stock</span>
+                        <i class="fa fa-industry"></i><span class="nav-text">Stock</span>
                     </a>
                 </li>
 
@@ -153,13 +153,13 @@
 
                 <li>
                     <a href="{{ route('admin.invoice.list') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Invoice</span>
+                        <i class="fa fa-file"></i><span class="nav-text">Invoice</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('admin.settings.list') }}" aria-expanded="false">
-                        <i class="icon-badge menu-icon"></i><span class="nav-text">Settings</span>
+                        <i class="fa fa-gear"></i><span class="nav-text">Settings</span>
                     </a>
                 </li>
 
