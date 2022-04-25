@@ -623,7 +623,7 @@ class InvoiceController extends Controller
 
             $HTMLContent .= '<tr>
                                     <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$no.'</th>
-                                    <th style="padding:8px 0;padding-left: 5px;border: 1px solid grey;width: 50%;text-align: left">'.$product_title.'</th>
+                                    <td style="padding:8px 0;padding-left: 5px;border: 1px solid grey;width: 50%;text-align: left">'.$product_title.'</td>
                                     <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$invoice_item->quantity.'</th>
                                     <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 15%;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
                                     <th style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px;width: 15%;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
@@ -648,7 +648,7 @@ class InvoiceController extends Controller
                         </tbody>
                         </table>';
 
-        $HTMLContent .= '<p style="font-size: 8pt;padding-bottom: 40px">AMOUNT IN WORDS: '.strtoupper(numberTowords($invoice->final_amount)).'</p>';
+        $HTMLContent .= '<p style="font-size: 8pt;padding-bottom: 40px">AMOUNT IN WORDS: '.strtoupper(numberTowords($invoice->total_payable_amount)).'</p>';
 
 //        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;border: 1px solid grey;" align="left">
 //                            <thead>
