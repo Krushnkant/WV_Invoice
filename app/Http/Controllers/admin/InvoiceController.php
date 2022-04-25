@@ -623,11 +623,11 @@ class InvoiceController extends Controller
             }
 
             $HTMLContent .= '<tr>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$no.'</td>
-                                    <td style="padding:8px 0;padding-left: 5px;border: 1px solid grey;width: 50%;">'.$product_title.'</td>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$invoice_item->quantity.'</td>
-                                    <td style="padding:8px 0;text-align: center;border: 1px solid grey;width: 15%;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
-                                    <td style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px;width: 15%;">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                    <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$no.'</th>
+                                    <th style="padding:8px 0;padding-left: 5px;border: 1px solid grey;width: 50%;text-align: left">'.$product_title.'</th>
+                                    <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 10%;">'.$invoice_item->quantity.'</th>
+                                    <th style="padding:8px 0;text-align: center;border: 1px solid grey;width: 15%;">'.number_format($invoice_item->price, 2, '.', ',').'</th>
+                                    <th style="padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px;width: 15%;">'.number_format($invoice_item->final_price, 2, '.', ',').'</th>
                                 </tr>';
             $no++;
         }
@@ -637,26 +637,31 @@ class InvoiceController extends Controller
                                     <th  style="padding:10px 0;border: 1px solid grey;">'.$invoice->total_qty.'</th>
                                     <th  style="padding:10px 0;border: 1px solid grey;"></th>
                                     <th  style="padding:10px 0;border: 1px solid grey;text-align: right;padding-right: 5px">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
-                             </tr>
-                            </tbody>
+                         </tr>
+                         <tr><th colspan="5" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Previous Outstanding Amount</th></tr>
+                         <tr><th colspan="5" style="padding:10px 0;border: 1px solid grey;text-align: left;padding-left: 5px">Total Payable Amount</th></tr>
+                        </tbody>
                         </table>';
 
-        $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper($f->format($invoice->final_amount)).' RUPEES ONLY</p>';
+        $HTMLContent .= '<p style="font-size: 8pt;">AMOUNT IN WORDS: '.strtoupper(numberTowords($invoice->final_amount)).'</p>';
 
-        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;border: 1px solid grey;" align="left">
-                            <thead>
-                                <tr>
-                                    <td colspan="5" style="text-align: left; padding:18px 0; padding-left: 5px; color:gray;border: 1px solid grey;"> Notes </td>
-                                </tr>
-                            </thead>
-                         </table>';
+//        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 10pt; margin-bottom:0px;border: 1px solid grey;" align="left">
+//                            <thead>
+//                                <tr>
+//                                    <td colspan="5" style="text-align: left; padding:18px 0; padding-left: 5px; color:gray;border: 1px solid grey;"> Notes </td>
+//                                </tr>
+//                            </thead>
+//                         </table>';
 
-        $HTMLContent .= '<table cellspacing="0" style="width: 100%; margin-top: 0px;">
+        $HTMLContent .= '<htmlpagefooter name="footer">
+                        <table cellspacing="0" style="width: 100%; margin-top: 0px;">
                                 <tr>
                                     <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:left; color:gray;">Customer Signature</td>
                                     <td  style="padding-top: 50px;padding-bottom: 10px; width :50%; border-bottom: solid 1px gray; text-align:right; color:gray;"><b>For, '.$settings->company_name.'</b></td>
                                 </tr>
                             </table>
+                        </htmlpagefooter>
+                        <sethtmlpagefooter name="footer" />
                         </page>';
 
 
