@@ -670,7 +670,7 @@ class InvoiceController extends Controller
                         </page>';
 
         $filename = "Invoice_".$invoice->invoice_no.".pdf";
-        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P', 'margin_left' => 3, 'margin_right' => 3, 'margin_top' => 3, 'margin_bottom' => 3, 'margin_header' => 0, 'margin_footer' => 0]);
+        $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A5-P', 'margin_left' => 5, 'margin_right' => 5, 'margin_top' => 5, 'margin_bottom' => 5, 'margin_header' => 0, 'margin_footer' => 0]);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output($filename,"I");
     }
