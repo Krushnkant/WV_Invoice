@@ -572,7 +572,7 @@ function validateInvoiceItems(action) {
             $(thi).find('#quantity-error').show().html("Please Provide Quantity");
             return valid;
         }
-        if($(thi).find('.quantity').val() != "" && $(thi).find('.quantity').val()>0 && $(thi).find('.item_name').val() != ""){
+        if($(thi).find('.quantity').val() != "" && $(thi).find('.quantity').val()>0 && $(thi).find('.item_name').val() != "" && !$(thi).find('.quantity').prop('readonly')){
             var check_stock = $.ajax({
                 type: 'POST',
                 url: "{{ route('admin.check_stock') }}",
