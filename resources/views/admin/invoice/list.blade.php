@@ -684,6 +684,12 @@ $('body').on('click', '#printBtn', function (e) {
     var url = "{{ url('admin/invoice/pdf') }}" + "/" + invoice_id;
     window.open(url, "_blank");
 });
+
+$('body').on('change', '#customer_name', function (e) {
+    // e.preventDefault();
+    $("#item_name_1").removeAttr('disabled');
+    $("#addrow").removeAttr('disabled');
+});
 </script>
 <!-- Invoice JS end -->
 @endsection

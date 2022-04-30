@@ -93,7 +93,7 @@
             <tr class="item-row">
                 <td class="item-name">
                     <div class="delete-wpr">
-                        <select name="item_name" id="item_name_1" class="item_name">
+                        <select name="item_name" id="item_name_1" class="item_name" disabled>
                             <option></option>
                             @foreach($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->title_english }}</option>
@@ -117,7 +117,7 @@
             <tfoot>
             <tr>
                 <td colspan="5">
-                    <button type="button" class="btn btn-light" id="addrow">New Item</button>
+                    <button type="button" class="btn btn-light" id="addrow" disabled>New Item</button>
                 </td>
             </tr>
             <tr class="fullrow">
