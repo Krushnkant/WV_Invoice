@@ -612,13 +612,13 @@ class InvoiceController extends Controller
             $product = Product::withTrashed()->find($invoice_item->product_id);
             $product_title = '';
             if ($invoice->language == "English" && isset($product)){
-                $product_title = $product->title_english;
+                $product_title = '<b>'.$product->title_english.'</b>';
             }
             elseif ($invoice->language == "Hindi" && isset($product)){
-                $product_title = $product->title_english." | ".$product->title_hindi;
+                $product_title = '<b>'.$product->title_english." | ".$product->title_hindi.'</b>';
             }
             elseif ($invoice->language == "Gujarati" && isset($product)){
-                $product_title = $product->title_english." | ".$product->title_gujarati;
+                $product_title = '<b>'.$product->title_english."</b> | ".$product->title_gujarati;
             }
 
             $HTMLContent .= '<tr>
