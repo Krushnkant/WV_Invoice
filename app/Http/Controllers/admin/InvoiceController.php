@@ -114,13 +114,13 @@ class InvoiceController extends Controller
     public function save(Request $request){
         if ($request->action == "add"){
             $invoice = new Invoice();
+            $invoice->user_id = $request->customer_name;
         }
         elseif ($request->action == "update"){
             $invoice = Invoice::find($request->invoice_id);
         }
         $invoice->language = $request->language;
         $invoice->invoice_no = $request->invoice_no;
-        $invoice->user_id = $request->customer_name;
         $invoice->invoice_date = date("Y-m-d", strtotime($request->invoice_date));
         $invoice->total_qty = $request->total_qty;
         $invoice->final_amount = $request->final_amount;

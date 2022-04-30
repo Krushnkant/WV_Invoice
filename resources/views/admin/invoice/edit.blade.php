@@ -29,7 +29,7 @@
                                         <div class="form-group row mb-0">
                                             <label class="col-lg-12 col-form-label" for="">Customer Name <span class="text-danger">*</span></label>
                                             <div class="col-lg-12">
-                                                <select name="customer_name" id="customer_name">
+                                                <select name="customer_name" id="customer_name" disabled>
                                                     <option></option>
                                                     @foreach($customers as $customer)
                                                         <option value="{{ $customer->id }}" @if($invoice->user_id==$customer->id) selected @endif>{{ $customer->full_name }} [{{ $customer->id }}]</option>
