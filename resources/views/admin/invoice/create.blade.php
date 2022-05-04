@@ -79,7 +79,7 @@
         </div>
         </form>
 
-        <table id="items">
+        <table id="items" class="table-responsive">
             <thead>
                 <tr>
                     <th>Item</th>

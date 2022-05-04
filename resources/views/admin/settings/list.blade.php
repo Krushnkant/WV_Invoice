@@ -12,7 +12,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-12 col-lg-9 col-xl-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="col-lg-12">

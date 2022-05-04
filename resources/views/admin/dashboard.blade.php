@@ -13,7 +13,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-xl-3">
                 <div class="card card-widget">
                     <div class="card-body gradient-3">
                         <div class="media">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="col-3">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-xl-3">
                 <div class="card card-widget">
                     <div class="card-body gradient-4">
                         <div class="media">
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="col-3">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-xl-3">
                 <div class="card card-widget">
                     <div class="card-body gradient-4">
                         <div class="media">
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div class="col-3">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-xl-3">
                 <div class="card card-widget">
                     <div class="card-body gradient-9">
                         <div class="media">

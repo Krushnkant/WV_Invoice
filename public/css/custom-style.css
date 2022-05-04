@@ -1244,3 +1244,8 @@ element.style {
     border-collapse: collapse;
 }
 /*Custom CSS */
+
+
+.customer_details .cust_info .form_title label {
+    width: auto;
+}
