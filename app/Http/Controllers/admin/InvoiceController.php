@@ -268,12 +268,19 @@ class InvoiceController extends Controller
                 foreach ($Invoices as $Invoice)
                 {
                     $amount = '';
-                    if (isset($Invoice->total_qty)){
-                        $amount .= '<span>Total Quantity: '.$Invoice->total_qty;
-                    }
+                    // if (isset($Invoice->total_qty)){
+                    //     $amount .= '<span>Total Quantity: '.$Invoice->total_qty;
+                    // }
                     if (isset($Invoice->final_amount)){
                         $amount .= '<span>Final Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->final_amount;
                     }
+                    if (isset($Invoice->outstanding_amount)){
+                        $amount .= '<span>Outstanding Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->outstanding_amount;
+                    }
+                    if (isset($Invoice->total_payable_amount)){
+                        $amount .= '<span>Total Payable Amount: <i class="fa fa-inr" aria-hidden="true"></i> '.$Invoice->total_payable_amount;
+                    }
+
 
                     $table = '<table cellpadding="5" cellspacing="0" border="1" width="100%" id="items_table">';
                     $table .= '<tbody>';
@@ -316,6 +323,7 @@ class InvoiceController extends Controller
 
                     $nestedData['invoice_no'] = $Invoice->invoice_no;
                     $nestedData['customer_info'] = isset($Invoice->user->full_name)?$Invoice->user->full_name:'';
+                    $nestedData['total_qty'] = $Invoice->total_qty .' KG';
                     $nestedData['amount'] = $amount;
                     $nestedData['invoice_date'] = date("d-m-Y", strtotime($Invoice->invoice_date));
                     $nestedData['action'] = $action;
@@ -323,7 +331,8 @@ class InvoiceController extends Controller
                     $nestedData['final_amount'] = $Invoice->final_amount;
                     $nestedData['amount_transfer'] = '';
                     $nestedData['payment_type'] = '';
-                    $nestedData['outstanding_amount'] = '';
+                    $nestedData['outstanding_amount'] = $Invoice->outstanding_amount;
+                    $nestedData['total_payable_amount'] = $Invoice->total_payable_amount;
                     $nestedData['table1'] = $table;
                     $data[] = $nestedData;
                 }
@@ -767,6 +776,17 @@ class InvoiceController extends Controller
                                     <th  style="padding:10px 0;border: 1px solid grey;"></th>
                                     <th  style="padding:10px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice->final_amount, 2, '.', ',').'</th>
                              </tr>
+                             <tr>
+                                    <th colspan="2" style="padding:10px 0;border: 1px solid grey;">Outstanding Amount</th>
+                                    <th  colspan="2" style="padding:10px 0;border: 1px solid grey;"></th>
+                                    <th  style="padding:10px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice->outstanding_amount, 2, '.', ',').'</th>
+                             </tr>
+                             <tr>
+                                    <th colspan="2" style="padding:10px 0;border: 1px solid grey;">Total Payable Amount</th>
+                                    <th  colspan="2" style="padding:10px 0;border: 1px solid grey;"></th>
+                                    <th  style="padding:10px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice->total_payable_amount, 2, '.', ',').'</th>
+                             </tr>
+                             
                             </tbody>
                         </table>';
         }

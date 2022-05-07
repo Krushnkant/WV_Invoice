@@ -62,14 +62,16 @@
                                         <th>No.</th>
                                         <th>Invoice No</th>
                                         <th>Customer</th>
+                                        <th>Qty</th>
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Action</th>
                                         <th>Quantity</th>
                                         <th>Amount</th>
-                                        <th>amount transfer</th>
-                                        <th>payment type</th>
-                                        <th>outstanding amount</th>
+                                        <th>Amount transfer</th>
+                                        <th>Payment type</th>
+                                        <th>Outstanding amount</th>
+                                        <th>Total payable amount</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -78,14 +80,16 @@
                                         <th>No.</th>
                                         <th>Invoice No</th>
                                         <th>Customer</th>
+                                        <th>Qty</th>
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Action</th>
                                         <th>Quantity</th>
                                         <th>Amount</th>
-                                        <th>amount transfer</th>
-                                        <th>payment type</th>
-                                        <th>outstanding amount</th>
+                                        <th>Amount transfer</th>
+                                        <th>Payment type</th>
+                                        <th>Outstanding amount</th>
+                                        <th>Total payable amount</th>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -228,7 +232,7 @@ function invoice_table(is_clearState=false){
                         var isNotForExport = $.inArray( idx, hideFromExport ) !== -1;
                         return ((isVisible && !isNotForExport) || !isVisible) ? true : false;
                     },*/
-                    columns: [0,1,5,2,3,function ( idx, data, node ) {
+                    columns: [0,1,6,2,3,function ( idx, data, node ) {
                         var isVisible = table.column( idx ).visible();
                         return (!isVisible) ? true : false;
                     }],
@@ -248,16 +252,18 @@ function invoice_table(is_clearState=false){
         'columnDefs': [
             { "width": "20px", "targets": 0 },
             { "width": "50px", "targets": 1 },
-            { "width": "230px", "targets": 2 },
+            { "width": "100px", "targets": 2 },
             { "width": "230px", "targets": 3 },
-            { "width": "150px", "targets": 4 },
-            { "width": "120px", "targets": 5 },
+            { "width": "100px", "targets": 4 },
+            { "width": "180px", "targets": 5 },
             { "width": "200px", "targets": 6 },
-            { "width": "5px", "visible": false ,"targets": 7 },
+            { "width": "200px", "targets": 7 },
             { "width": "5px", "visible": false ,"targets": 8 },
             { "width": "5px", "visible": false ,"targets": 9 },
             { "width": "5px", "visible": false ,"targets": 10 },
             { "width": "5px", "visible": false ,"targets": 11 },
+            { "width": "5px", "visible": false ,"targets": 12 },
+            { "width": "5px", "visible": false ,"targets": 13 },
         ],
         "columns": [
             {"className": 'details-control', "orderable": false, "data": null, "defaultContent": ''},
@@ -268,6 +274,7 @@ function invoice_table(is_clearState=false){
             },
             {data: 'invoice_no', name: 'invoice_no', orderable: false, class: "text-left"},
             {data: 'customer_info', name: 'customer_info', orderable: false, class: "text-left multirow"},
+            {data: 'total_qty', name: 'total_qty', orderable: false, class: "text-left "},
             {data: 'amount', name: 'amount', orderable: false, class: "text-left multirow"},
             {data: 'invoice_date', name: 'invoice_date', orderable: false, class: "text-left"},
             {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
@@ -276,6 +283,7 @@ function invoice_table(is_clearState=false){
             {data: 'amount_transfer', name: 'amount_transfer', orderable: false, searchable: false},
             {data: 'payment_type', name: 'payment_type', orderable: false, searchable: false},
             {data: 'outstanding_amount', name: 'outstanding_amount', orderable: false, searchable: false},
+            {data: 'total_payable_amount', name: 'total_payable_amount', orderable: false, searchable: false},
         ]
     });
 }
