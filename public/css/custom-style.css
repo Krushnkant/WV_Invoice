@@ -1249,3 +1249,13 @@
   .customer_details .cust_info .form_title label {
       width: auto;
   }
+
+  @media(max-width: 408px) {
+    td.subt_price div.prse {width: fit-content;width: max-content;}
+    
+    td.subt_price div.prse span.proprice {font-size: 15px;}
+    
+    td.subt_price div.prse i.fa {font-size: 14px !important;}
+    
+    #items td, #items th {font-size: 12px;}
+    }
