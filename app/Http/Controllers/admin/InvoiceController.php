@@ -830,6 +830,7 @@ class InvoiceController extends Controller
                                 <td style="padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">' . $product_stock->purchase_from . '</td>
                                 <td style="padding:8px 0;text-align: center;border: 1px solid grey;">' . $product_stock->stock . '</td>
                              </tr>';
+                $no++;
             }
 
             $HTMLContent .= '</tbody>
