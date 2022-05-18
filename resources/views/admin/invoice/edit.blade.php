@@ -120,7 +120,7 @@
                     </div>
                 </td>
                 <td width="200px">
-                    <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}" readonly>
+                    <input class="form-control quantity qty" name="quantity" type="number" min="1" value="{{ $invoice_item->quantity }}" >
                     <label id="quantity-error" class="error invalid-feedback animated fadeInDown" for="quantity"></label>
                 </td>
                 <td width="200px">
