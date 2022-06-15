@@ -329,10 +329,10 @@ class InvoiceController extends Controller
                     $nestedData['action'] = $action;
                     $nestedData['quantity'] = $Invoice->total_qty;
                     $nestedData['final_amount'] = $Invoice->final_amount;
-                    $nestedData['amount_transfer'] = '';
-                    $nestedData['payment_type'] = '';
-                    $nestedData['outstanding_amount'] = $Invoice->outstanding_amount;
-                    $nestedData['total_payable_amount'] = $Invoice->total_payable_amount;
+                    //$nestedData['amount_transfer'] = '';
+                    //$nestedData['payment_type'] = '';
+                   // $nestedData['outstanding_amount'] = $Invoice->outstanding_amount;
+                   // $nestedData['total_payable_amount'] = $Invoice->total_payable_amount;
                     $nestedData['table1'] = $table;
                     $data[] = $nestedData;
                 }

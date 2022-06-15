@@ -233,9 +233,9 @@ class ProductPriceController extends Controller
             $no = 1;
             foreach ($ProductPrices as $ProductPrice){
                 $HTMLContent .= '<tr>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.$no.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;">'.$ProductPrice->product->title_english.'</th>
-                                    <th style="font-weight : 10px; padding:8px 0;padding-right: 25px"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0; border-bottom: solid 0.5px gray;">'.$no.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0; border-bottom: solid 0.5px gray;">'.$ProductPrice->product->title_english.'</th>
+                                    <th style="font-weight : 10px; padding:8px 0; border-bottom: solid 0.5px gray; padding-right: 25px"><span style="font-family: DejaVu Sans; sans-serif;">&#8377;</span> '.$ProductPrice->price.'</th>
                                 </tr>';
                 $no++;
             }

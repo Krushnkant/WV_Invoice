@@ -68,10 +68,10 @@
                                         <th>Action</th>
                                         <th>Quantity</th>
                                         <th>Amount</th>
-                                        <th>Amount transfer</th>
+                                        <!-- <th>Amount transfer</th>
                                         <th>Payment type</th>
                                         <th>Outstanding amount</th>
-                                        <th>Total payable amount</th>
+                                        <th>Total payable amount</th> -->
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -86,10 +86,10 @@
                                         <th>Action</th>
                                         <th>Quantity</th>
                                         <th>Amount</th>
-                                        <th>Amount transfer</th>
+                                        <!-- <th>Amount transfer</th>
                                         <th>Payment type</th>
                                         <th>Outstanding amount</th>
-                                        <th>Total payable amount</th>
+                                        <th>Total payable amount</th> -->
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -260,10 +260,10 @@ function invoice_table(is_clearState=false){
             { "width": "200px", "targets": 7 },
             { "width": "5px", "visible": false ,"targets": 8 },
             { "width": "5px", "visible": false ,"targets": 9 },
-            { "width": "5px", "visible": false ,"targets": 10 },
-            { "width": "5px", "visible": false ,"targets": 11 },
-            { "width": "5px", "visible": false ,"targets": 12 },
-            { "width": "5px", "visible": false ,"targets": 13 },
+            // { "width": "5px", "visible": false ,"targets": 10 },
+            // { "width": "5px", "visible": false ,"targets": 11 },
+            // { "width": "5px", "visible": false ,"targets": 12 },
+            // { "width": "5px", "visible": false ,"targets": 13 },
         ],
         "columns": [
             {"className": 'details-control', "orderable": false, "data": null, "defaultContent": ''},
@@ -272,6 +272,7 @@ function invoice_table(is_clearState=false){
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
+            
             {data: 'invoice_no', name: 'invoice_no', orderable: false, class: "text-left"},
             {data: 'customer_info', name: 'customer_info', orderable: false, class: "text-left multirow"},
             {data: 'total_qty', name: 'total_qty', orderable: false, class: "text-left "},
@@ -280,10 +281,10 @@ function invoice_table(is_clearState=false){
             {data: 'action', name: 'action', orderable: false, searchable: false, class: "text-center"},
             {data: 'quantity', name: 'quantity', orderable: false, searchable: false},
             {data: 'final_amount', name: 'final_amount', orderable: false, searchable: false},
-            {data: 'amount_transfer', name: 'amount_transfer', orderable: false, searchable: false},
-            {data: 'payment_type', name: 'payment_type', orderable: false, searchable: false},
-            {data: 'outstanding_amount', name: 'outstanding_amount', orderable: false, searchable: false},
-            {data: 'total_payable_amount', name: 'total_payable_amount', orderable: false, searchable: false},
+            // {data: 'amount_transfer', name: 'amount_transfer', orderable: false, searchable: false},
+            // {data: 'payment_type', name: 'payment_type', orderable: false, searchable: false},
+            // {data: 'outstanding_amount', name: 'outstanding_amount', orderable: false, searchable: false},
+            // {data: 'total_payable_amount', name: 'total_payable_amount', orderable: false, searchable: false},
         ]
     });
 }
