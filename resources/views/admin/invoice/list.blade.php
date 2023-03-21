@@ -47,8 +47,17 @@
                                 <input type="text" class="form-control custom_date_picker" id="end_date" name="end_date" placeholder="End Date" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
                             </div>
                             <div class="col-md-3">
+                                <select class="form-control" id="product_id_filter">
+                                    <option></option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}">{{ $product->title_english }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mt-3">
                                 <button type="button" class="btn btn-outline-primary" id="export_excel_btn" >Export to Excel <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                                 <button type="button" class="btn btn-outline-primary" id="export_pdf_btn" >Export to PDF <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                                <button type="button" class="btn btn-outline-primary" id="item_export_pdf_btn" >Item Export PDF<i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                             </div>
                         </div>
                         @endif
@@ -191,6 +200,12 @@ $(document).ready(function() {
     $('#user_id_filter').select2({
         width: '100%',
         placeholder: "Select User",
+        allowClear: true
+    });
+
+    $('#product_id_filter').select2({
+        width: '100%',
+        placeholder: "Select Product",
         allowClear: true
     });
 });
@@ -563,9 +578,11 @@ function validateInvoice() {
 }
 
 function validateInvoiceItems(action) {
+    
     var valid = true;
     $('.item-row').each(function () {
         var thi = $(this);
+        //console.log(thi);
         if($(thi).find('.item_name').val() == ""){
             valid = false;
             $(thi).find('#item_name-error').show().html("Please Select Item");
@@ -581,6 +598,12 @@ function validateInvoiceItems(action) {
             $(thi).find('#quantity-error').show().html("Please Provide Quantity");
             return valid;
         }
+
+        
+        if (thi.hasClass("addnew")) {
+          
+
+
         if($(thi).find('.quantity').val() != "" && $(thi).find('.quantity').val()>0 && $(thi).find('.item_name').val() != "" && !$(thi).find('.quantity').prop('readonly')){
             var check_stock = $.ajax({
                 type: 'POST',
@@ -600,6 +623,7 @@ function validateInvoiceItems(action) {
                 return valid;
             }
         }
+      }
     });
 
     return valid;
@@ -684,6 +708,28 @@ $('body').on('click', '#export_pdf_btn', function (e) {
         end_date = null;
     }
     var url = "{{ url('admin/invoice/report') }}" + "/" + user_id_filter + "/" + start_date + "/" + end_date;
+    window.open(url, "_blank");
+});
+
+$('body').on('click', '#item_export_pdf_btn', function (e) {
+    e.preventDefault();
+    var user_id_filter = $("#user_id_filter").val();
+    var product_id_filter = $("#product_id_filter").val();
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    if(user_id_filter == ""){
+        user_id_filter = null;
+    }
+    if(product_id_filter == ""){
+        product_id_filter = null;
+    }
+    if(start_date == ""){
+        start_date = null;
+    }
+    if(end_date == ""){
+        end_date = null;
+    }
+    var url = "{{ url('admin/invoice/itemreport') }}" + "/" + user_id_filter + "/" + start_date + "/" + end_date+ "/" + product_id_filter;
     window.open(url, "_blank");
 });
 

@@ -22,7 +22,8 @@ class InvoiceController extends Controller
     public function index(){
         $action = "list";
         $users = User::where('role',2)->get();
-        return view('admin.invoice.list',compact('action','users'));
+        $products = Product::where('estatus',1)->get();
+        return view('admin.invoice.list',compact('action','users','products'));
     }
 
     public function create(){
@@ -62,7 +63,7 @@ class InvoiceController extends Controller
         }
 
 
-        $html = '<tr class="item-row" id="table-row-'.$next_item.'">
+        $html = '<tr class="item-row addnew" id="table-row-'.$next_item.'">
                 <td class="item-name">
                     <div class="delete-wpr">
                         <select name="item_name" id="item_name_'.$next_item.'" class="item_name">
@@ -129,6 +130,7 @@ class InvoiceController extends Controller
         $invoice->save();
 
         $deleted_product_ids = array();
+        $deleted_product_item_ids = array();
         if ($request->action == "update"){
             $invoice_items = InvoiceItem::where('invoice_id',$request->invoice_id)->get();
             foreach ($invoice_items as $invoice_item){
@@ -137,7 +139,9 @@ class InvoiceController extends Controller
                 $temp['product_id'] = $invoice_item->product_id;
                 $temp['qty'] = $invoice_item->quantity;
                 array_push($deleted_product_ids,$temp);
+                array_push($deleted_product_item_ids,$invoice_item->product_id);
                 //update stock
+                
                 if (!in_array($invoice_item->product_id,explode(",",$request->product_ids))){
                     $product = Product::find($invoice_item->product_id);
                     $product->stock = $product->stock + $invoice_item->quantity;
@@ -149,9 +153,12 @@ class InvoiceController extends Controller
             }
         }
 
+     
+
         for ($i = 1; $i <= $request->total_items; $i++){
             $form = 'InvoiceItemForm'.$i;
             $item = json_decode($request[$form],true);
+           
             $invoice_item = new InvoiceItem();
             $invoice_item->invoice_id = $invoice->id;
             $invoice_item->product_id = $item['item_name'];
@@ -167,6 +174,8 @@ class InvoiceController extends Controller
                 $product->save();
             }
             elseif ($request->action == "update"){
+                //dd($deleted_product_item_ids);
+                $no = 1;
                 foreach ($deleted_product_ids as $deleted_product_id) {
                     if ($deleted_product_id['product_id']==$invoice_item->product_id && $deleted_product_id['qty']!=$invoice_item->quantity){
                         if ($invoice_item->quantity > $deleted_product_id['qty']){
@@ -182,6 +191,23 @@ class InvoiceController extends Controller
                             $product->save();
                         }
                     }
+                    
+                    // if($no == 1){
+                    //     if ($deleted_product_id['product_id'] != $item['item_name'] ){
+                    //             $qty = $item['quantity'];
+                    //             $product = Product::find($item['item_name']);
+                    //             $product->stock = $product->stock - $qty;
+                    //             $product->save();
+                    //     }
+                    // }
+                    // $no++;
+                }
+
+                if (!in_array($item['item_name'], $deleted_product_item_ids)){
+                    $qty = $item['quantity'];
+                    $product = Product::find($item['item_name']);
+                    $product->stock = $product->stock - $qty;
+                    $product->save();
                 }
             }
         }
@@ -838,11 +864,142 @@ class InvoiceController extends Controller
         }
 
         $HTMLContent .= '</page>';
+        ini_set('pcre.backtrack_limit',100000000); 
+        ini_set('pcre.recursion_limit',100000000);
 
         $filename = "report_".time().".pdf";
         $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P', 'margin_top' => 3, 'margin_bottom' => 3]);
         $mpdf->WriteHTML($HTMLContent);
         $mpdf->Output($filename,"I");
+    }
+
+
+    public function itemreport_pdf($user_id, $start_date, $end_date,$product_id){
+
+        $products = Product::join('invoice_items', 'products.id', '=', 'invoice_items.product_id')->join('invoices', 'invoices.id', '=', 'invoice_items.invoice_id')
+        ->where('products.estatus',1)->where('invoice_items.estatus',1);
+        if (isset($product_id) && $product_id!="null") {
+            $products = $products->where('products.id', $product_id);
+        }
+
+        if (isset($user_id) && $user_id!="null") {
+            $products = $products->where('invoices.user_id', $user_id);
+        }
+
+        
+
+        $products = $products->where('products.id','!=', 1);
+        $products =  $products->groupBy('products.id')->get('products.*');
+
+        //dd($products);
+        
+        $HTMLContent = '
+            
+        <style type="text/css">
+                            <!--
+                            table { vertical-align: top; }
+                            tr    { vertical-align: top; }
+                            td    { vertical-align: top; }
+                            -->
+                            </style>';
+
+        $HTMLContent .= '<page backcolor="#FEFEFE" style="font-size: 12pt">
+                        <bookmark title="Lettre" level="0" ></bookmark>
+                        <h2 style="text-align: center;margin: 0">Item Daily Report</h2>';
+        foreach ($products as $product)
+        {
+           
+            $product_title = '';
+            
+            $product_title = $product->title_english." | ".$product->title_gujarati ." | ".$product->title_hindi;
+            
+
+            $invoiceitems = InvoiceItem::with('invoice.user','product');
+            if (isset($user_id) && $user_id!="null") {
+                $invoiceitems = $invoiceitems->whereHas('invoice.user', function($q) use ($user_id){
+                             $q->where('user_id',$user_id);
+                         });
+            }
+
+            // if (isset($product_id) && $product_id!="null") {
+            //     $invoices = $invoices->whereHas('invoice_item', function($q) use ($product_id){
+            //         $q->where('product_id',$product_id);
+            //     });
+            // }
+
+            if (isset($product->id) && $product->id !="null") {
+                $invoiceitems = $invoiceitems->where('product_id', $product->id);
+            }
+
+            
+
+            $date = '';
+            if (isset($start_date) && $start_date!="null" && isset($end_date) && $end_date!="null"){
+                $date = $start_date." - ".$end_date;
+                $invoiceitems = $invoiceitems->whereRaw("created_at between '".$start_date." 00:00:00' and '".$end_date." 23:59:59'");
+            }
+            elseif (isset($start_date) && $start_date!="null"){
+                $date = $start_date;
+                $invoiceitems = $invoiceitems->where('created_at',$start_date);
+            }
+            elseif (isset($end_date) && $end_date!="null"){
+                $date = $end_date;
+                $invoiceitems = $invoiceitems->where('created_at',$end_date);
+            }
+
+            $invoiceitems = $invoiceitems->get();
+              if(count($invoiceitems) > 0){
+                $HTMLContent .= '<hr style="height: 1px">
+                            <div>
+                            <p style="font-size: 10pt;margin: 0;float: left; width: 100%; text-align: left;">Product : '.$product_title.'</p><br>
+
+                            <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center">
+                            
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%; text-align: center; padding:8px 0;border: 1px solid grey;">No.</th>
+                                        <th style="width: 20%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Name</th>
+                                        <th style="width: 15%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Invoice No</th>
+                                        <th style="width: 10%; text-align: center; padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
+                                        <th style="width: 10%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Price</th>
+                                        <th style="width: 10%; text-align: center; padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px">Total</th>
+                                        <th style="width: 15%; text-align: center; padding:8px 0;border: 1px solid grey;padding-right: 5px">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+
+                $no = 1;
+                foreach ($invoiceitems as $invoice_item){
+                
+                    $HTMLContent .= '<tr>
+                                        <td style="font-weight : 5px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$no.'</td>
+                                        <td style="font-weight : 20px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$invoice_item->invoice->user->full_name.'</td>
+                                        <td style="font-weight : 15px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$invoice_item->invoice->invoice_no.'</td>
+                                        <td style="font-weight : 10px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.' Kg</td>
+                                        <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
+                                        <td style="font-weight : 10px; padding:8px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
+                                        <td style="font-weight : 15px; padding:8px 0;text-align: center;padding-right: 5px;border: 1px solid grey;">'.date("d-m-Y", strtotime($invoice_item->invoice->created_at)).'</td>
+                                    </tr>';
+                            $no++;
+                }
+                $HTMLContent .= ' </tbody>
+            </table>';
+              }
+
+        }
+
+        ini_set('pcre.backtrack_limit',100000000); 
+        ini_set('pcre.recursion_limit',100000000);
+         
+             $HTMLContent .= '</div> </page>';
+
+            $filename = "report_".time().".pdf";
+
+            $mpdf = new Mpdf(["autoScriptToLang" => true, "autoLangToFont" => true, 'mode' => 'utf-8', 'format' => 'A4-P', 'margin_top' => 3, 'margin_bottom' => 3]);
+            
+            $mpdf->WriteHTML($HTMLContent);
+            
+            $mpdf->Output($filename,"I");
     }
 }
 

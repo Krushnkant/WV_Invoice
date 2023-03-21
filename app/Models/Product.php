@@ -29,4 +29,13 @@ class Product extends Model
         'price',
         'stock',
     ];
+
+    public function invoice_item(){
+        return $this->hasMany(InvoiceItem::class,'product_id','id');
+    }
+
+    
+
+
+
 }

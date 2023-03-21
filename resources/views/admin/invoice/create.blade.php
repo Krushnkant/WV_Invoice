@@ -90,7 +90,7 @@
             </thead>
 
             <tbody id="itemstbody">
-            <tr class="item-row">
+            <tr class="item-row addnew">
                 <td class="item-name">
                     <div class="delete-wpr">
                         <select name="item_name" id="item_name_1" class="item_name" disabled>
