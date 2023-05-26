@@ -33,7 +33,7 @@ class Invoice extends Model
     ];
 
     public function invoice_item(){
-        return $this->hasMany(InvoiceItem::class,'invoice_id','id');
+        return $this->hasMany(InvoiceItem::class,'invoice_id','id')->orderBy('id', 'asc');
     }
 
     public function user(){
