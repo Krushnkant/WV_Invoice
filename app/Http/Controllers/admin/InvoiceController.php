@@ -886,9 +886,7 @@ class InvoiceController extends Controller
             $products = $products->where('invoices.user_id', $user_id);
         }
 
-        
-
-        $products = $products->where('products.id','!=', 1);
+        // $products = $products->where('products.id','!=', 1);
         $products =  $products->groupBy('products.id')->get('products.*');
 
         //dd($products);
