@@ -607,11 +607,12 @@ class InvoiceController extends Controller
         $HTMLContent .= '</div>
                         <div>';
         // $HTMLContent .= '<p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Mobile No: '.$invoice->user->mobile_no.'</p>';
+        $HTMLContent .= '<p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>';
         $HTMLContent .= '<p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
                         </div>
-                        <div>
-                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>
-                        </div>
+                        <div>';
+        // $HTMLContent .= '<p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>';
+        $HTMLContent .= '</div>
 
                         <table cellspacing="0" style="width: 100%; margin-top:10px; font-size: 8pt; margin-bottom:0px;border: 1px solid grey;" align="center" >
                             <colgroup>
