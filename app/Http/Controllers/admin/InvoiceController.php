@@ -590,7 +590,7 @@ class InvoiceController extends Controller
                                     '.$image.'
                                 </td>
                                 <td style="width: 75%;">
-                                	<h3 style="text-align: left; font-size: 25pt; margin: 0;">'.$settings->company_name.'</h3>
+                                	<h3 style="text-align: center; font-size: 25pt; margin: 0;">'.$settings->company_name.'</h3>
                                 </td>
                             </tr>
                             <tr>
