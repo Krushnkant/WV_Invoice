@@ -461,24 +461,10 @@ class InvoiceController extends Controller
                                         : <b>'.$invoice->user->full_name.'</b>
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
-                                        Invoice No
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        : '.$invoice->invoice_no.'
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size: 10pt; padding:2px 0;">
                                         Mobile No
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
                                         : '.$invoice->user->mobile_no.'
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        Date
-                                    </td>
-                                    <td style="font-size: 10pt; padding:2px 0;">
-                                        : '.date('d M, Y', strtotime($invoice->invoice_date)).'
                                     </td>
                                 </tr>
                                 <tr>
@@ -487,6 +473,12 @@ class InvoiceController extends Controller
                                     </td>
                                     <td style="font-size: 10pt; padding:2px 0;">
                                         : '.$invoice->user->address.'
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        Date
+                                    </td>
+                                    <td style="font-size: 10pt; padding:2px 0;">
+                                        : '.date('d M, Y', strtotime($invoice->invoice_date)).'
                                     </td>
                                 </tr>
                             </tbody>
@@ -609,12 +601,13 @@ class InvoiceController extends Controller
                         <hr style="height: 1px">
                         
                         <div>
-                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: <b>'.$invoice->user->full_name.'</b></p>
-                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>
-                        </div>
-                        <div>
-                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Mobile No: '.$invoice->user->mobile_no.'</p>
-                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: <b>'.$invoice->user->full_name.'</b></p>';
+        $HTMLContent .= '<p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Mobile No: '.$invoice->user->mobile_no.'</p>';
+        // $HTMLContent .= '<p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>';
+        $HTMLContent .= '</div>
+                        <div>';
+        // $HTMLContent .= '<p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Mobile No: '.$invoice->user->mobile_no.'</p>';
+        $HTMLContent .= '<p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
                         </div>
                         <div>
                         <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Address: '.$invoice->user->address.'</p>
