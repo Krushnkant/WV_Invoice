@@ -225,11 +225,11 @@ class InvoiceController extends Controller
         if ($request->ajax()) {
             $columns = array(
                 0 =>'id',
-                1 =>'invoice_no',
-                2=> 'customer_info',
-                3=> 'amount',
-                4=> 'invoice_date',
-                5=> 'action',
+                // 1 =>'invoice_no',
+                1=> 'customer_info',
+                2=> 'amount',
+                3=> 'invoice_date',
+                4=> 'action',
             );
 
             $limit = $request->input('length');
@@ -347,7 +347,7 @@ class InvoiceController extends Controller
                     $action .= '<button id="editInvoiceBtn" class="btn btn-gray text-blue btn-sm" data-id="'.$Invoice->id.'"><i class="fa fa-pencil" aria-hidden="true"></i></button>';
                     $action .= '<button id="deleteInvoiceBtn" class="btn btn-gray text-danger btn-sm" data-toggle="modal" data-target="#DeleteInvoiceModal" data-id="'.$Invoice->id.'"><i class="fa fa-trash-o" aria-hidden="true"></i></button>';
 
-                    $nestedData['invoice_no'] = $Invoice->invoice_no;
+                    // $nestedData['invoice_no'] = $Invoice->invoice_no;
                     $nestedData['customer_info'] = isset($Invoice->user->full_name)?$Invoice->user->full_name:'';
                     $nestedData['total_qty'] = $Invoice->total_qty .' KG';
                     $nestedData['amount'] = $amount;
@@ -743,9 +743,9 @@ class InvoiceController extends Controller
         foreach ($invoices as $invoice){
             $HTMLContent .= '<hr style="height: 1px">
                         <div>
-                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: '.$invoice->user->full_name.'</p>
-                        <p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>
-                        </div>
+                        <p style="font-size: 10pt;margin: 0;float: left; width: 50%; text-align: left;">Name: '.$invoice->user->full_name.'</p>';
+            // $HTMLContent .= '<p style="margin: 0;font-size: 10pt;float: left; width: 50%; text-align: right;">Invoice No: '.$invoice->invoice_no.'</p>';
+            $HTMLContent .= '</div>
                         <div>
                         <p style="margin: 0;font-size: 10pt;float: left; text-align: right;">Date: '.date("d-m-Y", strtotime($invoice->invoice_date)).'</p>
                         </div>
@@ -952,9 +952,9 @@ class InvoiceController extends Controller
                                 <thead>
                                     <tr>
                                         <th style="width: 5%; text-align: center; padding:8px 0;border: 1px solid grey;">No.</th>
-                                        <th style="width: 20%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Name</th>
-                                        <th style="width: 15%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Invoice No</th>
-                                        <th style="width: 10%; text-align: center; padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
+                                        <th style="width: 20%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Name</th>';
+                        // $HTMLContent .= '<th style="width: 15%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Invoice No</th>';
+                        $HTMLContent .= '<th style="width: 10%; text-align: center; padding:8px 0;border: 1px solid grey;">Qty (Kg)</th>
                                         <th style="width: 10%; text-align: center; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">Price</th>
                                         <th style="width: 10%; text-align: center; padding:8px 0;text-align: right;border: 1px solid grey;padding-right: 5px">Total</th>
                                         <th style="width: 15%; text-align: center; padding:8px 0;border: 1px solid grey;padding-right: 5px">Date</th>
@@ -967,9 +967,9 @@ class InvoiceController extends Controller
                 
                     $HTMLContent .= '<tr>
                                         <td style="font-weight : 5px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$no.'</td>
-                                        <td style="font-weight : 20px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$invoice_item->invoice->user->full_name.'</td>
-                                        <td style="font-weight : 15px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$invoice_item->invoice->invoice_no.'</td>
-                                        <td style="font-weight : 10px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.' Kg</td>
+                                        <td style="font-weight : 20px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.$invoice_item->invoice->user->full_name.'</td>';
+                    // $HTMLContent .= '<td style="font-weight : 15px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'. $invoice_item->invoice->invoice_no.'</td>';
+                    $HTMLContent .= '<td style="font-weight : 10px; padding:8px 0;text-align: center;border: 1px solid grey;">'.$invoice_item->quantity.' Kg</td>
                                         <td style="font-weight : 10px; padding:8px 0;text-align: left;padding-left: 5px;border: 1px solid grey;">'.number_format($invoice_item->price, 2, '.', ',').'</td>
                                         <td style="font-weight : 10px; padding:8px 0;text-align: right;padding-right: 5px;border: 1px solid grey;">'.number_format($invoice_item->final_price, 2, '.', ',').'</td>
                                         <td style="font-weight : 15px; padding:8px 0;text-align: center;padding-right: 5px;border: 1px solid grey;">'.date("d-m-Y", strtotime($invoice_item->invoice->created_at)).'</td>

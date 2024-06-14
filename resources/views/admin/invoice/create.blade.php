@@ -42,7 +42,7 @@
                             </tbody></table>
                     </div>
 
-                    <div class="col-sm-6">
+                    <!-- <div class="col-sm-6">
                         <table style="width: 100%;">
                             <tbody><tr>
                                 <td class="form_title m-0">
@@ -56,7 +56,7 @@
                             </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -69,6 +69,7 @@
                                 <div class="col-lg-12">
                                     <input class="form-control custom_date_picker" type="text" id="invoice_date" name="invoice_date" placeholder="dd-mm-yyyy" data-date-format="dd-mm-yyyy" value="{{ date("d-m-Y") }}">
                                     <label id="invoice_date-error" class="error invalid-feedback animated fadeInDown" for="invoice_date"></label>
+                                    <input type="hidden" name="invoice_no" id="invoice_no" value="{{ $invoice_no }}" readonly>
                                 </div>
                             </div>
                         </td>

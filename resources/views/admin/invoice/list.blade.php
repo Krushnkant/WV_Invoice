@@ -69,7 +69,7 @@
                                     <tr>
                                         <th></th>
                                         <th>No.</th>
-                                        <th>Invoice No</th>
+                                        <!-- <th>Invoice No</th> -->
                                         <th>Customer</th>
                                         <th>Qty</th>
                                         <th>Amount</th>
@@ -87,7 +87,7 @@
                                     <tr>
                                         <th></th>
                                         <th>No.</th>
-                                        <th>Invoice No</th>
+                                        <!-- <th>Invoice No</th> -->
                                         <th>Customer</th>
                                         <th>Qty</th>
                                         <th>Amount</th>
@@ -247,7 +247,7 @@ function invoice_table(is_clearState=false){
                         var isNotForExport = $.inArray( idx, hideFromExport ) !== -1;
                         return ((isVisible && !isNotForExport) || !isVisible) ? true : false;
                     },*/
-                    columns: [0,1,6,2,3,function ( idx, data, node ) {
+                    columns: [0,1,6,3,function ( idx, data, node ) {
                         var isVisible = table.column( idx ).visible();
                         return (!isVisible) ? true : false;
                     }],
@@ -266,15 +266,15 @@ function invoice_table(is_clearState=false){
         },
         'columnDefs': [
             { "width": "20px", "targets": 0 },
-            { "width": "50px", "targets": 1 },
-            { "width": "100px", "targets": 2 },
-            { "width": "230px", "targets": 3 },
-            { "width": "100px", "targets": 4 },
-            { "width": "180px", "targets": 5 },
+            { "width": "60px", "targets": 1 },
+            // { "width": "100px", "targets": 2 },
+            { "width": "250px", "targets": 2 },
+            { "width": "130px", "targets": 3 },
+            { "width": "200px", "targets": 4 },
+            { "width": "200px", "targets": 5 },
             { "width": "200px", "targets": 6 },
-            { "width": "200px", "targets": 7 },
-            { "width": "5px", "visible": false ,"targets": 8 },
-            { "width": "5px", "visible": false ,"targets": 9 },
+            { "width": "15px", "visible": false ,"targets": 7 },
+            { "width": "15px", "visible": false ,"targets": 8 },
             // { "width": "5px", "visible": false ,"targets": 10 },
             // { "width": "5px", "visible": false ,"targets": 11 },
             // { "width": "5px", "visible": false ,"targets": 12 },
@@ -288,7 +288,7 @@ function invoice_table(is_clearState=false){
                 }
             },
             
-            {data: 'invoice_no', name: 'invoice_no', orderable: false, class: "text-left"},
+            // {data: 'invoice_no', name: 'invoice_no', orderable: false, class: "text-left"},
             {data: 'customer_info', name: 'customer_info', orderable: false, class: "text-left multirow"},
             {data: 'total_qty', name: 'total_qty', orderable: false, class: "text-left "},
             {data: 'amount', name: 'amount', orderable: false, class: "text-left multirow"},
