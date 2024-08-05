@@ -59,10 +59,13 @@ Route::group(['prefix'=>'admin','middleware'=>['auth'],'as'=>'admin.'],function 
     Route::get('invoice/report/{user_id}/{start_date}/{end_date}',[\App\Http\Controllers\admin\InvoiceController::class,'report_pdf'])->name('report.pdf');
     Route::get('invoice/itemreport/{user_id}/{start_date}/{end_date}/{product_id}',[\App\Http\Controllers\admin\InvoiceController::class,'itemreport_pdf'])->name('itemreport.pdf');
 
+    Route::post('invoice/all_delete',[\App\Http\Controllers\admin\InvoiceController::class,'all_delete'])->name('invoice.all_delete');
+
     Route::get('product_stock',[\App\Http\Controllers\admin\ProductStockController::class,'index'])->name('product_stock.list');
     Route::post('addProductStock',[\App\Http\Controllers\admin\ProductStockController::class,'addProductStock'])->name('product_stock.add');
     Route::post('allProductStocklist',[\App\Http\Controllers\admin\ProductStockController::class,'allProductStocklist'])->name('allProductStocklist');
     Route::get('product_stock/{id}/delete',[\App\Http\Controllers\admin\ProductStockController::class,'deleteProductStock'])->name('product_stock.delete');
     Route::post('check_stock',[\App\Http\Controllers\admin\ProductStockController::class,'check_stock'])->name('check_stock');
+    Route::post('product_stock/all_delete',[\App\Http\Controllers\admin\ProductStockController::class,'all_delete'])->name('invoice.all_delete');
 
 });

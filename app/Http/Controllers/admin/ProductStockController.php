@@ -142,6 +142,20 @@ class ProductStockController extends Controller
         return response()->json(['status' => '400']);
     }
 
+    public function all_delete(Request $request){
+        
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $StockDelete = ProductStock::whereBetween('stock_date', [$startDate, $endDate])->forceDelete();
+        
+        if ($StockDelete){
+
+            return response()->json(['status' => '200']);
+        }
+        return response()->json(['status' => '400']);
+    }
+
     public function check_stock(Request $request){
         $product = Product::find($request->product_id);
 

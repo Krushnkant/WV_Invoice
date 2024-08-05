@@ -17,7 +17,7 @@ use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Html2Pdf;
 
-class InvoiceController extends Controller
+class InvoiceController extends Controller 
 {
     public function index(){
         $action = "list";
@@ -401,6 +401,22 @@ class InvoiceController extends Controller
 
                 $invoice_item->delete();
             }
+
+            return response()->json(['status' => '200']);
+        }
+        return response()->json(['status' => '400']);
+    }
+
+    public function all_delete(Request $request){
+        
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $InvoiceIds = Invoice::whereBetween('invoice_date', [$startDate, $endDate])->pluck('id')->toArray();
+        $DeleteInvoice = Invoice::whereIn('id', $InvoiceIds)->forceDelete();
+        $DeleteInvoiceItem = InvoiceItem::whereIn('invoice_id', $InvoiceIds)->forceDelete();
+        
+        if ($DeleteInvoice && $DeleteInvoiceItem){
 
             return response()->json(['status' => '200']);
         }

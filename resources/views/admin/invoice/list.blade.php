@@ -58,6 +58,7 @@
                                 <button type="button" class="btn btn-outline-primary" id="export_excel_btn" >Export to Excel <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                                 <button type="button" class="btn btn-outline-primary" id="export_pdf_btn" >Export to PDF <i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                                 <button type="button" class="btn btn-outline-primary" id="item_export_pdf_btn" >Item Export PDF<i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                                <button type="button" class="btn btn-outline-danger" id="multiple_delete_btn" >Delete<i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
                             </div>
                         </div>
                         @endif
@@ -731,6 +732,45 @@ $('body').on('click', '#item_export_pdf_btn', function (e) {
     }
     var url = "{{ url('admin/invoice/itemreport') }}" + "/" + user_id_filter + "/" + start_date + "/" + end_date+ "/" + product_id_filter;
     window.open(url, "_blank");
+});
+
+$('body').on('click', '#multiple_delete_btn', function (e) {
+    e.preventDefault();
+    
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    
+    if(start_date == ""){
+        start_date = null;
+    }
+    if(end_date == ""){
+        end_date = null;
+    }
+    
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: "{{ url('admin/invoice/all_delete') }}",
+        data: {_token: '{{ csrf_token() }}', start_date: start_date, end_date: end_date},
+        success: function (res) {
+            if(res.status == 200){
+                $("#multiple_delete_btn").find('.removeloadericonfa').hide();
+                invoice_table();
+                toastr.success("Invoice Deleted",'Success',{timeOut: 5000});
+            }
+
+            if(res.status == 400){
+                $("#multiple_delete_btn").find('.removeloadericonfa').hide();
+                invoice_table();
+                toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+        },
+        error: function (data) {
+            $("#multiple_delete_btn").find('.removeloadericonfa').hide();
+            invoice_table();
+            toastr.error("Please try again",'Error',{timeOut: 5000});
+        }
+    });
 });
 
 $('body').on('click', '#printBtn', function (e) {

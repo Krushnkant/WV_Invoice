@@ -22,6 +22,18 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ProductStockModal" id="AddProductStockBtn"><i class="fa fa-plus" aria-hidden="true"></i></button>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-3 input-group">
+                                <input type="text" class="form-control custom_date_picker" id="start_date" name="start_date" placeholder="Start Date" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>
+                            <div class="col-md-3 input-group">
+                                <input type="text" class="form-control custom_date_picker" id="end_date" name="end_date" placeholder="End Date" data-date-format="yyyy-mm-dd"> <span class="input-group-append"><span class="input-group-text"><i class="mdi mdi-calendar-check"></i></span></span>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-danger" id="multiple_delete_btn" >Delete<i class="fa fa-circle-o-notch fa-spin loadericonfa" style="display:none;"></i></button>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table id="ProductStock" class="table zero-configuration customNewtable" style="width:100%">
                                 <thead>
@@ -342,6 +354,45 @@ $('body').on('click', '#RemoveProductStockSubmit', function (e) {
             $("#DeleteProductStockModal").modal('hide');
             $('#RemoveProductStockSubmit').prop('disabled',false);
             $("#RemoveProductStockSubmit").find('.removeloadericonfa').hide();
+            Product_Stock_Table();
+            toastr.error("Please try again",'Error',{timeOut: 5000});
+        }
+    });
+});
+
+$('body').on('click', '#multiple_delete_btn', function (e) {
+    e.preventDefault();
+    
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+    
+    if(start_date == ""){
+        start_date = null;
+    }
+    if(end_date == ""){
+        end_date = null;
+    }
+    
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: "{{ url('admin/product_stock/all_delete') }}",
+        data: {_token: '{{ csrf_token() }}', start_date: start_date, end_date: end_date},
+        success: function (res) {
+            if(res.status == 200){
+                $("#multiple_delete_btn").find('.removeloadericonfa').hide();
+                Product_Stock_Table();
+                toastr.success("Stock Deleted",'Success',{timeOut: 5000});
+            }
+
+            if(res.status == 400){
+                $("#multiple_delete_btn").find('.removeloadericonfa').hide();
+                Product_Stock_Table();
+                toastr.error("Please try again",'Error',{timeOut: 5000});
+            }
+        },
+        error: function (data) {
+            $("#multiple_delete_btn").find('.removeloadericonfa').hide();
             Product_Stock_Table();
             toastr.error("Please try again",'Error',{timeOut: 5000});
         }
